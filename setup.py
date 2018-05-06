@@ -26,7 +26,7 @@ CLASSIFIERS = filter(None, CLASSIFIERS.splitlines())
 
 # extension sources
 
-extensions = [Extension("src.ncls", ["src/ncls.pyx", "src/cgraph.c"])]
+extensions = [Extension("src.ncls", ["src/ncls.pyx", "src/intervaldb.c"])] #"src/cgraph.c",
               # Extension("pyncls.cnestedlist", ["src/cnestedlist.pyx", "src/intervaldb.c"])]
 
 

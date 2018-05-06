@@ -438,6 +438,8 @@ int find_intervals(IntervalIterator *it0,int start,int end,
     it->n=n;
     it->i=find_overlap_start(start,end,im,n);
   }
+
+
   do {
     while (it->i>=0 && it->i<it->n && HAS_OVERLAP_POSITIVE(im[it->i],start,end)) {
       memcpy(buf+ibuf,im + it->i,sizeof(IntervalMap)); /*SAVE THIS HIT TO BUFFER */
@@ -445,13 +447,14 @@ int find_intervals(IntervalIterator *it0,int start,int end,
       k=im[it->i].sublist; /* GET SUBLIST OF i IF ANY */
       it->i++; /* ADVANCE TO NEXT INTERVAL */
       if (k>=0 && (j=find_suboverlap_start(start,end,k,im,subheader,nlists))>=0) {
-	PUSH_ITERATOR_STACK(it,it2,IntervalIterator); /* RECURSE TO SUBLIST */
-	it2->i = j; /* START OF OVERLAPPING HITS IN THIS SUBLIST */
-	it2->n = subheader[k].start+subheader[k].len; /* END OF SUBLIST */
-	it=it2; /* PUSH THE ITERATOR STACK */
+        PUSH_ITERATOR_STACK(it,it2,IntervalIterator); /* RECURSE TO SUBLIST */
+        it2->i = j; /* START OF OVERLAPPING HITS IN THIS SUBLIST */
+        it2->n = subheader[k].start+subheader[k].len; /* END OF SUBLIST */
+        it=it2; /* PUSH THE ITERATOR STACK */
       }
-      if (ibuf>=nbuf) /* FILLED THE BUFFER, RETURN THE RESULTS SO FAR */
-	goto finally_return_result;
+      if (ibuf>=nbuf){ /* FILLED THE BUFFER, RETURN THE RESULTS SO FAR */
+        goto finally_return_result;
+      }
     }
   } while (POP_ITERATOR_STACK(it));  /* IF STACK EXHAUSTED,  EXIT */
   if (!it0) /* FREE THE ITERATOR WE CREATED.  NO NEED TO RETURN IT TO USER */
@@ -462,6 +465,7 @@ int find_intervals(IntervalIterator *it0,int start,int end,
 #if defined(ALL_POSITIVE_ORIENTATION) || defined(MERGE_INTERVAL_ORIENTATIONS)
   reorient_intervals(ibuf,buf,ori_sign); /* REORIENT INTERVALS TO MATCH QUERY ORI */
 #endif
+
   *p_nreturn=ibuf; /* #INTERVALS FOUND IN THIS PASS */
   *it_return=it; /* HAND BACK ITERATOR FOR CONTINUING THE SEARCH, IF ANY */
   return 0; /* SIGNAL THAT NO ERROR OCCURRED */
@@ -1101,7 +1105,7 @@ int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[])
 int main(int argc, char **argv) {
 
   IntervalMap *im;
-  int len = 100000000;
+  int len = 3;
   SublistHeader *sl;
   int *p_n = malloc(sizeof *p_n);
   int *p_nlists = malloc(sizeof *p_nlists);
@@ -1109,7 +1113,7 @@ int main(int argc, char **argv) {
 
   FILE *ifp;
 
-  ifp = fopen("test.csv", "r");
+  ifp = fopen("../test_mini.csv", "r");
 
   struct timeval  tv1, tv2;
   gettimeofday(&tv1, NULL);
@@ -1129,7 +1133,9 @@ int main(int argc, char **argv) {
 
   IntervalMap im_buf[1024];
 
-  find_intervals(it, 0, 124873500, im, len, sl, *p_nlists, im_buf, 1024, nhits, &it);
+  printf("*p_nlists %d\n", *p_nlists);
+  find_intervals(it, 0, 500, im, len, sl, *p_nlists, im_buf, 1024, nhits, &it);
+  printf("*nhits %d\n", *nhits);
 
   int i;
   for (i = 0; i < *nhits; i++){
