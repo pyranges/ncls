@@ -26,28 +26,26 @@ CLASSIFIERS = filter(None, CLASSIFIERS.splitlines())
 
 # extension sources
 
-extensions = [Extension("pyncls.cdict", ["pygr/cdict.pyx", "pygr/cgraph.c"]),
-              Extension("pyncls.cnestedlist", ["pygr/cnestedlist.pyx", "pygr/apps/maf2nclist.c", "pygr/intervaldb.c"])]
+extensions = [Extension("src.ncls", ["src/ncls.pyx", "src/cgraph.c"])]
+              # Extension("pyncls.cnestedlist", ["src/cnestedlist.pyx", "src/intervaldb.c"])]
 
 
-def main():
-    setup(
-        name = "pyncls",
-        version= PYGR_VERSION,
-        packages=find_packages(),
-        ext_modules = cythonize(extensions),
-        description = \
-        'A wrapper for the nested containment list data structure.',
-        long_description = __doc__,
-        # I am the maintainer; the datastructure was invented by
-        # Alexander V. Alekseyenko and Christopher J. Lee.
-        author = "Endre Bakken Stovner",
-        author_email='endrebak85@gmail.com',
-        url = 'https://github.com/endrebak/pyncls',
-        license = 'New BSD License',
-        classifiers = CLASSIFIERS,
+setup(
+    name = "pyncls",
+    version=__version__,
+    packages=find_packages(),
+    ext_modules = cythonize(extensions),
+    description = \
+    'A wrapper for the nested containment list data structure.',
+    long_description = __doc__,
+    # I am the maintainer; the datastructure was invented by
+    # Alexander V. Alekseyenko and Christopher J. Lee.
+    author = "Endre Bakken Stovner",
+    author_email='endrebak85@gmail.com',
+    url = 'https://github.com/endrebak/pyncls',
+    license = 'New BSD License',
+    classifiers = CLASSIFIERS,
 
-        package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
-        include_dirs=["."],
-
-     )
+    package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
+    include_dirs=["."],
+)
