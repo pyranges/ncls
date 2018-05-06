@@ -1,6 +1,6 @@
+#include <sys/time.h>
 
 #include "intervaldb.h"
-
 
 int C_int_max=INT_MAX; /* KLUDGE TO LET PYREX CODE ACCESS VALUE OF INT_MAX MACRO */
 
@@ -1101,7 +1101,7 @@ int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[])
 int main(int argc, char **argv) {
 
   IntervalMap *im;
-  int len = 3;
+  int len = 100000000;
   SublistHeader *sl;
   int *p_n = malloc(sizeof *p_n);
   int *p_nlists = malloc(sizeof *p_nlists);
@@ -1109,17 +1109,27 @@ int main(int argc, char **argv) {
 
   FILE *ifp;
 
-  ifp = fopen("test_intervals2.txt", "r");
+  ifp = fopen("test.csv", "r");
 
+  struct timeval  tv1, tv2;
+  gettimeofday(&tv1, NULL);
   im = read_intervals(len, ifp);
+  gettimeofday(&tv2, NULL);
+  printf ("Total time = %f seconds\n",
+          (double) (tv2.tv_usec - tv1.tv_usec) / 1000000 +
+          (double) (tv2.tv_sec - tv1.tv_sec));
 
+  gettimeofday(&tv1, NULL);
   sl = build_nested_list(im, len, p_n, p_nlists);
-
+  gettimeofday(&tv2, NULL);
+  printf ("Total time = %f seconds\n",
+          (double) (tv2.tv_usec - tv1.tv_usec) / 1000000 +
+          (double) (tv2.tv_sec - tv1.tv_sec));
   IntervalIterator *it = interval_iterator_alloc();
 
   IntervalMap im_buf[1024];
 
-  find_intervals(it, 5, 9, im, len, sl, *p_nlists, im_buf, 1024, nhits, &it);
+  find_intervals(it, 0, 124873500, im, len, sl, *p_nlists, im_buf, 1024, nhits, &it);
 
   int i;
   for (i = 0; i < *nhits; i++){
