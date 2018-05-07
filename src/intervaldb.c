@@ -1104,8 +1104,10 @@ int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[])
 
 int main(int argc, char **argv) {
 
+  int interval_map_size = 1024;
+
   IntervalMap *im;
-  int len = 3;
+  int len = 10000000;
   SublistHeader *sl;
   int *p_n = malloc(sizeof *p_n);
   int *p_nlists = malloc(sizeof *p_nlists);
@@ -1113,7 +1115,7 @@ int main(int argc, char **argv) {
 
   FILE *ifp;
 
-  ifp = fopen("../test_mini.csv", "r");
+  ifp = fopen("../test.csv", "r");
 
   struct timeval  tv1, tv2;
   gettimeofday(&tv1, NULL);
@@ -1131,10 +1133,10 @@ int main(int argc, char **argv) {
           (double) (tv2.tv_sec - tv1.tv_sec));
   IntervalIterator *it = interval_iterator_alloc();
 
-  IntervalMap im_buf[1024];
+  IntervalMap im_buf[interval_map_size];
 
   printf("*p_nlists %d\n", *p_nlists);
-  find_intervals(it, 0, 500, im, len, sl, *p_nlists, im_buf, 1024, nhits, &it);
+  find_intervals(it, 0, 500, im, len, sl, *p_nlists, im_buf, interval_map_size, nhits, &it);
   printf("*nhits %d\n", *nhits);
 
   int i;

@@ -6,7 +6,6 @@ Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
 
 GenomicRanges uses it.
 
-
 ## Develop
 
 Test in C:

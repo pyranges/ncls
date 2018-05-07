@@ -4,7 +4,7 @@ cdef class NCLSIterator:
 
     cdef cn.IntervalIterator *it
     cdef cn.IntervalIterator *it_alloc
-    cdef cn.IntervalMap *im_buf
+    cdef cn.IntervalMap im_buf[1024]
     cdef int nhit, start, end, ihit
     cdef NCLS db
 
@@ -14,8 +14,8 @@ cdef class NCLSIterator:
         self.start = start
         self.end = end
         self.db = db
-        self.nhit = -1
-        self.ihit = -1
+        self.nhit = 0
+        self.ihit = 0
 
 
     def __iter__(self):
@@ -60,12 +60,14 @@ cdef class NCLSIterator:
         self.check_nonempty() # RAISE EXCEPTION IF NO DATA
         return NCLSIterator(start, end, self)
 
+
 cdef class NCLS:
 
     cdef cn.SublistHeader *subheader
     cdef cn.IntervalMap *im
     cdef int n, ntop
     cdef int nlists
+
     # build NCLS from array of starts, ends, values
     def __cinit__(self, long [::1] starts, long [::1] ends, long[::1] ids):
 
@@ -80,13 +82,12 @@ cdef class NCLS:
             self.im[i].start = starts[i]
             self.im[i].end = ends[i]
             self.im[i].target_id = ids[i]
-            self.im[i].target_start = 0
-            self.im[i].target_end = 0
+            self.im[i].target_start = starts[i]
+            self.im[i].target_end = ends[i]
             self.im[i].sublist = -1
             i = i + 1
 
         self.subheader = cn.build_nested_list(self.im, self.n, &(self.ntop), &(self.nlists))
-
 
 
     def find_overlap(self, int start, int end):
@@ -106,14 +107,15 @@ cdef class NCLS:
         # it_alloc = it
         l = [] # LIST OF RESULTS TO HAND BACK
         while it:
-            # print("In while")
             cn.find_intervals(it, start, end, self.im, self.ntop,
                         self.subheader, self.nlists, im_buf, 1024,
                         &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-        while i < nhit:
-            # print("Nhits")
-            l.append((im_buf[i].start, im_buf[i].end, im_buf[i].target_id, im_buf[i].target_start, im_buf[i].target_end))
-            i += 1
+
+            print("number hits", nhit)
+            while i < nhit:
+
+                l.append((im_buf[i].start, im_buf[i].end, im_buf[i].target_id))
+                i += 1
 
         cn.free_interval_iterator(it)
         return l
