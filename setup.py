@@ -5,7 +5,7 @@ from Cython.Build import cythonize
 import os
 import sys
 
-from pyncls.version import __version__
+from ncls.version import __version__
 
 
 CLASSIFIERS = """
@@ -26,15 +26,15 @@ CLASSIFIERS = filter(None, CLASSIFIERS.splitlines())
 
 # extension sources
 
-extensions = [Extension("src.ncls", ["src/ncls.pyx", "src/intervaldb.c"])] #"src/cgraph.c",
-              # Extension("pyncls.cnestedlist", ["src/cnestedlist.pyx", "src/intervaldb.c"])]
+extensions = [Extension("src.ncls", ["src/ncls.pyx", "src/intervaldb.c"])]
 
 
 setup(
-    name = "pyncls",
+    name = "ncls",
     version=__version__,
     packages=find_packages(),
     ext_modules = cythonize(extensions),
+    # py_modules=["pyncls"],
     description = \
     'A wrapper for the nested containment list data structure.',
     long_description = __doc__,
@@ -45,7 +45,6 @@ setup(
     url = 'https://github.com/endrebak/pyncls',
     license = 'New BSD License',
     classifiers = CLASSIFIERS,
-
     package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
-    include_dirs=["."],
+    include_dirs=[".", "src/"],
 )

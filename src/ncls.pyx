@@ -1,3 +1,5 @@
+cimport cython
+
 cimport src.cncls as cn
 
 cdef class NCLSIterator:
@@ -46,8 +48,8 @@ cdef class NCLSIterator:
         cdef int i
         i = self.cnext()
         if i >= 0:
-            return (self.im_buf[i].start, self.im_buf[i].end, self.im_buf[i].target_id,
-                    self.im_buf[i].target_start, self.im_buf[i].target_end)
+            return (self.im_buf[i].start, self.im_buf[i].end, self.im_buf[i].target_id)
+                    # self.im_buf[i].target_start, self.im_buf[i].target_end)
         else:
             raise StopIteration
 
