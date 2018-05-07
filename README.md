@@ -1,6 +1,6 @@
 # Nested containment list
 
-A datastructure that uses < half a percent of the build time of the extremely fast interval trees found in the linux kernel! Queries also much much faster.
+Should do better timings than at first announcement. Still seems much faster (i.e. many times) than intervaltrees for most purposes though.
 
 Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
 
@@ -32,7 +32,7 @@ for i in it:
 
 ## Timings
 
-NCLS of 10^7 values took one second to build! 10^8: one minute! Wow!
+Better timings coming.
 
 ## Citation
 
