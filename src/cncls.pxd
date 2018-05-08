@@ -17,8 +17,13 @@ cdef extern from "stdlib.h":
 cdef extern from "stdio.h":
   ctypedef struct FILE:
     pass
+
   FILE *fopen(char *,char *)
+  FILE *open_memstream(void *, size_t *)
+  FILE *fmemopen (void *, size_t, const char *)
+
   int fclose(FILE *)
+  int fflush(FILE *)
   int sscanf(char *str,char *fmt,...)
   int sprintf(char *str,char *fmt,...)
   int fprintf(FILE *ifile,char *fmt,...)
@@ -69,12 +74,15 @@ cdef extern from "src/intervaldb.h":
                        int nbuf,
                        int *p_nreturn,
                        IntervalIterator **it_return)
-    # char *write_binary_files(IntervalMap im[],int n,int ntop,int div,SublistHeader *subheader,int nlists,char filestem[])
+
+    char *write_binary_files(IntervalMap im[],int n,int ntop,int div,SublistHeader *subheader,int nlists,char filestem[])
     # IntervalDBFile *read_binary_files(char filestem[],char err_msg[],int subheader_nblock) except NULL
     # int free_interval_dbfile(IntervalDBFile *db_file)
     # int find_file_intervals(IntervalIterator *it0,int start,int end,IntervalIndex ii[],int nii,SublistHeader subheader[],int nlists,SubheaderFile *subheader_file,int ntop,int div,FILE *ifile,IntervalMap buf[],int nbuf,int *p_nreturn,IntervalIterator **it_return) except -1
-    # int write_padded_binary(IntervalMap im[],int n,int div,FILE *ifile)
-    # int read_imdiv(FILE *ifile,IntervalMap imdiv[],int div,int i_div,int ntop)
+    int write_padded_binary(IntervalMap im[],int n,int div,FILE *ifile)
+
+    int read_imdiv(FILE *ifile,IntervalMap imdiv[],int div,int i_div,int ntop)
+
     # int save_text_file(char filestem[],char basestem[],char err_msg[],FILE *ofile)
     # int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[])
     # int C_int_max

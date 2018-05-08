@@ -1,3 +1,9 @@
+import ctypes as c
+
+# import numpy as np
+
+from cpython.bytes cimport PyBytes_FromStringAndSize as to_bytes
+
 cimport cython
 
 cimport src.cncls as cn
@@ -71,7 +77,12 @@ cdef class NCLS:
     cdef int nlists
 
     # build NCLS from array of starts, ends, values
-    def __cinit__(self, long [::1] starts, long [::1] ends, long[::1] ids):
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    def __cinit__(self, long [::1] starts=None, long [::1] ends=None, long[::1] ids=None):
+
+        if None in (starts, ends, ids):
+            return
 
         cdef int i
         self.close() # DUMP OUR EXISTING MEMORY
@@ -113,7 +124,6 @@ cdef class NCLS:
                         self.subheader, self.nlists, im_buf, 1024,
                         &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
-            print("number hits", nhit)
             while i < nhit:
 
                 l.append((im_buf[i].start, im_buf[i].end, im_buf[i].target_id))
@@ -146,3 +156,106 @@ cdef class NCLS:
         else:
             msg = 'empty NCLS, not searchable!'
         raise IndexError(msg)
+
+
+    def __getstate__(self):
+
+        cdef char *bp
+        cdef size_t size
+        cdef cn.FILE *stream
+
+        stream = cn.open_memstream(&bp, &size)
+
+        cn.write_padded_binary(self.im, self.n, 256, stream)
+        cn.fflush(stream)
+
+        cn.fclose(stream)
+
+        output = to_bytes(bp, size)
+
+        cn.free(bp)
+
+        return (self.n, output)
+
+
+    def __setstate__(self, d):
+
+        size, bytes_ = d
+
+        self.build_from_array(bytes_, size)
+
+
+
+    def build_from_array(self, array, int n):
+
+        cdef cn.FILE *stream
+        cdef int i
+        cdef cn.IntervalMap *im_new
+
+        self.close()
+
+        # http://cython.readthedocs.io/en/latest/src/tutorial/strings.html#passing-byte-strings
+        cdef char* bytestr = array
+
+        stream = cn.fmemopen(bytestr, n, "r")
+
+        if stream == NULL:
+            raise IOError('unable to read from bytearray')
+
+        im_new = cn.interval_map_alloc(n)
+
+        i = cn.read_imdiv(stream, im_new, 256, 0, n)
+
+        cn.fclose(stream)
+
+        if i != n:
+            raise IOError('IntervalMap file corrupted?')
+
+        self.n = n
+        self.im = im_new
+        self.subheader = cn.build_nested_list_inplace(self.im, self.n, &(self.ntop), &(self.nlists))
+
+
+
+
+
+    # def buildFromUnsortedFile(self, filename, int n, **kwargs):
+
+    #     "This actually just reads the .idb files, not everything written by write_binaries"
+
+    #     'load unsorted binary data, and build nested list'
+    #     cdef cn.FILE *ifile
+    #     cdef int i
+    #     cdef cn.IntervalMap *im_new
+    #     self.close()
+
+    #     print("decoding")
+    #     ifile = cn.fopen(filename,
+    #                      'rb') # binary file
+
+    #     if ifile == NULL:
+    #         print("we are in ifile==NULL")
+    #         raise IOError('unable to open ' + filename)
+
+    #     im_new = cn.interval_map_alloc(n)
+
+    #     if im_new == NULL:
+    #         raise MemoryError('unable to allocate IntervalMap[%d]' % n)
+
+    #     i = cn.read_imdiv(ifile, im_new, n, 0, n)
+    #     cn.fclose(ifile)
+
+    #     if i != n:
+    #         raise IOError('IntervalMap file corrupted?')
+
+    #     self.n = n
+    #     self.im = im_new
+    #     self.subheader = cn.build_nested_list_inplace(self.im, self.n, &(self.ntop), &(self.nlists))
+
+
+    # def write_binaries(self, filestem, div=256):
+    #     cdef char *err_msg
+    #     err_msg = cn.write_binary_files(self.im, self.n, self.ntop, div,
+    #                                     self.subheader, self.nlists, filestem)
+    #     if err_msg:
+    #         raise IOError(err_msg)
