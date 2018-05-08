@@ -20,6 +20,7 @@ def create_ncls(seed):
 
     ncls = NCLS(starts, ends, starts)
 
+    print("returning")
     return ncls
 
 nclses = Parallel(n_jobs=5)(delayed(create_ncls)(i) for i in randint(0, int(1e8), 5))

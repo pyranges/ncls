@@ -187,6 +187,7 @@ cdef class NCLS:
 
     def build_from_array(self, array, int n):
 
+        print("Using new build from array")
         cdef cn.FILE *stream
         cdef int i
         cdef cn.IntervalMap *im_new
@@ -203,17 +204,25 @@ cdef class NCLS:
 
         im_new = cn.interval_map_alloc(n)
 
-        i = cn.read_imdiv(stream, im_new, 256, 0, n)
+        i = cn.read_imdiv(stream, im_new, n, 0, n)
 
         cn.fclose(stream)
 
         if i != n:
-            raise IOError('IntervalMap file corrupted?')
+            raise IOError('IntervalMap file corrupted? Expected {} entries, got {}.'.format(n, i))
 
         self.n = n
         self.im = im_new
         self.subheader = cn.build_nested_list_inplace(self.im, self.n, &(self.ntop), &(self.nlists))
 
+
+
+        # i = cn.read_imdiv(stream, im_new, n, 0, n)
+
+        # cn.fclose(stream)
+
+        # if i != n:
+        #     raise IOError('IntervalMap file corrupted? Expected im of size {n} got {i}'.format(n=n, i=i))
 
 
 
