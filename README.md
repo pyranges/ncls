@@ -1,18 +1,19 @@
 # Nested containment list
 
-Should do better timings than at first announcement. Still seems much faster (i.e. many times) than intervaltrees for most purposes though.
+Should do better timings than at first announcement. Still seems much faster (i.e. many times) than even the fastest intervaltrees for most purposes though.
 
 Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
 
 ## Install
 
 ```
-pip install ncls==0.0.3
+pip install ncls==0.0.6
 ```
 
 ## Usage
 
 ```python
+# see the examples/ folder for more examples
 from ncls import NCLS
 
 import pandas as pd

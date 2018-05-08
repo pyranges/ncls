@@ -185,7 +185,6 @@ cdef class NCLS:
         self.build_from_array(bytes_, size)
 
 
-
     def build_from_array(self, array, int n):
 
         cdef cn.FILE *stream
