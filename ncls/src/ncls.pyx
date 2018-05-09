@@ -1,5 +1,3 @@
-import ctypes as c
-
 # import numpy as np
 
 from cpython.bytes cimport PyBytes_FromStringAndSize as to_bytes
@@ -7,6 +5,17 @@ from cpython.bytes cimport PyBytes_FromStringAndSize as to_bytes
 cimport cython
 
 cimport ncls.src.cncls as cn
+
+# from libcpp.vector cimport vector
+
+import numpy as np
+
+
+try:
+    dummy = profile
+except:
+    profile = lambda x: x
+
 
 cdef class NCLSIterator:
 
@@ -65,7 +74,7 @@ cdef class NCLSIterator:
 
 
     def find_overlap(self, int start, int end):
-        if not self.check_nonempty():
+        if not self.im:
             return []
 
         return NCLSIterator(start, end, self)
@@ -106,24 +115,84 @@ cdef class NCLS:
 
 
     def find_overlap(self, int start, int end):
-        if not self.check_nonempty(): # RAISE EXCEPTION IF NO DATA
+        if not self.im: # RAISE EXCEPTION IF NO DATA
             return []
 
         return NCLSIterator(start, end, self)
 
 
-    def find_overlap_list(self, int start, int end):
+    cpdef has_overlap(self, int start, int end):
+        cdef int nhit = 0
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return 0
+
+        it = cn.interval_iterator_alloc()
+
+        while it:
+            cn.find_intervals(it, start, end, self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+            if nhit > 0:
+                cn.free_interval_iterator(it)
+                return True
+
+        cn.free_interval_iterator(it)
+
+        return False
+
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    cpdef has_overlaps(self, long [::1] starts, long [::1] ends, long [::1] indexes):
+
+        cdef int i = 0
+        cdef int nhit = 0
+        cdef int length = len(starts)
+
+        found = []
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return 0
+
+        while i < length:
+
+            it = cn.interval_iterator_alloc()
+
+            while it:
+                cn.find_intervals(it, starts[i], ends[i], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                if nhit > 0:
+                    cn.free_interval_iterator(it)
+                    it = NULL
+                    found.append(indexes[i])
+                    # indexes_of_overlapping.push_back(indexes[i])
+
+            i += 1
+            cn.free_interval_iterator(it)
+
+        return found
+
+
+
+    cpdef find_overlap_list(self, int start, int end):
         cdef int i = 0
         cdef int nhit = 0
 
         cdef cn.IntervalIterator *it
-        cdef cn.IntervalIterator *it_alloc
         cdef cn.IntervalMap im_buf[1024]
-        if not self.check_nonempty(): # RAISE EXCEPTION IF NO DATA
+        if not self.im: # if empty
             return []
 
         it = cn.interval_iterator_alloc()
-        # it_alloc = it
+
         l = [] # LIST OF RESULTS TO HAND BACK
         while it:
             cn.find_intervals(it, start, end, self.im, self.ntop,
@@ -156,11 +225,11 @@ cdef class NCLS:
 
         return None
 
-    cdef check_nonempty(self):
-        if self.im:
-            return True
-        else:
-            return False
+    # cdef inline check_nonempty(self):
+    #     if self.im:
+    #         return True
+    #     else:
+    #         return False
 
 
     def __getstate__(self):

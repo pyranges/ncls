@@ -24,9 +24,21 @@ Topic :: Scientific/Engineering :: Bio-Informatics
 # split into lines and filter empty ones
 CLASSIFIERS = filter(None, CLASSIFIERS.splitlines())
 
-# extension sources
 
-extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"])]
+macros = [("CYTHON_TRACE", "1")]
+
+if macros:
+    from Cython.Compiler.Options import get_directive_defaults
+    directive_defaults = get_directive_defaults()
+    directive_defaults['linetrace'] = True
+    directive_defaults['binding'] = True
+
+
+# extension sources
+macros = []
+
+extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
+                        define_macros=macros)]
 
 
 setup(
@@ -45,6 +57,6 @@ setup(
     url = 'https://github.com/endrebak/pyncls',
     license = 'New BSD License',
     classifiers = CLASSIFIERS,
-    # package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
+    package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
     include_dirs=["."],
 )

@@ -7,12 +7,15 @@ Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
 ## Install
 
 ```
-pip install ncls==0.0.11
+pip install ncls==0.0.15
 ```
 
 ## Changelog
 
 ```
+# 2018.05.09 (0.0.15)
+- add faster method has_overlap that returns True/False
+
 # 2018.05.09 (0.0.11)
 - empty NCLS returns [] instead of raising IndexError
 ```
