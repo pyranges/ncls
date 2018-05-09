@@ -6,7 +6,7 @@ from cpython.bytes cimport PyBytes_FromStringAndSize as to_bytes
 
 cimport cython
 
-cimport src.cncls as cn
+cimport ncls.src.cncls as cn
 
 cdef class NCLSIterator:
 
@@ -65,7 +65,9 @@ cdef class NCLSIterator:
 
 
     def find_overlap(self, int start, int end):
-        self.check_nonempty() # RAISE EXCEPTION IF NO DATA
+        if not self.check_nonempty():
+            return []
+
         return NCLSIterator(start, end, self)
 
 
@@ -104,7 +106,9 @@ cdef class NCLS:
 
 
     def find_overlap(self, int start, int end):
-        self.check_nonempty() # RAISE EXCEPTION IF NO DATA
+        if not self.check_nonempty(): # RAISE EXCEPTION IF NO DATA
+            return []
+
         return NCLSIterator(start, end, self)
 
 
@@ -115,7 +119,9 @@ cdef class NCLS:
         cdef cn.IntervalIterator *it
         cdef cn.IntervalIterator *it_alloc
         cdef cn.IntervalMap im_buf[1024]
-        self.check_nonempty() # RAISE EXCEPTION IF NO DATA
+        if not self.check_nonempty(): # RAISE EXCEPTION IF NO DATA
+            return []
+
         it = cn.interval_iterator_alloc()
         # it_alloc = it
         l = [] # LIST OF RESULTS TO HAND BACK
@@ -150,12 +156,11 @@ cdef class NCLS:
 
         return None
 
-    def check_nonempty(self):
+    cdef check_nonempty(self):
         if self.im:
             return True
         else:
-            msg = 'empty NCLS, not searchable!'
-        raise IndexError(msg)
+            return False
 
 
     def __getstate__(self):
@@ -180,6 +185,8 @@ cdef class NCLS:
 
     def __setstate__(self, d):
 
+        "Takes as much time as building anew so multithreading not a speedup"
+
         size, bytes_ = d
 
         self.build_from_array(bytes_, size)
@@ -187,7 +194,6 @@ cdef class NCLS:
 
     def build_from_array(self, array, int n):
 
-        print("Using new build from array")
         cdef cn.FILE *stream
         cdef int i
         cdef cn.IntervalMap *im_new

@@ -7,7 +7,14 @@ Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
 ## Install
 
 ```
-pip install ncls==0.0.6
+pip install ncls==0.0.11
+```
+
+## Changelog
+
+```
+# 2018.05.09 (0.0.11)
+- empty NCLS returns [] instead of raising IndexError
 ```
 
 ## Usage

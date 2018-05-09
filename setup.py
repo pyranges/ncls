@@ -26,7 +26,7 @@ CLASSIFIERS = filter(None, CLASSIFIERS.splitlines())
 
 # extension sources
 
-extensions = [Extension("src.ncls", ["src/ncls.pyx", "src/intervaldb.c"])]
+extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"])]
 
 
 setup(
@@ -45,6 +45,6 @@ setup(
     url = 'https://github.com/endrebak/pyncls',
     license = 'New BSD License',
     classifiers = CLASSIFIERS,
-    package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
-    include_dirs=[".", "src/"],
+    # package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
+    include_dirs=["."],
 )
