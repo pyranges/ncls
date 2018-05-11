@@ -6,6 +6,8 @@ cimport cython
 
 cimport ncls.src.cncls as cn
 
+# import ctypes as c
+from array import array
 # from libcpp.vector cimport vector
 
 import numpy as np
@@ -39,7 +41,7 @@ cdef class NCLSIterator:
         return self
 
 
-    cdef int cnext(self): # C VERSION OF ITERATOR next METHOD RETURNS INDEX
+    cdef int cnext(self): # c VERSION OF ITERATOR next METHOD RETURNS INDEX
         cdef int i
         if self.ihit >= self.nhit: # TRY TO GET ONE MORE BUFFER CHUNK OF HITS
             if self.it == NULL: # ITERATOR IS EXHAUSTED
@@ -147,18 +149,107 @@ cdef class NCLS:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    cpdef all_overlaps_both(self, long [::1] starts, long [::1] ends, long [::1] indexes):
+
+        cdef int i
+        cdef int nhit = 0
+        cdef int length = len(starts)
+        cdef int loop_counter = 0
+        cdef int nfound = 0
+
+        cdef cn.UT_array *found
+        cn.utarray_new(found, &(cn.ut_int_icd))
+
+        cdef cn.UT_array *found_other
+        cn.utarray_new(found_other, &(cn.ut_int_icd))
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
+
+        while loop_counter < length:
+
+            it = cn.interval_iterator_alloc()
+            while it:
+                i = 0
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                while i < nhit:
+
+                    cn.utarray_push_back(found, &(indexes[loop_counter]))
+                    cn.utarray_push_back(found_other, &(im_buf[i].target_id))
+                    # found[nfound] = indexes[loop_counter]
+                    # found_other[nfound] = im_buf[i].target_id
+                    # found.append(indexes[loop_counter])
+                    # found_other.append(im_buf[i].target_id)
+                    nfound += 1
+                    i += 1
+
+            cn.free_interval_iterator(it)
+
+            loop_counter += 1
+
+        cdef int *arr
+        cdef int *arr_other
+
+        arr = cn.utarray_eltptr(found, 0)
+        arr_other = cn.utarray_eltptr(found_other, 0)
+
+        length = cn.utarray_len(found)
+
+        # output = array("i")
+        output_arr = np.zeros(length, dtype=np.long)
+        output_arr_other = np.zeros(length, dtype=np.long)
+        cdef long [::1] output
+        cdef long [::1] output_other
+
+        output = output_arr
+        output_other = output_arr_other
+
+        for i in range(length):
+            output_arr[i] = arr[i]
+            output_arr_other[i] = arr_other[i]
+
+        # # data_pointer = c.cast(arr, c.POINTER(c.c_int))
+        # # new_array = np.copy(np.ctypeslib.as_array(data_pointer, shape=(length,)))
+        # cdef int[::1] mview = <int[:length:1]>(arr)
+        # output = np.copy(np.asarray(mview))
+
+        cn.utarray_free(found)
+        cn.utarray_free(found_other)
+
+        return output_arr, output_arr_other
+
+
+        # return found_arr, found_other_arr
+
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
     cpdef has_overlaps(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int i = 0
         cdef int nhit = 0
         cdef int length = len(starts)
 
-        found = []
+        # cn.UT_array does not seem faster than python list (!)
+        # but then we do not need to demarshal the list
+        # also much more mem-efficient
+
+        cdef cn.UT_array *found
+        cn.utarray_new(found, &(cn.ut_int_icd))
+
+        # found = []
+        # found_arr = np.zeros(len(starts), dtype=np.long)
+        # cdef long[::1] found = found_arr
 
         cdef cn.IntervalIterator *it
         cdef cn.IntervalMap im_buf[1024]
         if not self.im: # if empty
-            return 0
+            return []
 
         while i < length:
 
@@ -172,18 +263,41 @@ cdef class NCLS:
                 if nhit > 0:
                     cn.free_interval_iterator(it)
                     it = NULL
-                    found.append(indexes[i])
+                    # found.append(indexes[i])
+                    # found[nfound] = indexes[i]
+                    # nfound += 1
+                    cn.utarray_push_back(found, &(indexes[i]))
                     # indexes_of_overlapping.push_back(indexes[i])
 
             i += 1
             cn.free_interval_iterator(it)
 
-        return found
+        # cdef int outlength = cn.utarray_len(found);
+
+        cdef int *arr
+
+        arr = cn.utarray_eltptr(found, 0)
+
+        length = cn.utarray_len(found)
+        # output = array("i")
+        cdef long [::1] output
+        output = np.zeros(length)
+        for i in range(length):
+            output[i] = arr[i]
+
+        # # data_pointer = c.cast(arr, c.POINTER(c.c_int))
+        # # new_array = np.copy(np.ctypeslib.as_array(data_pointer, shape=(length,)))
+        # cdef int[::1] mview = <int[:length:1]>(arr)
+        # output = np.copy(np.asarray(mview))
+
+        cn.utarray_free(found)
+
+        return output
 
 
 
     cpdef find_overlap_list(self, int start, int end):
-        cdef int i = 0
+        cdef int i
         cdef int nhit = 0
 
         cdef cn.IntervalIterator *it
@@ -195,10 +309,11 @@ cdef class NCLS:
 
         l = [] # LIST OF RESULTS TO HAND BACK
         while it:
+
             cn.find_intervals(it, start, end, self.im, self.ntop,
                         self.subheader, self.nlists, im_buf, 1024,
                         &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
+            i = 0
             while i < nhit:
 
                 l.append((im_buf[i].start, im_buf[i].end, im_buf[i].target_id))

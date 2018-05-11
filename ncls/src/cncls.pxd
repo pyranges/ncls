@@ -87,6 +87,22 @@ cdef extern from "ncls/src/intervaldb.h":
     # int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[])
     # int C_int_max
 
+# cdef extern from "ncls/src/utarray.h":
+
+#     ctypedef struct UT_icd:
+#         pass
+
+#     ctypedef struct UT_array:
+#         pass
+
+#     const UT_icd ut_int_icd
+
+#     utarray_free(UT_array *a)
+#     UT_array utarray_new(UT_array *a, UT_icd *icd)
+#     utarray_len(UT_array *a)
+#     int* utarray_eltptr(UT_array *a, int j)
+#     utarray_push_back(UT_array *a, void *p)
+
 
 # cdef class NCLS:
 #     cdef int n
@@ -94,3 +110,20 @@ cdef extern from "ncls/src/intervaldb.h":
 #     cdef int nlists
 #     cdef IntervalMap *im
 #     cdef SublistHeader *subheader
+
+
+cdef extern from "ncls/src/utarray.h":
+
+    ctypedef struct UT_icd:
+        pass
+
+    ctypedef struct UT_array:
+        pass
+
+    const UT_icd ut_int_icd
+
+    void utarray_new(UT_array *a, UT_icd *icd)
+    int utarray_len(UT_array *a)
+    int* utarray_eltptr(UT_array *a, int j)
+    void utarray_push_back(UT_array *a, void *p)
+    void utarray_free(UT_array *a)
