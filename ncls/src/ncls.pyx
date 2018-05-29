@@ -133,8 +133,8 @@ cdef class NCLS:
 
         while it:
             cn.find_intervals(it, start, end, self.im, self.ntop,
-                                self.subheader, self.nlists, im_buf, 1024,
-                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+                              self.subheader, self.nlists, im_buf, 1024,
+                              &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
             if nhit > 0:
                 cn.free_interval_iterator(it)
@@ -320,6 +320,154 @@ cdef class NCLS:
 
 
         # return found_arr, found_other_arr
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    cpdef all_containments_both(self, long [::1] starts, long [::1] ends, long [::1] indexes):
+
+        cdef int i
+        cdef int nhit = 0
+        cdef int length = len(starts)
+        cdef int loop_counter = 0
+        cdef int nfound = 0
+        cdef int start, end
+
+        cdef cn.UT_array *found
+        cn.utarray_new(found, &(cn.ut_int_icd))
+
+        cdef cn.UT_array *found_other
+        cn.utarray_new(found_other, &(cn.ut_int_icd))
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
+
+        while loop_counter < length:
+
+            it = cn.interval_iterator_alloc()
+            start = starts[loop_counter]
+            end = ends[loop_counter]
+            while it:
+                i = 0
+                cn.find_intervals(it, start, end, self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                while i < nhit:
+
+                    if im_buf[i].start <= start and im_buf[i].end >= end:
+                        cn.utarray_push_back(found, &(indexes[loop_counter]))
+                        cn.utarray_push_back(found_other, &(im_buf[i].target_id))
+
+                    nfound += 1
+                    i += 1
+
+            cn.free_interval_iterator(it)
+
+            loop_counter += 1
+
+        cdef int *arr
+        cdef int *arr_other
+
+        arr = cn.utarray_eltptr(found, 0)
+        arr_other = cn.utarray_eltptr(found_other, 0)
+
+        length = cn.utarray_len(found)
+
+        # output = array("i")
+        output_arr = np.zeros(length, dtype=np.long)
+        output_arr_other = np.zeros(length, dtype=np.long)
+        cdef long [::1] output
+        cdef long [::1] output_other
+
+        output = output_arr
+        output_other = output_arr_other
+
+        for i in range(length):
+            output_arr[i] = arr[i]
+            output_arr_other[i] = arr_other[i]
+
+        # # data_pointer = c.cast(arr, c.POINTER(c.c_int))
+        # # new_array = np.copy(np.ctypeslib.as_array(data_pointer, shape=(length,)))
+        # cdef int[::1] mview = <int[:length:1]>(arr)
+        # output = np.copy(np.asarray(mview))
+
+        cn.utarray_free(found)
+        cn.utarray_free(found_other)
+
+        return output_arr, output_arr_other
+
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    cpdef has_containment(self, long [::1] starts, long [::1] ends, long [::1] indexes):
+
+        cdef int i = 0
+        cdef int loop_counter = 0
+        cdef int nhit = 0
+        cdef int length = len(starts)
+
+        # cn.UT_array does not seem faster than python list (!)
+        # but then we do not need to demarshal the list
+        # also much more mem-efficient
+
+        cdef cn.UT_array *found
+        cn.utarray_new(found, &(cn.ut_int_icd))
+
+        # found = []
+        # found_arr = np.zeros(len(starts), dtype=np.long)
+        # cdef long[::1] found = found_arr
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return []
+
+        while loop_counter < length:
+
+            it = cn.interval_iterator_alloc()
+            i = 0
+            while it:
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+
+                while i < nhit:
+
+                    if im_buf[i].start <= start and im_buf[i].end >= end:
+                        cn.free_interval_iterator(it)
+                        it = NULL
+                        cn.utarray_push_back(found, &(indexes[i]))
+
+            loop_counter += 1
+            cn.free_interval_iterator(it)
+
+        cdef int *arr
+
+        arr = cn.utarray_eltptr(found, 0)
+
+        length = cn.utarray_len(found)
+
+
+        output_arr_other = np.zeros(length, dtype=np.long)
+        cdef long [::1] output_other
+
+        output_other = output_arr_other
+
+        # output = array("i")
+        output_arr = np.zeros(length, dtype=np.long)
+        cdef long [::1] output
+        output = output_arr
+
+        for i in range(length):
+            output_arr[i] = arr[i]
+
+        cn.utarray_free(found)
+
+        return output_arr
+
 
 
     @cython.boundscheck(False)
