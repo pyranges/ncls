@@ -22,4 +22,4 @@ install:
   - python --version
   - python -c 'import pandas as pd; print(pd.__version__)'
 
-script: py.test test
+script: py.test tests

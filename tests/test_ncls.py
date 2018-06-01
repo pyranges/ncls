@@ -10,4 +10,4 @@ def test_ncls():
 
     it = ncls.find_overlap(0, 2)
 
-    assert it[0] == (0, 100, 0)
+    assert next(it) == (0, 100, 0)
