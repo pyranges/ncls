@@ -1,9 +1,9 @@
 
-cdef extern from "string.h":
-  ctypedef int size_t
-  void *memcpy(void *dst,void *src,size_t len)
-  void *memmove(void *dst,void *src,size_t len)
-  void *memset(void *b,int c,size_t len)
+# cdef extern from "string.h":
+#   ctypedef int size_t
+#   void *memcpy(void *dst,void *src,size_t len)
+#   void *memmove(void *dst,void *src,size_t len)
+#   void *memset(void *b,int c,size_t len)
 
 cdef extern from "stdlib.h":
   void free(void *)
@@ -29,13 +29,12 @@ cdef extern from "stdio.h":
   int fprintf(FILE *ifile,char *fmt,...)
   char *fgets(char *str,int size,FILE *ifile)
 
-cdef extern from "string.h":
-  int strcmp(char *s1, char *s2)
-  int strncmp(char *s1,char *s2,size_t len)
-  char *strcpy(char *dest,char *src)
-  char *strdup(char *)
-  char *strcat(char *,char *)
-
+# cdef extern from "string.h":
+#   int strcmp(char *s1, char *s2)
+#   int strncmp(char *s1,char *s2,size_t len)
+#   char *strcpy(char *dest,char *src)
+#   char *strdup(char *)
+#   char *strcat(char *,char *)
 
 
 cdef extern from "ncls/src/intervaldb.h":
