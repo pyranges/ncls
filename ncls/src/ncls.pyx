@@ -407,6 +407,7 @@ cdef class NCLS:
         cdef int loop_counter = 0
         cdef int nhit = 0
         cdef int length = len(starts)
+        cdef int start, end
 
         # cn.UT_array does not seem faster than python list (!)
         # but then we do not need to demarshal the list
@@ -432,6 +433,9 @@ cdef class NCLS:
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                start = starts[loop_counter]
+                end = ends[loop_counter]
 
 
                 while i < nhit:
