@@ -21,6 +21,5 @@ install:
   - python setup.py install # will install ncls and clustertrees and more
   - python --version
   - python -c 'import pandas as pd; print(pd.__version__)'
-  - ls tests
 
 script: py.test test
