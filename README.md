@@ -1,18 +1,23 @@
 # Nested containment list
 
-Should do better timings than at first announcement. Still seems much faster (i.e. many times) than even the fastest intervaltrees for most purposes though.
+[![Build Status](https://travis-ci.org/hunt-genes/ncls.svg?branch=master)](https://travis-ci.org/hunt-genes/ncls) [![PyPI version](https://badge.fury.io/py/ncls.svg)](https://badge.fury.io/py/ncls)
+
+Much faster (i.e. many times) than even the fastest intervaltrees for most purposes.
 
 Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
 
 ## Install
 
 ```
-pip install ncls==0.0.18
+pip install ncls
 ```
 
 ## Changelog
 
 ```
+# 2018.01.06 (0.0.23)
+- NCLS started segfaulting in travis build for pyranges. Probably due to bad string definition files in travis.
+
 # 2018.05.09 (0.0.16-18)
 - add Cython/C helper code for pyranges
 
@@ -51,17 +56,3 @@ Better timings coming.
 ## Citation
 
 > Alexander V. Alekseyenko, Christopher J. Lee; Nested Containment List (NCList): a new algorithm for accelerating interval query of genome alignment and interval databases, Bioinformatics, Volume 23, Issue 11, 1 June 2007, Pages 1386–1393, https://doi.org/10.1093/bioinformatics/btl647
-
-## Develop
-
-Test in C:
-
-```bash
-gcc -D=BUILD_C_LIBRARY intervaldb.c -o intervaldb; ./intervaldb
-```
-
-Python:
-
-```bash
-python setup.py build_ext --inplace; python test.py
-```
