@@ -12,7 +12,6 @@ from array import array
 
 import numpy as np
 
-
 try:
     dummy = profile
 except:
@@ -145,12 +144,110 @@ cdef class NCLS:
         return False
 
 
+    # @cython.boundscheck(False)
+    # @cython.wraparound(False)
+    # cpdef set_difference_helper(self, long [::1] starts, long [::1] ends, long [::1] indexes):
+
+    #     cdef int i
+    #     cdef int nhit = 0
+    #     cdef int length = len(starts)
+    #     cdef int loop_counter = 0
+    #     cdef int nfound = 0
+    #     cdef int overlap_type_nb = 0
+    #     cdef int na = -1
+
+    #     cdef cn.UT_array *idx_self
+    #     cn.utarray_new(idx_self, &(cn.ut_int_icd))
+
+    #     cdef cn.UT_array *idx_other
+    #     cn.utarray_new(idx_other, &(cn.ut_int_icd))
+
+    #     cdef cn.UT_array *overlap_type
+    #     cn.utarray_new(overlap_type, &(cn.ut_int_icd))
+
+    #     cdef cn.IntervalIterator *it
+    #     cdef cn.IntervalMap im_buf[1024]
+    #     if not self.im: # if empty
+    #         return [], [], []
+
+    #     while loop_counter < length:
+
+    #         it = cn.interval_iterator_alloc()
+    #         while it:
+    #             i = 0
+    #             cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+    #                             self.subheader, self.nlists, im_buf, 1024,
+    #                             &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+    #             while i < nhit:
+    #                 type_0 = im_buf[i].start < starts[loop_counter]
+    #                 type_1 = im_buf[i].end > ends[loop_counter]
+    #                 type_2 = type_0 and type_1
+
+
+    #                 if not type_0 and not type_1:
+    #                     i += 1
+    #                     continue
+
+    #                 cn.utarray_push_back(idx_other, &(indexes[loop_counter]))
+    #                 cn.utarray_push_back(idx_self, &(im_buf[i].target_id))
+
+    #                 if type_2:
+    #                     overlap_type_nb = 2
+    #                 elif type_1:
+    #                     overlap_type_nb = 1
+    #                 elif type_0:
+    #                     overlap_type_nb = 0
+    #                 cn.utarray_push_back(overlap_type, &(overlap_type_nb))
+    #                 i += 1
+
+    #         cn.free_interval_iterator(it)
+
+    #         loop_counter += 1
+
+    #     cdef int *arr
+    #     cdef int *arr_other
+    #     cdef int *arr_type
+
+    #     arr = cn.utarray_eltptr(idx_self, 0)
+    #     arr_other = cn.utarray_eltptr(idx_other, 0)
+    #     arr_type = cn.utarray_eltptr(overlap_type, 0)
+
+    #     length = cn.utarray_len(idx_self)
+
+    #     # output = array("i")
+    #     output_arr = np.zeros(length, dtype=np.long)
+    #     output_arr_other = np.zeros(length, dtype=np.long)
+    #     output_arr_type = np.zeros(length, dtype=np.long)
+    #     cdef long [::1] output
+    #     cdef long [::1] output_other
+    #     cdef long [::1] output_type
+
+    #     output = output_arr
+    #     output_other = output_arr_other
+    #     output_type = output_arr_type
+
+    #     i = 0
+    #     for i in range(length):
+    #         output_arr[i] = arr[i]
+    #         output_arr_other[i] = arr_other[i]
+    #         output_arr_type[i] = arr_type[i]
+
+    #     cn.utarray_free(idx_self)
+    #     cn.utarray_free(idx_other)
+    #     cn.utarray_free(overlap_type)
+
+
+    #     return output_arr, output_arr_other, output_arr_type
+
     @cython.boundscheck(False)
     @cython.wraparound(False)
     cpdef set_difference_helper(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int i
         cdef int nhit = 0
+        cdef int nstart = 0
+        cdef int nend = 0
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
@@ -160,18 +257,22 @@ cdef class NCLS:
         cdef cn.UT_array *idx_self
         cn.utarray_new(idx_self, &(cn.ut_int_icd))
 
-        cdef cn.UT_array *idx_other
-        cn.utarray_new(idx_other, &(cn.ut_int_icd))
+        cdef cn.UT_array *new_start
+        cn.utarray_new(new_start, &(cn.ut_int_icd))
 
-        cdef cn.UT_array *overlap_type
-        cn.utarray_new(overlap_type, &(cn.ut_int_icd))
+        cdef cn.UT_array *new_end
+        cn.utarray_new(new_end, &(cn.ut_int_icd))
 
         cdef cn.IntervalIterator *it
         cdef cn.IntervalMap im_buf[1024]
         if not self.im: # if empty
+            print("empty intervalmap")
             return [], [], []
 
         while loop_counter < length:
+            print("loop_counter", loop_counter)
+            print("A start:", starts[loop_counter])
+            print("A end:", ends[loop_counter])
 
             it = cn.interval_iterator_alloc()
             while it:
@@ -180,66 +281,101 @@ cdef class NCLS:
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
+                print("nhits:", nhit)
+
+                nstart = starts[loop_counter]
+                nend = ends[loop_counter]
+
+                # B covers whole of A; ignore
+                if nhit == 1 and starts[loop_counter] > im_buf[i].start and ends[loop_counter] < im_buf[i].end:
+                    cn.utarray_push_back(new_start, &(na))
+                    cn.utarray_push_back(new_end, &(na))
+                    cn.utarray_push_back(idx_self, &(indexes[loop_counter]))
+                    i = nhit
+
                 while i < nhit:
-                    type_0 = im_buf[i].start < starts[loop_counter]
-                    type_1 = im_buf[i].end > ends[loop_counter]
-                    type_2 = type_0 and type_1
+                    print("  i:", i)
+                    print("  B start:", im_buf[i].start)
+                    print("  B end:", im_buf[i].end)
 
 
-                    if not type_0 and not type_1:
-                        i += 1
-                        continue
+                    # in case the start contributes nothing
+                    if i < nhit - 1:
+                        print("  i < nhit - 1")
 
-                    cn.utarray_push_back(idx_other, &(indexes[loop_counter]))
-                    cn.utarray_push_back(idx_self, &(im_buf[i].target_id))
+                        if nstart < im_buf[i].start:
+                            print("  new_start", nstart)
+                            print("  new_end", im_buf[i].start)
+                            cn.utarray_push_back(new_start, &(nstart))
+                            cn.utarray_push_back(new_end, &(im_buf[i].start))
+                            cn.utarray_push_back(idx_self, &(indexes[loop_counter]))
+                        nstart = im_buf[i].end
+                    elif i == nhit - 1:
 
-                    if type_2:
-                        overlap_type_nb = 2
-                    elif type_1:
-                        overlap_type_nb = 1
-                    elif type_0:
-                        overlap_type_nb = 0
-                    cn.utarray_push_back(overlap_type, &(overlap_type_nb))
+                        print("i == nhit -1")
+                        print("im_buf[i].start", im_buf[i].start)
+                        print("im_buf[i].end", im_buf[i].end)
+                        print("nstart", nstart)
+                        print("ends[loop_counter]", ends[loop_counter])
+
+                        if im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]:
+                            print("we are here " * 10)
+                            cn.utarray_push_back(new_start, &(na))
+                            cn.utarray_push_back(new_end, &(na))
+                            cn.utarray_push_back(idx_self, &(indexes[loop_counter]))
+                        else:
+                            if im_buf[i].start > nstart:
+                                print("im_buf[i].start > nstart", im_buf[i].start, nstart)
+                                cn.utarray_push_back(new_start, &(nstart))
+                                cn.utarray_push_back(new_end, &(im_buf[i].start))
+                                cn.utarray_push_back(idx_self, &(indexes[loop_counter]))
+
+                            if im_buf[i].end < ends[loop_counter]:
+                                print("im_buf[i].end < ends[loop_counter]", im_buf[i].end, ends[loop_counter])
+                                cn.utarray_push_back(new_start, &(im_buf[i].end))
+                                cn.utarray_push_back(new_end, &(ends[loop_counter]))
+                                cn.utarray_push_back(idx_self, &(indexes[loop_counter]))
+
                     i += 1
+
 
             cn.free_interval_iterator(it)
 
             loop_counter += 1
 
         cdef int *arr
-        cdef int *arr_other
-        cdef int *arr_type
+        cdef int *arr_nstarts
+        cdef int *arr_nends
 
         arr = cn.utarray_eltptr(idx_self, 0)
-        arr_other = cn.utarray_eltptr(idx_other, 0)
-        arr_type = cn.utarray_eltptr(overlap_type, 0)
+        arr_nstarts = cn.utarray_eltptr(new_start, 0)
+        arr_nends = cn.utarray_eltptr(new_end, 0)
 
         length = cn.utarray_len(idx_self)
 
-        # output = array("i")
         output_arr = np.zeros(length, dtype=np.long)
-        output_arr_other = np.zeros(length, dtype=np.long)
-        output_arr_type = np.zeros(length, dtype=np.long)
+        output_arr_nstarts = np.zeros(length, dtype=np.long)
+        output_arr_nends = np.zeros(length, dtype=np.long)
         cdef long [::1] output
-        cdef long [::1] output_other
-        cdef long [::1] output_type
+        cdef long [::1] output_start
+        cdef long [::1] output_end
 
         output = output_arr
-        output_other = output_arr_other
-        output_type = output_arr_type
+        output_end = output_arr_nends
+        output_start = output_arr_nstarts
 
         i = 0
         for i in range(length):
             output_arr[i] = arr[i]
-            output_arr_other[i] = arr_other[i]
-            output_arr_type[i] = arr_type[i]
+            output_arr_nends[i] = arr_nends[i]
+            output_arr_nstarts[i] = arr_nstarts[i]
 
         cn.utarray_free(idx_self)
-        cn.utarray_free(idx_other)
-        cn.utarray_free(overlap_type)
+        cn.utarray_free(new_start)
+        cn.utarray_free(new_end)
 
+        return output_arr, output_arr_nstarts, output_arr_nends
 
-        return output_arr, output_arr_other, output_arr_type
 
 
     @cython.boundscheck(False)
@@ -282,6 +418,77 @@ cdef class NCLS:
                     # found_other.append(im_buf[i].target_id)
                     nfound += 1
                     i += 1
+
+            cn.free_interval_iterator(it)
+
+            loop_counter += 1
+
+        cdef int *arr
+        cdef int *arr_other
+
+        arr = cn.utarray_eltptr(found, 0)
+        arr_other = cn.utarray_eltptr(found_other, 0)
+
+        length = cn.utarray_len(found)
+
+        # output = array("i")
+        output_arr = np.zeros(length, dtype=np.long)
+        output_arr_other = np.zeros(length, dtype=np.long)
+        cdef long [::1] output
+        cdef long [::1] output_other
+
+        output = output_arr
+        output_other = output_arr_other
+
+        for i in range(length):
+            output_arr[i] = arr[i]
+            output_arr_other[i] = arr_other[i]
+
+        # # data_pointer = c.cast(arr, c.POINTER(c.c_int))
+        # # new_array = np.copy(np.ctypeslib.as_array(data_pointer, shape=(length,)))
+        # cdef int[::1] mview = <int[:length:1]>(arr)
+        # output = np.copy(np.asarray(mview))
+
+        cn.utarray_free(found)
+        cn.utarray_free(found_other)
+
+        return output_arr, output_arr_other
+
+
+
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    cpdef first_overlap_both(self, long [::1] starts, long [::1] ends, long [::1] indexes):
+
+        cdef int nhit = 0
+        cdef int length = len(starts)
+        cdef int loop_counter = 0
+        cdef int nfound = 0
+
+        cdef cn.UT_array *found
+        cn.utarray_new(found, &(cn.ut_int_icd))
+
+        cdef cn.UT_array *found_other
+        cn.utarray_new(found_other, &(cn.ut_int_icd))
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
+
+        while loop_counter < length:
+
+            it = cn.interval_iterator_alloc()
+            while it:
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                if nhit > 0:
+                    cn.utarray_push_back(found, &(indexes[loop_counter]))
+                    cn.utarray_push_back(found_other, &(im_buf[0].target_id))
+                nfound += 1
 
             cn.free_interval_iterator(it)
 
