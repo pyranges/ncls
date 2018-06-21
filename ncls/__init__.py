@@ -1,9 +1,1 @@
-
-# compilation hack - canna import before it is compiled, but setup.py reads this file methinks
-# and errors
-try:
-    from ncls.src.ncls import NCLS
-except ImportError:
-    pass
-
-from ncls.version import __version__
+from ncls.src.ncls import NCLS

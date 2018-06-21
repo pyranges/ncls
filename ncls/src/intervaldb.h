@@ -10,8 +10,8 @@ typedef struct {
   int start;
   int end;
   int target_id;
-  int target_start;
-  int target_end;
+  /* int target_start; */
+  /* int target_end; */
   int sublist;
 } IntervalMap;
 

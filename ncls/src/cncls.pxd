@@ -54,7 +54,7 @@ cdef extern from "ncls/src/intervaldb.h":
         int len
 
     int imstart_qsort_cmp(void *void_a,void *void_b)
-    int target_qsort_cmp(void *void_a,void *void_b)
+    # int target_qsort_cmp(void *void_a,void *void_b)
     IntervalMap *read_intervals(int n,FILE *ifile)
     SublistHeader *build_nested_list(IntervalMap im[],int n,int *p_n,int *p_nlists)
     SublistHeader *build_nested_list_inplace(IntervalMap im[],int n,int *p_n,int *p_nlists)
@@ -74,11 +74,11 @@ cdef extern from "ncls/src/intervaldb.h":
                        int *p_nreturn,
                        IntervalIterator **it_return)
 
-    char *write_binary_files(IntervalMap im[],int n,int ntop,int div,SublistHeader *subheader,int nlists,char filestem[])
+    # char *write_binary_files(IntervalMap im[],int n,int ntop,int div,SublistHeader *subheader,int nlists,char filestem[])
     # IntervalDBFile *read_binary_files(char filestem[],char err_msg[],int subheader_nblock) except NULL
     # int free_interval_dbfile(IntervalDBFile *db_file)
     # int find_file_intervals(IntervalIterator *it0,int start,int end,IntervalIndex ii[],int nii,SublistHeader subheader[],int nlists,SubheaderFile *subheader_file,int ntop,int div,FILE *ifile,IntervalMap buf[],int nbuf,int *p_nreturn,IntervalIterator **it_return) except -1
-    int write_padded_binary(IntervalMap im[],int n,int div,FILE *ifile)
+    # int write_padded_binary(IntervalMap im[],int n,int div,FILE *ifile)
 
     int read_imdiv(FILE *ifile,IntervalMap imdiv[],int div,int i_div,int ntop)
 

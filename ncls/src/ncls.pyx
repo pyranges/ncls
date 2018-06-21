@@ -95,20 +95,20 @@ cdef class NCLS:
             return
 
         cdef int i
+        cdef length = len(starts)
         self.close() # DUMP OUR EXISTING MEMORY
         self.n = len(starts)
         self.im = cn.interval_map_alloc(self.n)
         if self.im == NULL:
             raise MemoryError('unable to allocate IntervalMap[%d]' % self.n)
         i = 0
-        while i < len(starts):
+        for i in range(length):
             self.im[i].start = starts[i]
             self.im[i].end = ends[i]
             self.im[i].target_id = ids[i]
-            self.im[i].target_start = starts[i]
-            self.im[i].target_end = ends[i]
+            # self.im[i].target_start = starts[i]
+            # self.im[i].target_end = ends[i]
             self.im[i].sublist = -1
-            i = i + 1
 
         self.subheader = cn.build_nested_list(self.im, self.n, &(self.ntop), &(self.nlists))
 
@@ -401,7 +401,6 @@ cdef class NCLS:
         if not self.im: # if empty
             return [], []
 
-
         while loop_counter < len(starts):
 
             # remember first pointer for dealloc
@@ -417,8 +416,8 @@ cdef class NCLS:
                 if nfound + nhit >= length:
 
                     length = length * 2
-                    np.resize(output_arr, length)
-                    np.resize(output_arr_other, length)
+                    output_arr = np.resize(output_arr, length)
+                    output_arr_other = np.resize(output_arr_other, length)
                     output = output_arr
                     output_other = output_arr_other
 
@@ -429,6 +428,7 @@ cdef class NCLS:
 
                     nfound += 1
                     i += 1
+
             loop_counter += 1
 
             cn.free_interval_iterator(it_alloc)
@@ -843,63 +843,63 @@ cdef class NCLS:
     #         return False
 
 
-    def __getstate__(self):
+    # def __getstate__(self):
 
-        cdef char *bp
-        cdef size_t size
-        cdef cn.FILE *stream
+    #     cdef char *bp
+    #     cdef size_t size
+    #     cdef cn.FILE *stream
 
-        stream = cn.open_memstream(&bp, &size)
+    #     stream = cn.open_memstream(&bp, &size)
 
-        cn.write_padded_binary(self.im, self.n, 256, stream)
-        cn.fflush(stream)
+    #     cn.write_padded_binary(self.im, self.n, 256, stream)
+    #     cn.fflush(stream)
 
-        cn.fclose(stream)
+    #     cn.fclose(stream)
 
-        output = to_bytes(bp, size)
+    #     output = to_bytes(bp, size)
 
-        cn.free(bp)
+    #     cn.free(bp)
 
-        return (self.n, output)
-
-
-    def __setstate__(self, d):
-
-        "Takes as much time as building anew so multithreading not a speedup"
-
-        size, bytes_ = d
-
-        self.build_from_array(bytes_, size)
+    #     return (self.n, output)
 
 
-    def build_from_array(self, array, int n):
+    # def __setstate__(self, d):
 
-        cdef cn.FILE *stream
-        cdef int i
-        cdef cn.IntervalMap *im_new
+    #     "Takes as much time as building anew so multithreading not a speedup"
 
-        self.close()
+    #     size, bytes_ = d
 
-        # http://cython.readthedocs.io/en/latest/src/tutorial/strings.html#passing-byte-strings
-        cdef char* bytestr = array
+    #     self.build_from_array(bytes_, size)
 
-        stream = cn.fmemopen(bytestr, n, "r")
 
-        if stream == NULL:
-            raise IOError('unable to read from bytearray')
+    # def build_from_array(self, array, int n):
 
-        im_new = cn.interval_map_alloc(n)
+    #     cdef cn.FILE *stream
+    #     cdef int i
+    #     cdef cn.IntervalMap *im_new
 
-        i = cn.read_imdiv(stream, im_new, n, 0, n)
+    #     self.close()
 
-        cn.fclose(stream)
+    #     # http://cython.readthedocs.io/en/latest/src/tutorial/strings.html#passing-byte-strings
+    #     cdef char* bytestr = array
 
-        if i != n:
-            raise IOError('IntervalMap file corrupted? Expected {} entries, got {}.'.format(n, i))
+    #     stream = cn.fmemopen(bytestr, n, "r")
 
-        self.n = n
-        self.im = im_new
-        self.subheader = cn.build_nested_list_inplace(self.im, self.n, &(self.ntop), &(self.nlists))
+    #     if stream == NULL:
+    #         raise IOError('unable to read from bytearray')
+
+    #     im_new = cn.interval_map_alloc(n)
+
+    #     i = cn.read_imdiv(stream, im_new, n, 0, n)
+
+    #     cn.fclose(stream)
+
+    #     if i != n:
+    #         raise IOError('IntervalMap file corrupted? Expected {} entries, got {}.'.format(n, i))
+
+    #     self.n = n
+    #     self.im = im_new
+    #     self.subheader = cn.build_nested_list_inplace(self.im, self.n, &(self.ntop), &(self.nlists))
 
 
 

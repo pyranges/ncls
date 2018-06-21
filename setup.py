@@ -5,7 +5,6 @@ from Cython.Build import cythonize
 import os
 import sys
 
-from ncls.version import __version__
 
 
 CLASSIFIERS = """Development Status :: 5 - Production/Stable
@@ -42,7 +41,7 @@ install_requires = ["cython", "numpy"]
 
 setup(
     name = "ncls",
-    version=__version__,
+    version="0.0.24",
     packages=find_packages(),
     ext_modules = cythonize(extensions),
     install_requires = ["cython", "numpy"],

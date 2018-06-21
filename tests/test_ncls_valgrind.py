@@ -8,8 +8,8 @@ def mem():
 	print(str(round(psutil.Process().memory_info().rss/1024./1024., 2)) + ' MB')
 
 for i in range(10000):
-    starts = pd.Series(range(0, 1))
-    ends = starts + 1
+    starts = pd.Series(range(0, 5))
+    ends = starts + 2
     ids = starts
 
     ncls = NCLS(starts.values, ends.values, ids.values)
