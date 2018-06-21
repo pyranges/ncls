@@ -439,7 +439,6 @@ int find_intervals(IntervalIterator *it0,int start,int end,
     it->i=find_overlap_start(start,end,im,n);
   }
 
-
   do {
     while (it->i>=0 && it->i<it->n && HAS_OVERLAP_POSITIVE(im[it->i],start,end)) {
       memcpy(buf+ibuf,im + it->i,sizeof(IntervalMap)); /*SAVE THIS HIT TO BUFFER */

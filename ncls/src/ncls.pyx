@@ -388,50 +388,6 @@ cdef class NCLS:
         cdef int loop_counter = 0
         cdef int nfound = 0
 
-        cdef cn.UT_array *found
-        cn.utarray_new(found, &(cn.ut_int_icd))
-
-        cdef cn.UT_array *found_other
-        cn.utarray_new(found_other, &(cn.ut_int_icd))
-
-        cdef cn.IntervalIterator *it
-        cdef cn.IntervalMap im_buf[1024]
-        if not self.im: # if empty
-            return [], []
-
-        while loop_counter < length:
-
-            it = cn.interval_iterator_alloc()
-            while it:
-                i = 0
-                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
-                                self.subheader, self.nlists, im_buf, 1024,
-                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
-                while i < nhit:
-
-                    cn.utarray_push_back(found, &(indexes[loop_counter]))
-                    cn.utarray_push_back(found_other, &(im_buf[i].target_id))
-                    # found[nfound] = indexes[loop_counter]
-                    # found_other[nfound] = im_buf[i].target_id
-                    # found.append(indexes[loop_counter])
-                    # found_other.append(im_buf[i].target_id)
-                    nfound += 1
-                    i += 1
-
-            cn.free_interval_iterator(it)
-
-            loop_counter += 1
-
-        cdef int *arr
-        cdef int *arr_other
-
-        arr = cn.utarray_eltptr(found, 0)
-        arr_other = cn.utarray_eltptr(found_other, 0)
-
-        length = cn.utarray_len(found)
-
-        # output = array("i")
         output_arr = np.zeros(length, dtype=np.long)
         output_arr_other = np.zeros(length, dtype=np.long)
         cdef long [::1] output
@@ -440,19 +396,44 @@ cdef class NCLS:
         output = output_arr
         output_other = output_arr_other
 
-        for i in range(length):
-            output_arr[i] = arr[i]
-            output_arr_other[i] = arr_other[i]
+        cdef cn.IntervalIterator *it, *it_alloc
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
 
-        # # data_pointer = c.cast(arr, c.POINTER(c.c_int))
-        # # new_array = np.copy(np.ctypeslib.as_array(data_pointer, shape=(length,)))
-        # cdef int[::1] mview = <int[:length:1]>(arr)
-        # output = np.copy(np.asarray(mview))
 
-        cn.utarray_free(found)
-        cn.utarray_free(found_other)
+        while loop_counter < len(starts):
 
-        return output_arr, output_arr_other
+            # remember first pointer for dealloc
+            it_alloc = cn.interval_iterator_alloc()
+            it = it_alloc
+
+            while it:
+                i = 0
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                if nfound + nhit >= length:
+
+                    length = length * 2
+                    np.resize(output_arr, length)
+                    np.resize(output_arr_other, length)
+                    output = output_arr
+                    output_other = output_arr_other
+
+                while i < nhit:
+
+                    output[nfound] = indexes[loop_counter]
+                    output_other[nfound] = im_buf[i].target_id
+
+                    nfound += 1
+                    i += 1
+            loop_counter += 1
+
+            cn.free_interval_iterator(it_alloc)
+
+        return output_arr[:nfound], output_arr_other[:nfound]
 
 
 
@@ -461,48 +442,12 @@ cdef class NCLS:
     @cython.wraparound(False)
     cpdef first_overlap_both(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
+        cdef int i
         cdef int nhit = 0
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
 
-        cdef cn.UT_array *found
-        cn.utarray_new(found, &(cn.ut_int_icd))
-
-        cdef cn.UT_array *found_other
-        cn.utarray_new(found_other, &(cn.ut_int_icd))
-
-        cdef cn.IntervalIterator *it
-        cdef cn.IntervalMap im_buf[1024]
-        if not self.im: # if empty
-            return [], []
-
-        while loop_counter < length:
-
-            it = cn.interval_iterator_alloc()
-            while it:
-                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
-                                self.subheader, self.nlists, im_buf, 1024,
-                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
-                if nhit > 0:
-                    cn.utarray_push_back(found, &(indexes[loop_counter]))
-                    cn.utarray_push_back(found_other, &(im_buf[0].target_id))
-                nfound += 1
-
-            cn.free_interval_iterator(it)
-
-            loop_counter += 1
-
-        cdef int *arr
-        cdef int *arr_other
-
-        arr = cn.utarray_eltptr(found, 0)
-        arr_other = cn.utarray_eltptr(found_other, 0)
-
-        length = cn.utarray_len(found)
-
-        # output = array("i")
         output_arr = np.zeros(length, dtype=np.long)
         output_arr_other = np.zeros(length, dtype=np.long)
         cdef long [::1] output
@@ -511,19 +456,35 @@ cdef class NCLS:
         output = output_arr
         output_other = output_arr_other
 
-        for i in range(length):
-            output_arr[i] = arr[i]
-            output_arr_other[i] = arr_other[i]
+        cdef cn.IntervalIterator *it, *it_alloc
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
 
-        # # data_pointer = c.cast(arr, c.POINTER(c.c_int))
-        # # new_array = np.copy(np.ctypeslib.as_array(data_pointer, shape=(length,)))
-        # cdef int[::1] mview = <int[:length:1]>(arr)
-        # output = np.copy(np.asarray(mview))
 
-        cn.utarray_free(found)
-        cn.utarray_free(found_other)
+        while loop_counter < len(starts):
 
-        return output_arr, output_arr_other
+            # remember first pointer for dealloc
+            it_alloc = cn.interval_iterator_alloc()
+            it = it_alloc
+
+            while it:
+                i = 0
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                if nhit:
+                    output[nfound] = indexes[loop_counter]
+                    output_other[nfound] = im_buf[i].target_id
+
+                    nfound += 1
+
+            loop_counter += 1
+
+            cn.free_interval_iterator(it_alloc)
+
+        return output_arr[:nfound], output_arr_other[:nfound]
 
 
         # return found_arr, found_other_arr
