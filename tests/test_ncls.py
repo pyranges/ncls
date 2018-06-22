@@ -15,7 +15,7 @@ for i in range(0, int(1e6)):
         print(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
         print(mem())
 
-    starts = pd.Series(range(0, 5000))
+    starts = pd.Series(range(0, 50))
     ends = starts + 2
     ids = starts
 
