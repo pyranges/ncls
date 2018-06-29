@@ -24,6 +24,9 @@ CLASSIFIERS = CLASSIFIERS.split("\n")
 
 macros = [("CYTHON_TRACE", "1")]
 
+# extension sources
+macros = []
+
 if macros:
     from Cython.Compiler.Options import get_directive_defaults
     directive_defaults = get_directive_defaults()
@@ -31,8 +34,6 @@ if macros:
     directive_defaults['binding'] = True
 
 
-# extension sources
-macros = []
 
 extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
                         define_macros=macros)]
@@ -41,7 +42,7 @@ install_requires = ["cython", "numpy"]
 
 setup(
     name = "ncls",
-    version="0.0.25",
+    version="0.0.28",
     packages=find_packages(),
     ext_modules = cythonize(extensions),
     install_requires = ["cython", "numpy"],

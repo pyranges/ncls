@@ -85,9 +85,13 @@ cdef class NCLS:
     # build NCLS from array of starts, ends, values
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.initializedcheck(False)
     def __cinit__(self, long [::1] starts=None, long [::1] ends=None, long[::1] ids=None):
 
         if None in (starts, ends, ids):
+            return
+
+        if len(starts) == 0 or len(ends) == 0 or len(ids) == 0:
             return
 
         cdef int i
@@ -142,6 +146,7 @@ cdef class NCLS:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.initializedcheck(False)
     cpdef set_difference_helper(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int i
@@ -266,6 +271,7 @@ cdef class NCLS:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.initializedcheck(False)
     cpdef all_overlaps_both(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int i
@@ -301,9 +307,13 @@ cdef class NCLS:
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
+                # print("nhit", nhit)
+                # print("length", length)
+                # print("nfound", nfound)
+                # print(nfound + nhit >= length)
                 if nfound + nhit >= length:
 
-                    length = length * 2
+                    length = (length + nhit) * 2
                     output_arr = np.resize(output_arr, length)
                     output_arr_other = np.resize(output_arr_other, length)
                     output = output_arr
@@ -311,6 +321,9 @@ cdef class NCLS:
 
                 while i < nhit:
 
+                    # print("length", length)
+                    # print("nfound", nfound)
+                    # print("loop_counter", loop_counter)
                     output[nfound] = indexes[loop_counter]
                     output_other[nfound] = im_buf[i].target_id
 
@@ -326,6 +339,7 @@ cdef class NCLS:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.initializedcheck(False)
     cpdef first_overlap_both(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int nhit = 0
@@ -375,6 +389,7 @@ cdef class NCLS:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.initializedcheck(False)
     cpdef all_containments_both(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int i
@@ -437,6 +452,7 @@ cdef class NCLS:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.initializedcheck(False)
     cpdef has_containment(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int i = 0
@@ -491,6 +507,7 @@ cdef class NCLS:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.initializedcheck(False)
     cpdef has_overlaps(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int i = 0
@@ -531,6 +548,7 @@ cdef class NCLS:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.initializedcheck(False)
     cpdef no_overlaps(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
         cdef int i = 0
