@@ -73,6 +73,11 @@ cdef extern from "ncls/src/intervaldb.h":
                        int nbuf,
                        int *p_nreturn,
                        IntervalIterator **it_return)
+    void find_k_next(int start, int end,
+                    IntervalMap im[], int n,
+                    SublistHeader subheader[], int nlists,
+                    IntervalMap buf[], int ktofind,
+                    int *p_nreturn)
 
     # char *write_binary_files(IntervalMap im[],int n,int ntop,int div,SublistHeader *subheader,int nlists,char filestem[])
     # IntervalDBFile *read_binary_files(char filestem[],char err_msg[],int subheader_nblock) except NULL

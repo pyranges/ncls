@@ -106,6 +106,11 @@ extern int save_text_file(char filestem[],char err_msg[],
 			  char basestem[],FILE *ofile);
 extern int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[]);
 extern void reorient_intervals(int n,IntervalMap im[],int ori_sign);
+extern int find_k_next(int start, int end,
+                IntervalMap im[], int n,
+                SublistHeader subheader[], int nlists,
+                IntervalMap buf[], int ktofind,
+                int *p_nreturn);
 
 #define FIND_FILE_MALLOC_ERR -2
 
