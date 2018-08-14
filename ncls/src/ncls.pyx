@@ -5,6 +5,8 @@ cimport cython
 
 cimport ncls.src.cncls as cn
 
+from libc.stdlib cimport malloc
+
 # import ctypes as c
 import numpy as np
 
@@ -287,10 +289,11 @@ cdef class NCLS:
     @cython.initializedcheck(False)
     cpdef all_overlaps_both_stack(self, long [::1] starts, long [::1] ends, long [::1] indexes):
 
+        # print("In beginning ")
         if not self.im: # if empty
             return [], []
 
-        cdef int i
+        cdef int i = 0
         cdef int nhit = 0
         cdef int length = len(starts)
         cdef int loop_counter = 0
@@ -304,30 +307,50 @@ cdef class NCLS:
         output = output_arr
         output_other = output_arr_other
 
-        cdef int resultlength = len(starts) * 3
-        cdef cn.IntervalMap results[resultlength]
+        cdef cn.IntervalMap im_buf[1024]
 
-        cdef int sp
-        cdef int max_number_recursions = length - self.ntop
-        cdef int start_stack[max_number_recursions]
-        cdef int end_stack[max_number_recursions]
+        cdef int sp = 0
+        # print("n, ntop:", self.n, self.ntop)
+        cdef int max_number_recursions = self.n - self.ntop + 1
+        # print(max_number_recursions)
+
+        # assert max_number_recursions > 0
+        # print("max_number_recursions", max_number_recursions)
+
+        # cdef int *start_stack = cn.alloc_array(max_number_recursions)
+        # cdef int *end_stack = cn.alloc_array(max_number_recursions)
+
+        # start_stack = <int*> calloc(max_number_recursions, sizeof(int))
+        # end_stack = <int*> calloc(max_number_recursions, sizeof(int))
+
+        cdef int *start_stack
+        cdef int *end_stack
+        start_stack = <int*> malloc(max_number_recursions * sizeof(1));
+        end_stack = <int*> malloc(max_number_recursions * sizeof(1));
 
         for loop_counter in range(length):
 
             sp = 0
 
             while sp != -1:
-                sp = cn.find_intervals_stack(start_stack, end_stack, sp,
-                                             starts[loop_counter], ends[loop_counter],
-                                             self.im, self.subheader, results,
-                                             resultlength)
 
-                # print("nhit", nhit)
-                # print("length", length)
+                i = 0
+                sp = cn.find_intervals_stack(start_stack, end_stack, sp,
+                                             starts[loop_counter],
+                                             ends[loop_counter],
+                                             self.im, self.ntop, self.subheader,
+                                             im_buf, &(nhit))
+
+                # if loop_counter > 2:
+                #     print("loop_counter > 2")
+                #     raise
+
                 # print("nfound", nfound)
                 # print(nfound + nhit >= length)
                 if nfound + nhit >= length:
 
+                    # print("In nfound")
+                    # raise
                     length = (length + nhit) * 2
                     output_arr = np.resize(output_arr, length)
                     output_arr_other = np.resize(output_arr_other, length)
@@ -336,17 +359,14 @@ cdef class NCLS:
 
                 while i < nhit:
 
-                    # print("length", length)
-                    # print("nfound", nfound)
-                    # print("loop_counter", loop_counter)
                     output[nfound] = indexes[loop_counter]
                     output_other[nfound] = im_buf[i].target_id
 
                     nfound += 1
                     i += 1
 
-            cn.free_interval_iterator(it_alloc)
-
+        # print("output[arr[:nfound+2]]", output_arr[:nfound+2])
+        # print("nfound:", nfound)
         return output_arr[:nfound], output_arr_other[:nfound]
 
 
@@ -690,7 +710,7 @@ cdef class NCLS:
         cdef cn.IntervalIterator *it
         cdef cn.IntervalIterator *it_alloc
 
-        cdef cn.IntervalMap im_buf[k]
+        cdef cn.IntervalMap im_buf[1024]
         if not self.im: # if empty
             return [], []
 

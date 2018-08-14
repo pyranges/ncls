@@ -306,6 +306,14 @@ SublistHeader *build_nested_list(IntervalMap im[],int n,
   return NULL;
 }
 
+int *alloc_array(int n){
+  /* var = (int*) malloc(n * sizeof(int)); */
+  int *arr = NULL;
+  CALLOC(arr,n,int);
+  handle_malloc_failure:
+    return NULL;
+};
+
 
 IntervalMap *interval_map_alloc(int n)
 {
@@ -1151,73 +1159,93 @@ int free_interval_dbfile(IntervalDBFile *db_file)
 /* } */
 
 
-int find_k_next(int start, int end,
-                IntervalMap im[], int n,
-                SublistHeader subheader[], int nlists,
-                IntervalMap buf[], int ktofind,
-                int *p_nreturn)
-{
-  IntervalIterator *it=NULL,*it2=NULL;
-  int nfound=0,j,k;
-  /* IntervalMap *results = interval_map_alloc(ktofind); */
+/* int find_k_next(int start, int end, */
+/*                 IntervalMap im[], int n, */
+/*                 SublistHeader subheader[], int nlists, */
+/*                 IntervalMap buf[], int ktofind, */
+/*                 int *p_nreturn) */
+/* { */
+/*   IntervalIterator *it=NULL,*it2=NULL; */
+/*   int nfound=0,j,k; */
+/*   /\* IntervalMap *results = interval_map_alloc(ktofind); *\/ */
 
-  CALLOC(it,1,IntervalIterator);
+/*   /\* CALLOC(it,1,IntervalIterator); *\/ */
 
-  if (it->n == 0) { /* DEFAULT: SEARCH THE TOP NESTED LIST */
-    it->n=n;
-    it->i=find_overlap_start(start,end,im,n);
-  }
+/*   if (it->n == 0) { /\* DEFAULT: SEARCH THE TOP NESTED LIST *\/ */
+/*     it->n=n; */
+/*     it->i=find_overlap_start(start,end,im,n); */
+/*   } */
 
-  do {
-    while (it->i>=0 && it->i<it->n && (nfound < ktofind)) {
-      if (!HAS_OVERLAP_POSITIVE(im[it->i],start,end)) {
-        buf[nfound] = im[it->i]; /*SAVE THIS HIT TO BUFFER */
-        nfound++;
-      }
-      k=im[it->i].sublist; /* GET SUBLIST OF i IF ANY */
-      it->i++; /* ADVANCE TO NEXT INTERVAL */
-      if (k>=0 && (j=find_suboverlap_start(start,end,k,im,subheader,nlists))>=0) {
-        PUSH_ITERATOR_STACK(it,it2,IntervalIterator); /* RECURSE TO SUBLIST */
-        it2->i = j; /* START OF OVERLAPPING HITS IN THIS SUBLIST */
-        it2->n = subheader[k].start+subheader[k].len; /* END OF SUBLIST */
-        it=it2; /* PUSH THE ITERATOR STACK */
-      }
-    }
-  } while (POP_ITERATOR_STACK(it));  /* IF STACK EXHAUSTED, EXIT */
-  free_interval_iterator(it); /* takes care of the whole stack */
-  it=NULL;  /* ITERATOR IS EXHAUSTED */
+/*   do { */
+/*     while (it->i>=0 && it->i<it->n && (nfound < ktofind)) { */
+/*       if (!HAS_OVERLAP_POSITIVE(im[it->i],start,end)) { */
+/*         buf[nfound] = im[it->i]; /\*SAVE THIS HIT TO BUFFER *\/ */
+/*         nfound++; */
+/*       } */
+/*       k=im[it->i].sublist; /\* GET SUBLIST OF i IF ANY *\/ */
+/*       it->i++; /\* ADVANCE TO NEXT INTERVAL *\/ */
+/*       if (k>=0 && (j=find_suboverlap_start(start,end,k,im,subheader))>=0) { */
+/*         PUSH_ITERATOR_STACK(it,it2,IntervalIterator); /\* RECURSE TO SUBLIST *\/ */
+/*         it2->i = j; /\* START OF OVERLAPPING HITS IN THIS SUBLIST *\/ */
+/*         it2->n = subheader[k].start+subheader[k].len; /\* END OF SUBLIST *\/ */
+/*         it=it2; /\* PUSH THE ITERATOR STACK *\/ */
+/*       } */
+/*     } */
+/*   } while (POP_ITERATOR_STACK(it));  /\* IF STACK EXHAUSTED, EXIT *\/ */
+/*   free_interval_iterator(it); /\* takes care of the whole stack *\/ */
+/*   it=NULL;  /\* ITERATOR IS EXHAUSTED *\/ */
 
-  *p_nreturn=nfound; /* #INTERVALS FOUND IN THIS PASS */
-}
+/*   *p_nreturn=nfound; /\* #INTERVALS FOUND IN THIS PASS *\/ */
+/* } */
 
 
-inline int find_intervals_stack(int start_stack[], int end_stack[], int sp, int start,
+int find_intervals_stack(int start_stack[], int end_stack[], int sp, int start,
                                 int end, IntervalMap im[], int n,
                                 SublistHeader subheader[], IntervalMap buf[],
-                                int *nbuf)
+                                int *p_nreturn)
 {
   /* IntervalIterator *it=NULL,*it2=NULL; */
+  /* printf("In very beginning!\n"); */
+  /* return 0; */
   int nfound = 0, j, k;
+  /* printf("j: %d, sp: %d, start_stack[sp]: %d", 0, sp, sp); */
 
-  if (sp == 0) {
-    start_stack[sp] = find_overlap_start(start,end,im,n);
-    end_stack[sp] = n;
-  }
+  /* if (sp == 0) { */
+  clock_t t;
+  t = clock();
+  j = find_overlap_start(start,end,im,n);
+  t = clock() - t;
+  double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds
+  printf("fun() took %f seconds to execute \n", time_taken);
+  start_stack[sp] = j;
+  end_stack[sp] = n;
+  /* } */
 
-  while (sp > 0) {
+  /* printf("We are before loop\n"); */
+  /* printf("start, end: %d, %d", start_stack[sp], end_stack[sp]); */
+
+  /* fflush(stdout); */
+
+  while (sp >= 0) {
+    /* printf("Outer loop. sp: %d, st: %d, end: %d\n", sp, start_stack[sp], end_stack[sp]); */
+    /* fflush(stdout); */
     while (start_stack[sp] >= 0 && start_stack[sp] < end_stack[sp] && \
-           HAS_OVERLAP_POSITIVE(start_stack[sp], start, end)) {
-      memcpy(buf+nfound, im + start_stack[sp],sizeof(IntervalMap)); /*SAVE THIS HIT TO BUFFER */
+           HAS_OVERLAP_POSITIVE(im[start_stack[sp]], start, end)) {
+      /* printf("Inner loop. sp: %d\n", start_stack[sp]); */
+      /* printf("Interval added: %d, %d, %d\n", im[start_stack[sp]].start, im[start_stack[sp]].end, im[start_stack[sp]].target_id); */
+      memcpy(buf+nfound, im + start_stack[sp], sizeof(IntervalMap)); /*SAVE THIS HIT TO BUFFER */
+
       nfound++;
-      k=im[sp++].sublist; /* GET SUBLIST OF i IF ANY */
-      /* sp++; ADVANCE TO NEXT INTERVAL */
+      k=im[sp].sublist; /* GET SUBLIST OF i IF ANY */
+
+      start_stack[sp++]++; /* ADVANCE TO NEXT INTERVAL */
       if (k>=0 && (j=find_suboverlap_start(start,end,k,im,subheader))>=0) {
         sp++;
         start_stack[sp] = j;
         end_stack[sp] = subheader[k].start + subheader[k].len; /* END OF SUBLIST */
       }
 
-      if (nfound>=nbuf){ /* FILLED THE BUFFER, RETURN THE RESULTS SO FAR */
+      if (nfound>=1024){ /* FILLED THE BUFFER, RETURN THE RESULTS SO FAR */
         goto finally_return_result;
       }
     }
@@ -1228,6 +1256,7 @@ inline int find_intervals_stack(int start_stack[], int end_stack[], int sp, int 
 
  finally_return_result:
 
-  *p_nreturn = nfound; /* #INTERVALS FOUND IN THIS PASS */
+    *p_nreturn = nfound; /* #INTERVALS FOUND IN THIS PASS */
+
   return sp;
 }

@@ -62,6 +62,12 @@ cdef extern from "ncls/src/intervaldb.h":
     IntervalIterator *interval_iterator_alloc()
     int free_interval_iterator(IntervalIterator *it)
     IntervalIterator *reset_interval_iterator(IntervalIterator *it)
+    int *alloc_array(int n)
+    int find_intervals_stack(int start_stack[], int end_stack[], int sp, int start,
+                             int end, IntervalMap im[], int n,
+                             SublistHeader subheader[], IntervalMap buf[],
+                             int *nfound)
+
     int find_intervals(IntervalIterator *it0,
                        int start,
                        int end,
