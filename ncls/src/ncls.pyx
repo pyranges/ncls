@@ -114,6 +114,11 @@ cdef class NCLS:
 
         self.subheader = cn.build_nested_list(self.im, self.n, &(self.ntop), &(self.nlists))
 
+    def __str__(self):
+
+        contents = ["Number intervals:", self.n, "Number of intervals in main list:", self.ntop, "Number of intervals with subintervals:", self.nlists, "Percentage in top-level interval", self.ntop/float(self.n)]
+        return "\n".join(str(c) for c in contents)
+
 
     def find_overlap(self, int start, int end):
         if not self.im: # RAISE EXCEPTION IF NO DATA
