@@ -37,7 +37,7 @@ cdef extern from "stdio.h":
 #   char *strcat(char *,char *)
 
 
-cdef extern from "ncls/src/intervaldb.h":
+cdef extern from "intervaldb.h":
     ctypedef struct IntervalMap:
         int start
         int end

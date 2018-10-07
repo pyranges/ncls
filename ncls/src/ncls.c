@@ -579,7 +579,7 @@ static CYTHON_INLINE float __PYX_NAN() {
 /* Early includes */
 #include "stdlib.h"
 #include "stdio.h"
-#include "ncls/src/intervaldb.h"
+#include "intervaldb.h"
 #include <string.h>
 #include <stdlib.h>
 #include "pythread.h"
