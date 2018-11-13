@@ -15,6 +15,9 @@ pip install ncls
 ## Changelog
 
 ```
+# 2018.13.11 (0.0.29)
+- add 32-bit methods
+
 # 2018.01.06 (0.0.23)
 - NCLS started segfaulting in travis build for pyranges. Probably due to bad string definition files in travis.
 

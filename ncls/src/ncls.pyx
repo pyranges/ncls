@@ -22,9 +22,9 @@ cdef class NCLSIterator:
     cdef cn.IntervalIterator *it_alloc
     cdef cn.IntervalMap im_buf[1024]
     cdef int nhit, start, end, ihit
-    cdef NCLS db
+    cdef NCLS64 db
 
-    def __cinit__(self, int start, int end, NCLS db not None):
+    def __cinit__(self, int start, int end, NCLS64 db not None):
         self.it = cn.interval_iterator_alloc()
         self.it_alloc = self.it
         self.start = start
@@ -77,7 +77,9 @@ cdef class NCLSIterator:
         return NCLSIterator(start, end, self)
 
 
-cdef class NCLS:
+
+
+cdef class NCLS64:
 
     cdef cn.SublistHeader *subheader
     cdef cn.IntervalMap *im
@@ -198,8 +200,14 @@ cdef class NCLS:
         if not self.im: # if empty
             return [], [], []
 
+
+        # print("----")
+        print(output_arr)
+        print(output_arr_start)
+        print(output_arr_end)
+        # print("indexes", list(indexes))
         for loop_counter in range(length):
-            #print("loop_counter", loop_counter)
+            # print("---- loop_counter ----", loop_counter)
             #print("A start:", starts[loop_counter])
             #print("A end:", ends[loop_counter])
 
@@ -216,6 +224,9 @@ cdef class NCLS:
                 nstart = starts[loop_counter]
                 nend = ends[loop_counter]
 
+                # print("nstart", nstart)
+                # print("nend", nend)
+
                 if nfound + nhit >= length:
 
                     length = length * 2
@@ -228,6 +239,7 @@ cdef class NCLS:
 
                 # B covers whole of A; ignore
                 if nhit == 1 and starts[loop_counter] > im_buf[i].start and ends[loop_counter] < im_buf[i].end:
+                    # print("ignore me!")
                     output_start[nfound] = -1
                     output_end[nfound] = -1
                     output[nfound] = indexes[loop_counter]
@@ -235,13 +247,14 @@ cdef class NCLS:
                     nfound += 1
 
                 while i < nhit:
-                    #print("  i:", i)
+                    # print("--- i:", i)
+                    # print("--- im_buf[i]", im_buf[i])
                     #print("  B start:", im_buf[i].start)
                     #print("  B end:", im_buf[i].end)
 
                     # in case the start contributes nothing
                     if i < nhit - 1:
-                        #print("  i < nhit - 1")
+                        # print("  i < nhit - 1")
 
                         if nstart < im_buf[i].start:
                             #print("  new_start", nstart)
@@ -254,13 +267,14 @@ cdef class NCLS:
                         nstart = im_buf[i].end
                     elif i == nhit - 1:
 
-                        #print("i == nhit -1")
+                        # print("i == nhit -1")
                         #print("im_buf[i].start", im_buf[i].start)
                         #print("im_buf[i].end", im_buf[i].end)
                         #print("nstart", nstart)
                         #print("ends[loop_counter]", ends[loop_counter])
 
                         if im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]:
+                            # print("im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]")
                             #print("we are here " * 10)
 
                             output_start[nfound] = -1
@@ -269,14 +283,18 @@ cdef class NCLS:
                             nfound += 1
                         else:
                             if im_buf[i].start > nstart:
-                                #print("im_buf[i].start > nstart", im_buf[i].start, nstart)
+                                # print("im_buf[i].start > nstart", im_buf[i].start, nstart)
                                 output[nfound] = indexes[loop_counter]
                                 output_start[nfound] = nstart
                                 output_end[nfound] = im_buf[i].start
                                 nfound += 1
 
                             if im_buf[i].end < ends[loop_counter]:
-                                #print("im_buf[i].end < ends[loop_counter]", im_buf[i].end, ends[loop_counter])
+                                # print("im_buf[i].end < ends[loop_counter]", im_buf[i].end, ends[loop_counter])
+                                # print("i, loop_counter", i, loop_counter)
+                                # print("indexes[loop_counter]", indexes[loop_counter])
+                                # print("indexes", indexes[loop_counte  rloop_counter])
+
                                 output[nfound] = indexes[loop_counter]
                                 output_start[nfound] = im_buf[i].end
                                 output_end[nfound] = ends[loop_counter]
@@ -285,6 +303,10 @@ cdef class NCLS:
                     i += 1
 
             cn.free_interval_iterator(it_alloc)
+            # print("-------")
+            # print(output_arr)
+            # print(output_arr_start)
+            # print(output_arr_end)
 
         return output_arr[:nfound], output_arr_start[:nfound], output_arr_end[:nfound]
 

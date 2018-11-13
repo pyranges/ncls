@@ -42,8 +42,6 @@ cdef extern from "ncls/src/intervaldb.h":
         int start
         int end
         int target_id
-        int target_start
-        int target_end
         int sublist
 
     ctypedef struct IntervalIterator:
@@ -53,6 +51,7 @@ cdef extern from "ncls/src/intervaldb.h":
         int start
         int len
 
+    int find_overlap_start(int start, int end, IntervalMap im[], int n)
     int imstart_qsort_cmp(void *void_a,void *void_b)
     # int target_qsort_cmp(void *void_a,void *void_b)
     IntervalMap *read_intervals(int n,FILE *ifile)

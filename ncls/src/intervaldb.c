@@ -257,12 +257,15 @@ SublistHeader *build_nested_list(IntervalMap im[],int n,
     CALLOC(imsub,nsub,IntervalMap); /* TEMPORARY ARRAY FOR REPACKING SUBLISTS */
     for (i=j=0;i<n;i++) { /* GENERATE LIST FOR SORTING; ASSIGN HEADER INDEXES*/
       parent=im[i].sublist;
+      printf("Interval %i has parent %d\n", i, parent);
       if (parent>=0)  {/* IN A SUBLIST */
         imsub[j].start=i;
         imsub[j].sublist=parent;
         j++;
-        if (im[parent].sublist<0) /* A NEW PARENT! SET HIS SUBLIST HEADER INDEX */
+        if (im[parent].sublist<0){ /* A NEW PARENT! SET HIS SUBLIST HEADER INDEX */
+          printf("Setting parent %d to sublist %d\n", parent, nlists += 1);
           im[parent].sublist=nlists++;
+        }
       }
       im[i].sublist= -1; /* RESET TO DEFAULT VALUE: NO SUBLIST */
     }
@@ -272,9 +275,11 @@ SublistHeader *build_nested_list(IntervalMap im[],int n,
     CALLOC(subheader,nlists,SublistHeader); /* SUBLIST HEADER INDEX */
     for (i=0;i<nsub;i++) { /* COPY SUBLIST ENTRIES TO imsub */
       j=imsub[i].start;
+      printf("j: %d\n", j);
       parent=imsub[i].sublist;
       memcpy(imsub+i,im+j,sizeof(IntervalMap)); /* COPY INTERVAL */
       k=im[parent].sublist;
+      printf("k is %d\n", k);
       if (subheader[k].len==0) /* START A NEW SUBLIST */
         subheader[k].start=i;
       subheader[k].len++; /* COUNT THE SUBLIST ENTRIES */

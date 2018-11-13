@@ -4,6 +4,7 @@ from Cython.Build import cythonize
 
 import os
 import sys
+import numpy as np
 
 
 
@@ -36,13 +37,15 @@ if macros:
 
 
 extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
-                        define_macros=macros)]
+                        define_macros=macros),
+              Extension("ncls.src.ncls32", ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
+                        define_macros=macros, include_dirs=[np.get_include()])]
 
 install_requires = ["cython", "numpy"]
 
 setup(
     name = "ncls",
-    version="0.0.28",
+    version="0.0.29",
     packages=find_packages(),
     ext_modules = cythonize(extensions),
     install_requires = ["cython", "numpy"],
