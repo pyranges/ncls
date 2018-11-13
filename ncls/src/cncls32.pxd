@@ -43,18 +43,12 @@ cdef extern from "ncls/src/intervaldb32.h":
     int find_overlap_start(int32_t start, int32_t end, IntervalMap im[], int n)
     int imstart_qsort_cmp(void *void_a,void *void_b)
     # int target_qsort_cmp(void *void_a,void *void_b)
-    IntervalMap *read_intervals(int n,FILE *ifile)
     SublistHeader *build_nested_list(IntervalMap im[],int n,int *p_n,int *p_nlists)
-    SublistHeader *build_nested_list_inplace(IntervalMap im[],int n,int *p_n,int *p_nlists)
     IntervalMap *interval_map_alloc(int n)
     IntervalIterator *interval_iterator_alloc()
     int free_interval_iterator(IntervalIterator *it)
     IntervalIterator *reset_interval_iterator(IntervalIterator *it)
     int *alloc_array(int n)
-    int find_intervals_stack(int start_stack[], int end_stack[], int sp, int start32_t,
-                             int end32_t, IntervalMap im[], int n,
-                             SublistHeader subheader[], IntervalMap buf[],
-                             int *nfound)
 
     int find_intervals(IntervalIterator *it0,
                        int start,
@@ -67,11 +61,3 @@ cdef extern from "ncls/src/intervaldb32.h":
                        int nbuf,
                        int *p_nreturn,
                        IntervalIterator **it_return)
-
-    void find_k_next(int start, int end,
-                    IntervalMap im[], int n,
-                    SublistHeader subheader[], int nlists,
-                    IntervalMap buf[], int ktofind,
-                    int *p_nreturn)
-
-    int read_imdiv(FILE *ifile,IntervalMap imdiv[],int div,int i_div,int ntop)

@@ -66,10 +66,10 @@ cdef class NCLS32:
         cdef int loop_counter = 0
         cdef int nfound = 0
 
-        output_arr = np.zeros(length, dtype=np.int32)
-        output_arr_other = np.zeros(length, dtype=np.int32)
-        cdef int32_t [::1] output
-        cdef int32_t [::1] output_other
+        output_arr = np.zeros(length, dtype=long)
+        output_arr_other = np.zeros(length, dtype=long)
+        cdef long [::1] output
+        cdef long [::1] output_other
 
         output = output_arr
         output_other = output_arr_other

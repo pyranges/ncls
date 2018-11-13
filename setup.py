@@ -45,7 +45,7 @@ install_requires = ["cython", "numpy"]
 
 setup(
     name = "ncls",
-    version="0.0.29",
+    version="0.0.30",
     packages=find_packages(),
     ext_modules = cythonize(extensions),
     install_requires = ["cython", "numpy"],

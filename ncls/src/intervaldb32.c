@@ -64,9 +64,9 @@ SublistHeader *build_nested_list(IntervalMap im[],int n,
   IntervalMap *imsub=NULL;
   SublistHeader *subheader=NULL;
 
-#ifdef ALL_POSITIVE_ORIENTATION
-  reorient_intervals(n,im,1); /* FORCE ALL INTERVALS INTO POSITIVE ORI */
-#endif
+/* #ifdef ALL_POSITIVE_ORIENTATION */
+/*   reorient_intervals(n,im,1); /\* FORCE ALL INTERVALS INTO POSITIVE ORI *\/ */
+/* #endif */
 #ifdef MERGE_INTERVAL_ORIENTATIONS
   qsort(im,n,sizeof(IntervalMap),im_qsort_cmp); /* SORT BY start, CONTAINMENT */
 #else
@@ -287,9 +287,9 @@ int find_intervals(IntervalIterator *it0, int start, int end,
   it=NULL;  /* ITERATOR IS EXHAUSTED */
 
  finally_return_result:
-#if defined(ALL_POSITIVE_ORIENTATION) || defined(MERGE_INTERVAL_ORIENTATIONS)
-  reorient_intervals(ibuf,buf,ori_sign); /* REORIENT INTERVALS TO MATCH QUERY ORI */
-#endif
+/* #if defined(ALL_POSITIVE_ORIENTATION) || defined(MERGE_INTERVAL_ORIENTATIONS) */
+/*   reorient_intervals(ibuf,buf,ori_sign); /\* REORIENT INTERVALS TO MATCH QUERY ORI *\/ */
+/* #endif */
 
   *p_nreturn=ibuf; /* #INTERVALS FOUND IN THIS PASS */
   *it_return=it; /* HAND BACK ITERATOR FOR CONTINUING THE SEARCH, IF ANY */
