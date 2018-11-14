@@ -30,7 +30,7 @@ cdef class NCLS32:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    def __cinit__(self, int32_t [::1] starts=None, int32_t [::1] ends=None, long [::1] ids=None):
+    def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const long [::1] ids=None):
 
         if None in (starts, ends, ids):
             return
@@ -58,7 +58,7 @@ cdef class NCLS32:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef all_overlaps_both(self, int32_t [::1] starts, int32_t [::1] ends, long [::1] indexes):
+    cpdef all_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
         cdef int i
         cdef int nhit = 0
@@ -177,7 +177,7 @@ cdef class NCLS32:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef set_difference_helper(self, int32_t [::1] starts, int32_t [::1] ends, long [::1] indexes):
+    cpdef set_difference_helper(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
         cdef int i
         cdef int nhit = 0
@@ -367,7 +367,7 @@ cdef class NCLS32:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef first_overlap_both(self, int32_t [::1] starts, int32_t [::1] ends, long [::1] indexes):
+    cpdef first_overlap_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
         cdef int nhit = 0
         cdef int length = len(starts)
@@ -535,7 +535,7 @@ cdef class NCLS32:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef has_overlaps(self, int32_t [::1] starts, int32_t [::1] ends, long [::1] indexes):
+    cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
         cdef int i = 0
         cdef int ix = 0
