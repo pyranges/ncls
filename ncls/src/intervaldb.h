@@ -106,7 +106,7 @@ extern IntervalDBFile *read_binary_files(char filestem[],char err_msg[],
 extern int free_interval_dbfile(IntervalDBFile *db_file);
 
 extern int save_text_file(char filestem[],char err_msg[],
-			  char basestem[],FILE *ofile);
+		  char basestem[],FILE *ofile);
 extern int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[]);
 extern void reorient_intervals(int n,IntervalMap im[],int ori_sign);
 

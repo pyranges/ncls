@@ -414,67 +414,67 @@ cdef class NCLS32:
         return output_arr[:nfound], output_arr_other[:nfound]
 
 
-    # @cython.boundscheck(False)
-    # @cython.wraparound(False)
-    # @cython.initializedcheck(False)
-    # cpdef all_containments_both(self, long [::1] starts, long [::1] ends, long [::1] indexes):
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.initializedcheck(False)
+    cpdef all_containments_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
-    #     cdef int i
-    #     cdef int nhit = 0
-    #     cdef int length = len(starts)
-    #     cdef int loop_counter = 0
-    #     cdef int nfound = 0
-    #     cdef int start, end
+        cdef int i
+        cdef int nhit = 0
+        cdef int length = len(starts)
+        cdef int loop_counter = 0
+        cdef int nfound = 0
+        cdef int start, end
 
-    #     output_arr = np.zeros(length, dtype=cnp.long)
-    #     output_arr_other = np.zeros(length, dtype=cnp.long)
-    #     cdef long [::1] output
-    #     cdef long [::1] output_other
+        output_arr = np.zeros(length, dtype=np.long)
+        output_arr_other = np.zeros(length, dtype=np.long)
+        cdef long [::1] output
+        cdef long [::1] output_other
 
-    #     output = output_arr
-    #     output_other = output_arr_other
+        output = output_arr
+        output_other = output_arr_other
 
-    #     cdef cn.IntervalIterator *it
-    #     cdef cn.IntervalIterator *it_alloc
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalIterator *it_alloc
 
 
-    #     cdef cn.IntervalMap im_buf[1024]
-    #     if not self.im: # if empty
-    #         return [], []
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
 
-    #     for loop_counter in range(length):
+        for loop_counter in range(length):
 
-    #         it_alloc = cn.interval_iterator_alloc()
-    #         it = it_alloc
-    #         start = starts[loop_counter]
-    #         end = ends[loop_counter]
-    #         while it:
-    #             i = 0
-    #             cn.find_intervals(it, start, end, self.im, self.ntop,
-    #                             self.subheader, self.nlists, im_buf, 1024,
-    #                             &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+            it_alloc = cn.interval_iterator_alloc()
+            it = it_alloc
+            start = starts[loop_counter]
+            end = ends[loop_counter]
+            while it:
+                i = 0
+                cn.find_intervals(it, start, end, self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
-    #             while i < nhit:
+                while i < nhit:
 
-    #                 if im_buf[i].start <= start and im_buf[i].end >= end:
+                    if im_buf[i].start <= start and im_buf[i].end >= end:
 
-    #                     if nfound >= length:
+                        if nfound >= length:
 
-    #                         length = length * 2
-    #                         output_arr = np.resize(output_arr, length)
-    #                         output_arr_other = np.resize(output_arr_other, length)
-    #                         output = output_arr
-    #                         output_other = output_arr_other
+                            length = length * 2
+                            output_arr = np.resize(output_arr, length)
+                            output_arr_other = np.resize(output_arr_other, length)
+                            output = output_arr
+                            output_other = output_arr_other
 
-    #                     output[nfound] = indexes[loop_counter]
-    #                     output_other[nfound] = im_buf[i].target_id
+                        output[nfound] = indexes[loop_counter]
+                        output_other[nfound] = im_buf[i].target_id
 
-    #                     nfound += 1
-    #                 i += 1
+                        nfound += 1
+                    i += 1
 
-    #         cn.free_interval_iterator(it_alloc)
+            cn.free_interval_iterator(it_alloc)
 
-    #     return output_arr[:nfound], output_arr_other[:nfound]
+        return output_arr[:nfound], output_arr_other[:nfound]
 
 
     # @cython.boundscheck(False)
