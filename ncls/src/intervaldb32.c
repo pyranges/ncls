@@ -93,13 +93,13 @@ SublistHeader *build_nested_list(IntervalMap im[],int n,
     CALLOC(imsub,nsub,IntervalMap); /* TEMPORARY ARRAY FOR REPACKING SUBLISTS */
     for (i=j=0;i<n;i++) { /* GENERATE LIST FOR SORTING; ASSIGN HEADER INDEXES*/
       parent=im[i].sublist;
-      printf("Interval %i has parent %d\n", i, parent);
+      /* printf("Interval %i has parent %d\n", i, parent); */
       if (parent>=0)  {/* IN A SUBLIST */
         imsub[j].start=i;
         imsub[j].sublist=parent;
         j++;
         if (im[parent].sublist<0){ /* A NEW PARENT! SET HIS SUBLIST HEADER INDEX */
-          printf("Setting parent %d to sublist %d\n", parent, nlists += 1);
+          /* printf("Setting parent %d to sublist %d\n", parent, nlists += 1); */
           im[parent].sublist=nlists++;
         }
       }
@@ -111,11 +111,11 @@ SublistHeader *build_nested_list(IntervalMap im[],int n,
     CALLOC(subheader,nlists,SublistHeader); /* SUBLIST HEADER INDEX */
     for (i=0;i<nsub;i++) { /* COPY SUBLIST ENTRIES TO imsub */
       j=imsub[i].start;
-      printf("j: %d\n", j);
+      /* printf("j: %d\n", j); */
       parent=imsub[i].sublist;
       memcpy(imsub+i,im+j,sizeof(IntervalMap)); /* COPY INTERVAL */
       k=im[parent].sublist;
-      printf("k is %d\n", k);
+      /* printf("k is %d\n", k); */
       if (subheader[k].len==0) /* START A NEW SUBLIST */
         subheader[k].start=i;
       subheader[k].len++; /* COUNT THE SUBLIST ENTRIES */
@@ -296,4 +296,21 @@ int find_intervals(IntervalIterator *it0, int start, int end,
   return 0; /* SIGNAL THAT NO ERROR OCCURRED */
  handle_malloc_failure:
   return -1;
+}
+
+
+
+void reorient_intervals(int n,IntervalMap im[],int ori_sign)
+{
+  int i,tmp;
+  for (i=0;i<n;i++) {
+    if ((im[i].start>=0 ? 1:-1)!=ori_sign) { /* ORIENTATION MISMATCH */
+      tmp=im[i].start; /* SO REVERSE THIS INTERVAL MAPPING */
+      im[i].start= -im[i].end;
+      im[i].end =  -tmp;
+      /* tmp=im[i].target_start; */
+      /* im[i].target_start= -im[i].target_end; */
+      /* im[i].target_end =  -tmp; */
+    }
+  }
 }

@@ -120,6 +120,59 @@ cdef class NCLS32:
 
         return output_arr[:nfound], output_arr_other[:nfound]
 
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.initializedcheck(False)
+    cpdef all_overlaps_self(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
+
+        cdef int i
+        cdef int nhit = 0
+        cdef int length = len(starts)
+        cdef int loop_counter = 0
+        cdef int nfound = 0
+
+        output_arr = np.zeros(length, dtype=long)
+        cdef long [::1] output
+
+        output = output_arr
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalIterator *it_alloc
+
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
+
+        for loop_counter in range(length):
+
+            # remember first pointer for dealloc
+            it_alloc = cn.interval_iterator_alloc()
+            it = it_alloc
+
+            while it:
+                i = 0
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                if nfound + nhit >= length:
+
+                    length = (length + nhit) * 2
+                    output_arr = np.resize(output_arr, length)
+                    output = output_arr
+
+                for i in range(nhit):
+
+                    output[nfound] = indexes[loop_counter]
+
+                    nfound += 1
+
+            cn.free_interval_iterator(it_alloc)
+
+        return output_arr[:nfound]
+
+
     def __str__(self):
 
         contents = ["Number intervals:", self.n, "Number of intervals in main list:", self.ntop, "Number of intervals with subintervals:", self.nlists, "Percentage in top-level interval", self.ntop/float(self.n)]
@@ -537,6 +590,41 @@ cdef class NCLS32:
     @cython.initializedcheck(False)
     cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
+
+        # cdef int i = 0
+        # cdef int nhit = 0
+        # cdef int length = len(starts)
+        # cdef int nfound = 0
+
+        # cdef cn.IntervalIterator *it
+        # cdef cn.IntervalMap im_buf[1024]
+        # if not self.im: # if empty
+        #     return []
+
+        # output_arr = np.zeros(length, dtype=np.long)
+        # cdef long [::1] output
+        # output = output_arr
+
+        # for i in range(length):
+
+        #     it_alloc = cn.interval_iterator_alloc()
+        #     it = it_alloc
+
+        #     while it:
+        #         cn.find_intervals(it, starts[i], ends[i], self.im, self.ntop,
+        #                         self.subheader, self.nlists, im_buf, 1024,
+        #                         &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+        #         if nhit > 0:
+        #             cn.free_interval_iterator(it)
+        #             it = NULL
+        #             output[nfound] = indexes[i]
+        #             nfound += 1
+
+        #     i += 1
+        #     cn.free_interval_iterator(it_alloc)
+
+        # return output_arr[:nfound]
         cdef int i = 0
         cdef int ix = 0
         cdef int length = len(starts)

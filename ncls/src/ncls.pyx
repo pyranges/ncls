@@ -202,9 +202,9 @@ cdef class NCLS64:
 
 
         # print("----")
-        print(output_arr)
-        print(output_arr_start)
-        print(output_arr_end)
+        # print(output_arr)
+        # print(output_arr_start)
+        # print(output_arr_end)
         # print("indexes", list(indexes))
         for loop_counter in range(length):
             # print("---- loop_counter ----", loop_counter)
@@ -439,6 +439,11 @@ cdef class NCLS64:
                 # print("length", length)
                 # print("nfound", nfound)
                 # print(nfound + nhit >= length)
+
+
+                if nhit == -1:
+                    raise Exception("Segfault!!")
+
                 if nfound + nhit >= length:
 
                     length = (length + nhit) * 2
@@ -791,6 +796,56 @@ cdef class NCLS64:
         cn.free_interval_iterator(it)
         return l
 
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.initializedcheck(False)
+    cpdef all_overlaps_self(self, const long [::1] starts, const long [::1] ends, const long [::1] indexes):
+
+        cdef int i
+        cdef int nhit = 0
+        cdef int length = len(starts)
+        cdef int loop_counter = 0
+        cdef int nfound = 0
+
+        output_arr = np.zeros(length, dtype=long)
+        cdef long [::1] output
+
+        output = output_arr
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalIterator *it_alloc
+
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
+
+        for loop_counter in range(length):
+
+            # remember first pointer for dealloc
+            it_alloc = cn.interval_iterator_alloc()
+            it = it_alloc
+
+            while it:
+                i = 0
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                if nfound + nhit >= length:
+
+                    length = (length + nhit) * 2
+                    output_arr = np.resize(output_arr, length)
+                    output = output_arr
+
+                for i in range(nhit):
+
+                    output[nfound] = indexes[loop_counter]
+
+                    nfound += 1
+
+            cn.free_interval_iterator(it_alloc)
+
+        return output_arr[:nfound]
 
     def __dealloc__(self):
         'remember: dealloc cannot call other methods!'
