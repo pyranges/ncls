@@ -1,6 +1,6 @@
 #include <sys/time.h>
 
-#include "intervaldb.h"
+#include "intervaldb32.h"
 
 
 int imstart_qsort_cmp(const void *void_a,const void *void_b)
@@ -313,4 +313,11 @@ void reorient_intervals(int n,IntervalMap im[],int ori_sign)
       /* im[i].target_end =  -tmp; */
     }
   }
+}
+
+IntervalIterator *reset_interval_iterator(IntervalIterator *it)
+{
+  ITERATOR_STACK_TOP(it);
+  it->n=0;
+  return it;
 }

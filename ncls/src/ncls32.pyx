@@ -1,4 +1,5 @@
 # import numpy as cnp
+import sys
 
 
 cimport cython
@@ -49,7 +50,7 @@ cdef class NCLS32:
         for i in range(length):
             self.im[i].start = starts[i]
             self.im[i].end = ends[i]
-            self.im[i].target_id = <int32_t> ids[i]
+            self.im[i].target_id = ids[i]
             self.im[i].sublist = -1
 
         self.subheader = cn.build_nested_list(self.im, self.n, &(self.ntop), &(self.nlists))
@@ -60,7 +61,7 @@ cdef class NCLS32:
     @cython.initializedcheck(False)
     cpdef all_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
-        cdef int i
+        cdef int i = 0
         cdef int nhit = 0
         cdef int length = len(starts)
         cdef int loop_counter = 0
@@ -81,12 +82,11 @@ cdef class NCLS32:
         if not self.im: # if empty
             return [], []
 
+        it_alloc = cn.interval_iterator_alloc()
+        it = it_alloc
         for loop_counter in range(length):
 
             # remember first pointer for dealloc
-            it_alloc = cn.interval_iterator_alloc()
-            it = it_alloc
-
             while it:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
@@ -116,7 +116,10 @@ cdef class NCLS32:
                     nfound += 1
                     i += 1
 
-            cn.free_interval_iterator(it_alloc)
+            cn.reset_interval_iterator(it_alloc)
+            it = it_alloc
+
+        cn.free_interval_iterator(it_alloc)
 
         return output_arr[:nfound], output_arr_other[:nfound]
 
@@ -144,11 +147,11 @@ cdef class NCLS32:
         if not self.im: # if empty
             return [], []
 
+        it_alloc = cn.interval_iterator_alloc()
+        it = it_alloc
         for loop_counter in range(length):
 
             # remember first pointer for dealloc
-            it_alloc = cn.interval_iterator_alloc()
-            it = it_alloc
 
             while it:
                 i = 0
@@ -168,7 +171,10 @@ cdef class NCLS32:
 
                     nfound += 1
 
-            cn.free_interval_iterator(it_alloc)
+            cn.reset_interval_iterator(it_alloc)
+            it = it_alloc
+
+        cn.free_interval_iterator(it_alloc)
 
         return output_arr[:nfound]
 
@@ -176,7 +182,7 @@ cdef class NCLS32:
     def __str__(self):
 
         contents = ["Number intervals:", self.n, "Number of intervals in main list:", self.ntop, "Number of intervals with subintervals:", self.nlists, "Percentage in top-level interval", self.ntop/float(self.n)]
-        return "\n".join(str(c) for c in contents)
+        return "NCLS32\n------\n" + "\n".join(str(c) for c in contents)
 
     def __dealloc__(self):
         'remember: dealloc cannot call other methods!'
@@ -243,10 +249,10 @@ cdef class NCLS32:
         cdef int na = -1
 
 
-        output_arr = np.zeros(length, dtype=np.int32)
+        output_arr = np.zeros(length, dtype=np.int64)
         output_arr_start = np.zeros(length, dtype=np.int32)
         output_arr_end = np.zeros(length, dtype=np.int32)
-        cdef int32_t [::1] output
+        cdef long [::1] output
         cdef int32_t [::1] output_start
         cdef int32_t [::1] output_end
 
@@ -261,18 +267,10 @@ cdef class NCLS32:
             return [], [], []
 
 
-        # print("----")
-        # print(output_arr)
-        # print(output_arr_start)
-        # print(output_arr_end)
-        # print("indexes", list(indexes))
+        it_alloc = cn.interval_iterator_alloc()
+        it = it_alloc
         for loop_counter in range(length):
-            # print("---- loop_counter ----", loop_counter)
-            #print("A start:", starts[loop_counter])
-            #print("A end:", ends[loop_counter])
 
-            it_alloc = cn.interval_iterator_alloc()
-            it = it_alloc
             while it:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
@@ -302,7 +300,7 @@ cdef class NCLS32:
                     # print("ignore me!")
                     output_start[nfound] = -1
                     output_end[nfound] = -1
-                    output[nfound] = <int32_t> indexes[loop_counter]
+                    output[nfound] = indexes[loop_counter]
                     i = nhit
                     nfound += 1
 
@@ -319,7 +317,7 @@ cdef class NCLS32:
                         if nstart < im_buf[i].start:
                             #print("  new_start", nstart)
                             #print("  new_end", im_buf[i].start)
-                            output[nfound] = <int32_t> indexes[loop_counter]
+                            output[nfound] = indexes[loop_counter]
                             output_start[nfound] = nstart
                             output_end[nfound] = im_buf[i].start
                             nfound += 1
@@ -339,12 +337,12 @@ cdef class NCLS32:
 
                             output_start[nfound] = -1
                             output_end[nfound] = -1
-                            output[nfound] = <int32_t> indexes[loop_counter]
+                            output[nfound] = indexes[loop_counter]
                             nfound += 1
                         else:
                             if im_buf[i].start > nstart:
                                 # print("im_buf[i].start > nstart", im_buf[i].start, nstart)
-                                output[nfound] = <int32_t> indexes[loop_counter]
+                                output[nfound] = indexes[loop_counter]
                                 output_start[nfound] = nstart
                                 output_end[nfound] = im_buf[i].start
                                 nfound += 1
@@ -355,74 +353,28 @@ cdef class NCLS32:
                                 # print("indexes[loop_counter]", indexes[loop_counter])
                                 # print("indexes", indexes[loop_counte  rloop_counter])
 
-                                output[nfound] = <int32_t> indexes[loop_counter]
+                                output[nfound] = indexes[loop_counter]
                                 output_start[nfound] = im_buf[i].end
                                 output_end[nfound] = ends[loop_counter]
                                 nfound += 1
 
                     i += 1
 
-            cn.free_interval_iterator(it_alloc)
-            # print("-------")
-            # print(output_arr)
-            # print(output_arr_start)
-            # print(output_arr_end)
+            cn.reset_interval_iterator(it_alloc)
+            it = it_alloc
+
+        cn.free_interval_iterator(it_alloc)
 
         return output_arr[:nfound], output_arr_start[:nfound], output_arr_end[:nfound]
 
 
     # this one is actually slower!!!!
-    # @cython.boundscheck(False)
-    # @cython.wraparound(False)
-    # @cython.initializedcheck(False)
-    # cpdef first_overlap_both(self, int32_t [::1] starts, int32_t [::1] ends, long [::1] indexes):
-
-    #     cdef int ix = 0
-    #     cdef int length = len(starts)
-    #     cdef int loop_counter = 0
-    #     cdef int nfound = 0
-
-    #     output_arr = np.zeros(length, dtype=np.long)
-    #     output_arr_other = np.zeros(length, dtype=np.long)
-    #     cdef long [::1] output
-    #     cdef long [::1] output_other
-
-    #     output = output_arr
-    #     output_other = output_arr_other
-
-    #     cdef cn.IntervalIterator *it
-    #     cdef cn.IntervalIterator *it_alloc
-
-    #     cdef cn.IntervalMap im_buf[1024]
-    #     if not self.im: # if empty
-    #         return [], []
-
-
-    #     for loop_counter in range(length):
-
-    #         # remember first pointer for dealloc
-    #         ix = cn.find_overlap_start(starts[loop_counter], ends[loop_counter], self.im, self.ntop)
-
-    #         if ix >= 0:
-    #             output[nfound] = indexes[loop_counter]
-    #             output_other[nfound] = self.im[ix].target_id
-
-    #             nfound += 1
-
-    #     return output_arr[:nfound], output_arr_other[:nfound]
-
-
-
-
-
-
-
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
     cpdef first_overlap_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
-        cdef int nhit = 0
+        cdef int ix = 0
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
@@ -446,23 +398,13 @@ cdef class NCLS32:
         for loop_counter in range(length):
 
             # remember first pointer for dealloc
-            it_alloc = cn.interval_iterator_alloc()
-            it = it_alloc
+            ix = cn.find_overlap_start(starts[loop_counter], ends[loop_counter], self.im, self.ntop)
 
-            while it:
-                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
-                                self.subheader, self.nlists, im_buf, 1024,
-                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+            if ix != -1:
+                output[nfound] = indexes[loop_counter]
+                output_other[nfound] = self.im[ix].target_id
 
-                if nhit:
-                    output[nfound] = indexes[loop_counter]
-                    output_other[nfound] = im_buf[0].target_id
-                    cn.free_interval_iterator(it)
-                    it = NULL
-
-                    nfound += 1
-
-            cn.free_interval_iterator(it_alloc)
+                nfound += 1
 
         return output_arr[:nfound], output_arr_other[:nfound]
 
@@ -495,10 +437,12 @@ cdef class NCLS32:
         if not self.im: # if empty
             return [], []
 
+
+        it_alloc = cn.interval_iterator_alloc()
+        it = it_alloc
+
         for loop_counter in range(length):
 
-            it_alloc = cn.interval_iterator_alloc()
-            it = it_alloc
             start = starts[loop_counter]
             end = ends[loop_counter]
             while it:
@@ -525,63 +469,13 @@ cdef class NCLS32:
                         nfound += 1
                     i += 1
 
-            cn.free_interval_iterator(it_alloc)
+            cn.reset_interval_iterator(it_alloc)
+            it = it_alloc
+
+        cn.free_interval_iterator(it_alloc)
 
         return output_arr[:nfound], output_arr_other[:nfound]
 
-
-    # @cython.boundscheck(False)
-    # @cython.wraparound(False)
-    # @cython.initializedcheck(False)
-    # cpdef has_containment(self, long [::1] starts, long [::1] ends, long [::1] indexes):
-
-    #     cdef int i = 0
-    #     cdef int loop_counter = 0
-    #     cdef int nhit = 0
-    #     cdef int length = len(starts)
-    #     cdef int start, end
-    #     cdef int nfound = 0
-
-    #     output_arr = np.zeros(length, dtype=cnp.long)
-    #     cdef long [::1] output
-    #     output = output_arr
-
-    #     cdef cn.IntervalIterator *it
-    #     cdef cn.IntervalIterator *it_alloc
-
-    #     cdef cn.IntervalMap im_buf[1024]
-    #     if not self.im: # if empty
-    #         return []
-
-    #     for loop_counter in range(length):
-
-    #         it_alloc = cn.interval_iterator_alloc()
-    #         it = it_alloc
-
-    #         i = 0
-    #         while it:
-    #             cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
-    #                             self.subheader, self.nlists, im_buf, 1024,
-    #                             &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
-    #             start = starts[loop_counter]
-    #             end = ends[loop_counter]
-
-    #             while i < nhit:
-
-    #                 if im_buf[i].start <= start and im_buf[i].end >= end:
-
-    #                     output[nfound] = indexes[loop_counter] # said i instead of loop counter before, was bug?
-    #                     nfound += 1
-
-    #                     cn.free_interval_iterator(it)
-    #                     it = NULL
-
-    #                 i += 1
-
-    #         cn.free_interval_iterator(it_alloc)
-
-    #     return output_arr[:nfound]
 
 
 
@@ -590,41 +484,6 @@ cdef class NCLS32:
     @cython.initializedcheck(False)
     cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
 
-
-        # cdef int i = 0
-        # cdef int nhit = 0
-        # cdef int length = len(starts)
-        # cdef int nfound = 0
-
-        # cdef cn.IntervalIterator *it
-        # cdef cn.IntervalMap im_buf[1024]
-        # if not self.im: # if empty
-        #     return []
-
-        # output_arr = np.zeros(length, dtype=np.long)
-        # cdef long [::1] output
-        # output = output_arr
-
-        # for i in range(length):
-
-        #     it_alloc = cn.interval_iterator_alloc()
-        #     it = it_alloc
-
-        #     while it:
-        #         cn.find_intervals(it, starts[i], ends[i], self.im, self.ntop,
-        #                         self.subheader, self.nlists, im_buf, 1024,
-        #                         &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
-        #         if nhit > 0:
-        #             cn.free_interval_iterator(it)
-        #             it = NULL
-        #             output[nfound] = indexes[i]
-        #             nfound += 1
-
-        #     i += 1
-        #     cn.free_interval_iterator(it_alloc)
-
-        # return output_arr[:nfound]
         cdef int i = 0
         cdef int ix = 0
         cdef int length = len(starts)
@@ -643,7 +502,7 @@ cdef class NCLS32:
 
             ix = cn.find_overlap_start(starts[i], ends[i], self.im, self.ntop)
 
-            if ix >= 0:
+            if ix != -1:
                 output[nfound] = indexes[i]
                 nfound += 1
 
@@ -651,141 +510,6 @@ cdef class NCLS32:
 
         return output_arr[:nfound]
 
-
-    # @cython.boundscheck(False)
-    # @cython.wraparound(False)
-    # @cython.initializedcheck(False)
-    # cpdef no_overlaps(self, long [::1] starts, long [::1] ends, long [::1] indexes):
-
-    #     cdef int i = 0
-    #     cdef int nhit = 0
-    #     cdef int length = len(starts)
-    #     cdef int nfound = 0
-
-
-    #     output_arr = np.zeros(length, dtype=cnp.long)
-    #     cdef long [::1] output
-    #     output = output_arr
-
-    #     cdef cn.IntervalIterator *it
-    #     cdef cn.IntervalMap im_buf[1024]
-    #     if not self.im: # if empty
-    #         return []
-
-    #     for i in range(length):
-
-    #         it_alloc = cn.interval_iterator_alloc()
-    #         it = it_alloc
-
-    #         while it:
-    #             cn.find_intervals(it, starts[i], ends[i], self.im, self.ntop,
-    #                             self.subheader, self.nlists, im_buf, 1024,
-    #                             &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
-    #             if nhit == 0:
-    #                 cn.free_interval_iterator(it)
-    #                 it = NULL
-    #                 output[nfound] = indexes[i]
-    #                 nfound += 1
-
-    #         cn.free_interval_iterator(it_alloc)
-
-    #     return output_arr[:nfound]
-
-
-    # @cython.boundscheck(False)
-    # @cython.wraparound(False)
-    # @cython.initializedcheck(False)
-    # cpdef next_nonoverlapping_both(self, long [::1] starts, long [::1] ends,
-    #                                long [::1] indexes):
-
-    #     cdef int nhit = 0
-    #     cdef int length = len(starts)
-    #     cdef int loop_counter = 0
-    #     cdef int nfound = 0
-
-    #     output_arr = np.zeros(length, dtype=cnp.long)
-    #     output_arr_other = np.zeros(length, dtype=cnp.long)
-    #     cdef long [::1] output
-    #     cdef long [::1] output_other
-
-    #     output = output_arr
-    #     output_other = output_arr_other
-
-    #     cdef cn.IntervalIterator *it
-    #     cdef cn.IntervalIterator *it_alloc
-
-    #     cdef cn.IntervalMap im_buf[1024]
-    #     if not self.im: # if empty
-    #         return [], []
-
-
-    #     for loop_counter in range(length):
-
-    #         # remember first pointer for dealloc
-    #         it_alloc = cn.interval_iterator_alloc()
-    #         it = it_alloc
-
-    #         while it:
-    #             cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
-    #                             self.subheader, self.nlists, im_buf, 1024,
-    #                             &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
-    #             if nhit:
-    #                 output[nfound] = indexes[loop_counter]
-    #                 output_other[nfound] = im_buf[0].target_id
-    #                 cn.free_interval_iterator(it)
-    #                 it = NULL
-
-    #                 nfound += 1
-
-    #         cn.free_interval_iterator(it_alloc)
-
-    #     return output_arr[:nfound], output_arr_other[:nfound]
-
-    # cpdef find_overlap_list(self, int start, int end):
-    #     cdef int i
-    #     cdef int nhit = 0
-
-    #     cdef cn.IntervalIterator *it
-    #     cdef cn.IntervalMap im_buf[1024]
-    #     if not self.im: # if empty
-    #         return []
-
-    #     it = cn.interval_iterator_alloc()
-
-    #     l = [] # LIST OF RESULTS TO HAND BACK
-    #     while it:
-
-    #         cn.find_intervals(it, start, end, self.im, self.ntop,
-    #                     self.subheader, self.nlists, im_buf, 1024,
-    #                     &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-    #         i = 0
-    #         while i < nhit:
-
-    #             l.append((im_buf[i].start, im_buf[i].end, im_buf[i].target_id))
-    #             i += 1
-
-    #     cn.free_interval_iterator(it)
-    #     return l
-
-
-    # def __dealloc__(self):
-    #     'remember: dealloc cannot call other methods!'
-    #     if self.subheader:
-    #         cn.free(self.subheader)
-    #     if self.im:
-    #         cn.free(self.im)
-
-    # def close(self):
-    #     if self.subheader:
-    #         cn.free(self.subheader)
-    #     if self.im:
-    #         cn.free(self.im)
-    #         self.subheader = NULL
-    #         self.im = NULL
-
-    #     return None
 
 
 cdef class NCLSIterator:

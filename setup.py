@@ -37,7 +37,7 @@ if macros:
 
 
 extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
-                        define_macros=macros),
+                        define_macros=macros, include_dirs=[np.get_include()]),
               Extension("ncls.src.ncls32", ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
                         define_macros=macros, include_dirs=[np.get_include()])]
 
