@@ -45,7 +45,7 @@ install_requires = ["cython", "numpy"]
 
 setup(
     name = "ncls",
-    version="0.0.32",
+    version="0.0.33",
     packages=find_packages(),
     ext_modules = cythonize(extensions),
     install_requires = ["cython", "numpy"],
@@ -57,7 +57,7 @@ setup(
     # Alexander V. Alekseyenko and Christopher J. Lee.
     author = "Endre Bakken Stovner",
     author_email='endrebak85@gmail.com',
-    url = 'https://github.com/endrebak/pyncls',
+    url = 'https://github.com/endrebak/ncls',
     license = 'New BSD License',
     classifiers = CLASSIFIERS,
     package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
