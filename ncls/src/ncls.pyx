@@ -9,7 +9,6 @@ cimport cython
 cimport ncls.src.cncls as cn
 
 from libc.stdlib cimport malloc
-cimport numpy as cnp
 import numpy as np
 
 # import ctypes as c

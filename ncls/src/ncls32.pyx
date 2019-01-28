@@ -10,7 +10,6 @@ from libc.stdint cimport int32_t
 cimport ncls.src.cncls32 as cn
 
 from libc.stdlib cimport malloc
-cimport numpy as cnp
 import numpy as np
 
 # import ctypes as c
