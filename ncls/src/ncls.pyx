@@ -488,8 +488,6 @@ cdef class NCLS64:
         cdef int length = len(starts)
         cdef int nfound = 0
 
-        # cdef cn.IntervalIterator *it
-        cdef cn.IntervalMap im_buf[1024]
         if not self.im: # if empty
             return []
 

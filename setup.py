@@ -35,6 +35,7 @@ if macros:
     directive_defaults['binding'] = True
 
 
+__version__ = open("ncls/version.py").readline().split(" = ")[1].replace('"', '').strip()
 
 extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
                         define_macros=macros, include_dirs=[np.get_include()]),
@@ -45,7 +46,7 @@ install_requires = ["cython", "numpy"]
 
 setup(
     name = "ncls",
-    version="0.0.33",
+    version=__version__,
     packages=find_packages(),
     ext_modules = cythonize(extensions),
     install_requires = ["cython", "numpy"],

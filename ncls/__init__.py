@@ -11,3 +11,5 @@ def NCLS(starts, ends, ids):
         return NCLS32(starts, ends, ids)
     else:
         raise Exception("Starts/Ends not int64 or int32: " + str(starts.dtype))
+
+from ncls.version import __version__
