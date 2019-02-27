@@ -38,9 +38,9 @@ if macros:
 __version__ = open("ncls/version.py").readline().split(" = ")[1].replace('"', '').strip()
 
 extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
-                        define_macros=macros),
+                        define_macros=macros, include_dirs=["ncls/src/"]),
               Extension("ncls.src.ncls32", ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
-                        define_macros=macros)]
+                        define_macros=macros, include_dirs=["ncls/src/"])]
 
 install_requires = ["cython", "numpy"]
 
