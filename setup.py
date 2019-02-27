@@ -48,7 +48,7 @@ setup(
     name = "ncls",
     version=__version__,
     packages=find_packages(),
-    ext_modules = cythonize(extensions, language_level=3),
+    ext_modules = cythonize(extensions, language_level=2),
     install_requires = ["cython", "numpy"],
     # py_modules=["pyncls"],
     description = \
