@@ -4,9 +4,6 @@ from Cython.Build import cythonize
 
 import os
 import sys
-import numpy as np
-
-
 
 CLASSIFIERS = """Development Status :: 5 - Production/Stable
 Operating System :: MacOS :: MacOS X
@@ -22,7 +19,6 @@ Topic :: Scientific/Engineering :: Bio-Informatics"""
 # split into lines and filter empty ones
 CLASSIFIERS = CLASSIFIERS.split("\n")
 
-
 macros = [("CYTHON_TRACE", "1")]
 
 # extension sources
@@ -34,13 +30,23 @@ if macros:
     directive_defaults['linetrace'] = True
     directive_defaults['binding'] = True
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
-__version__ = open("ncls/version.py").readline().split(" = ")[1].replace('"', '').strip()
+include_dirs = [dir_path + "/ncls/src", dir_path]
 
-extensions = [Extension("ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
-                        define_macros=macros, include_dirs=["ncls/src/"]),
-              Extension("ncls.src.ncls32", ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
-                        define_macros=macros, include_dirs=["ncls/src/"])]
+__version__ = open("ncls/version.py").readline().split(" = ")[1].replace(
+    '"', '').strip()
+
+extensions = [
+    Extension(
+        "ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
+        define_macros=macros,
+        include_dirs=include_dirs),
+    Extension(
+        "ncls.src.ncls32", ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
+        define_macros=macros,
+        include_dirs=include_dirs)
+]
 
 install_requires = ["cython", "numpy"]
 
