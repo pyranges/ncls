@@ -53,6 +53,19 @@ cdef class NCLS64:
 
         self.subheader = cn.build_nested_list(self.im, self.n, &(self.ntop), &(self.nlists))
 
+    def intervals(self, take=None):
+        intervals = []
+
+        cdef int i = 0
+        cdef int _take = int(take) if not take is None else len(self)
+        if not self.im: # if empty
+            return []
+
+        for i in range(_take):
+            intervals.append((self.im[i].start, self.im[i].end, self.im[i].target_id))
+
+        return intervals
+
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
@@ -176,6 +189,8 @@ cdef class NCLS64:
 
         return output_arr[:nfound]
 
+    def __len__(self):
+        return self.n
 
     def __str__(self):
 
