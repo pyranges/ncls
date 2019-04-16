@@ -22,28 +22,6 @@ Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
 pip install ncls
 ```
 
-## Changelog
-
-```
-# 2018.10.12 (0.0.33)
-- speedups
-
-# 2018.13.11 (0.0.29)
-- add 32-bit methods
-
-# 2018.01.06 (0.0.23)
-- NCLS started segfaulting in travis build for pyranges. Probably due to bad string definition files in travis.
-
-# 2018.05.09 (0.0.16-18)
-- add Cython/C helper code for pyranges
-
-# 2018.05.09 (0.0.15)
-- add faster method has_overlap that returns True/False
-
-# 2018.05.09 (0.0.11)
-- empty NCLS returns [] instead of raising IndexError
-```
-
 ## Usage
 
 ```python
@@ -73,6 +51,11 @@ indexes_query = pd.Series([10000, 100])
 ncls.all_overlaps_both(starts_query.values, ends_query.values, indexes_query.values)
 # (array([10000, 10000, 10000, 10000, 10000,   100,   100,   100,   100,
 #          100]), array([0, 1, 2, 3, 4, 0, 1, 2, 3, 4]))
+
+# return intervals in python (slow/mem-consuming)
+intervals = ncls.intervals()
+intervals
+# [(0, 100, 0), (1, 101, 1), (2, 102, 2), (3, 103, 3), (4, 104, 4)]
 ```
 
 ## Benchmark
