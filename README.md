@@ -72,6 +72,10 @@ Test file of 100 million intervals (created by subsetting gencode gtf with repla
 Building is 50 times faster and overlap queries are 20 times faster. Memory
 usage is one fifth and one ninth.
 
-## Citation
+## Cite
+
+https://www.biorxiv.org/content/10.1101/609396v1
+
+## Original paper
 
 > Alexander V. Alekseyenko, Christopher J. Lee; Nested Containment List (NCList): a new algorithm for accelerating interval query of genome alignment and interval databases, Bioinformatics, Volume 23, Issue 11, 1 June 2007, Pages 1386–1393, https://doi.org/10.1093/bioinformatics/btl647
