@@ -18,12 +18,4 @@ def NCLS(starts=None, ends=None, ids=None):
         return NCLS32(starts, ends, ids)
 
 
-def NCLS32():
-    return NCLS32()
-
-
-def NCLS64():
-    return NCLS64()
-
-
 from ncls.version import __version__
