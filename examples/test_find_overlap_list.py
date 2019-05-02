@@ -22,6 +22,6 @@ indexes2 = np.array([0, 1, 2, 3], dtype=np.long)
 print(starts)
 print(ncls.has_overlaps(starts2, ends2, indexes2))
 
-# for i in range(0, 100):
-#     for j in ncls.find_overlap_list(i, i + 10):
-#         print(j)
+for i in range(0, 100):
+    for j in ncls.find_overlap_list(i, i + 10):
+        print(j)
