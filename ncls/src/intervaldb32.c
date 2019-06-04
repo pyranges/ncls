@@ -1,5 +1,3 @@
-#include <sys/time.h>
-
 #include "intervaldb32.h"
 
 
