@@ -11,6 +11,8 @@ cimport ncls.src.cncls as cn
 from libc.stdlib cimport malloc
 import numpy as np
 
+cdef inline int int_max(int a, int b): return a if a >= b else b
+cdef inline int int_min(int a, int b): return a if a <= b else b
 # import ctypes as c
 
 try:
@@ -188,6 +190,64 @@ cdef class NCLS64:
         cn.free_interval_iterator(it_alloc)
 
         return output_arr[:nfound]
+
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.initializedcheck(False)
+    cpdef coverage(self, const long [::1] starts, const long [::1] ends, const long [::1] indexes):
+
+        # assumes the ncls to not contain any overlapping intervals
+
+        cdef int i = 0
+        cdef int start = 0
+        cdef int end = 0
+        cdef int other_start = 0
+        cdef int other_end = 0
+        cdef int nhit = 0
+        cdef int length = len(starts)
+        cdef int loop_counter = 0
+        cdef int nfound = 0
+
+        # output_arr = np.zeros(length, dtype=long)
+        output_arr_length = np.zeros(length, dtype=long)
+        # cdef long [::1] output
+        cdef long [::1] output_length
+
+        # output = output_arr
+        output_length = output_arr_length
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalIterator *it_alloc
+
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
+
+        it_alloc = cn.interval_iterator_alloc()
+        it = it_alloc
+        for loop_counter in range(length):
+
+            start = starts[loop_counter]
+            end = ends[loop_counter]
+            # remember first pointer for dealloc
+            while it:
+                i = 0
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                while i < nhit:
+                    output_length[loop_counter] += int_min(im_buf[i].end, end) - int_max(im_buf[i].start, start)
+                    i += 1
+
+
+            cn.reset_interval_iterator(it_alloc)
+            it = it_alloc
+
+        cn.free_interval_iterator(it_alloc)
+
+        return output_arr_length
 
     def __len__(self):
         return self.n
