@@ -1,3 +1,5 @@
+#include <sys/time.h>
+
 #include "intervaldb.h"
 
 int C_int_max=INT_MAX; /* KLUDGE TO LET PYREX CODE ACCESS VALUE OF INT_MAX MACRO */
