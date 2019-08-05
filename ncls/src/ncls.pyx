@@ -4,7 +4,7 @@ import sys
 
 cimport cython
 
-# from cython.stdint import int32
+from libc.stdint cimport int32_t, int64_t
 
 cimport ncls.src.cncls as cn
 
@@ -24,14 +24,14 @@ cdef class NCLS64:
 
     cdef cn.SublistHeader *subheader
     cdef cn.IntervalMap *im
-    cdef int n, ntop
-    cdef int nlists
+    cdef int32_t n, ntop
+    cdef int32_t nlists
 
     # build NCLS from array of starts, ends, values
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    def __cinit__(self, const long [::1] starts=None, const long [::1] ends=None, const long [::1] ids=None):
+    def __cinit__(self, const int64_t [::1] starts=None, const int64_t [::1] ends=None, const int64_t [::1] ids=None):
 
         if None in (starts, ends, ids):
             return
@@ -39,7 +39,7 @@ cdef class NCLS64:
         if len(starts) == 0 or len(ends) == 0 or len(ids) == 0:
             return
 
-        cdef int i
+        cdef int32_t i
         cdef length = len(starts)
         self.close() # DUMP OUR EXISTING MEMORY
         self.n = len(starts)
@@ -50,7 +50,7 @@ cdef class NCLS64:
         for i in range(length):
             self.im[i].start = starts[i]
             self.im[i].end = ends[i]
-            self.im[i].target_id = <long> ids[i]
+            self.im[i].target_id = <int64_t> ids[i]
             self.im[i].sublist = -1
 
         self.subheader = cn.build_nested_list(self.im, self.n, &(self.ntop), &(self.nlists))
@@ -58,8 +58,8 @@ cdef class NCLS64:
     def intervals(self, take=None):
         intervals = []
 
-        cdef int i = 0
-        cdef int _take = int(take) if not take is None else len(self)
+        cdef int32_t i = 0
+        cdef int32_t _take = np.int32(take) if not take is None else len(self)
         if not self.im: # if empty
             return []
 
@@ -72,18 +72,18 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef all_overlaps_both(self, const long [::1] starts, const long [::1] ends, const long [::1] indexes):
+    cpdef all_overlaps_both(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes):
 
-        cdef int i = 0
-        cdef int nhit = 0
-        cdef int length = len(starts)
-        cdef int loop_counter = 0
-        cdef int nfound = 0
+        cdef int32_t i = 0
+        cdef int32_t nhit = 0
+        cdef int32_t length = len(starts)
+        cdef int32_t loop_counter = 0
+        cdef int32_t nfound = 0
 
-        output_arr = np.zeros(length, dtype=long)
-        output_arr_other = np.zeros(length, dtype=long)
-        cdef long [::1] output
-        cdef long [::1] output_other
+        output_arr = np.zeros(length, dtype=np.int64)
+        output_arr_other = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_other
 
         output = output_arr
         output_other = output_arr_other
@@ -140,16 +140,16 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef all_overlaps_self(self, const long [::1] starts, const long [::1] ends, const long [::1] indexes):
+    cpdef all_overlaps_self(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes):
 
-        cdef int i
-        cdef int nhit = 0
-        cdef int length = len(starts)
-        cdef int loop_counter = 0
-        cdef int nfound = 0
+        cdef int32_t i
+        cdef int32_t nhit = 0
+        cdef int32_t length = len(starts)
+        cdef int32_t loop_counter = 0
+        cdef int32_t nfound = 0
 
-        output_arr = np.zeros(length, dtype=long)
-        cdef long [::1] output
+        output_arr = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
 
         output = output_arr
 
@@ -274,15 +274,15 @@ cdef class NCLS64:
 
         return None
 
-    def find_overlap(self, int start, int end):
+    def find_overlap(self, int32_t start, int32_t end):
         if not self.im: # RAISE EXCEPTION IF NO DATA
             return []
 
         return NCLSIterator(start, end, self)
 
 
-    cpdef has_overlap(self, int start, int end):
-        cdef int nhit = 0
+    cpdef has_overlap(self, int32_t start, int32_t end):
+        cdef int32_t nhit = 0
 
         cdef cn.IntervalIterator *it
         cdef cn.IntervalMap im_buf[1024]
@@ -309,25 +309,25 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef set_difference_helper(self, const long [::1] starts, const long [::1] ends, const long [::1] indexes):
+    cpdef set_difference_helper(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes):
 
-        cdef int i
-        cdef int nhit = 0
-        cdef int nfound = 0
-        cdef int nstart = 0
-        cdef int nend = 0
-        cdef int length = len(starts)
-        cdef int loop_counter = 0
-        cdef int overlap_type_nb = 0
-        cdef int na = -1
+        cdef int32_t i
+        cdef int32_t nhit = 0
+        cdef int32_t nfound = 0
+        cdef int32_t nstart = 0
+        cdef int32_t nend = 0
+        cdef int32_t length = len(starts)
+        cdef int32_t loop_counter = 0
+        cdef int32_t overlap_type_nb = 0
+        cdef int32_t na = -1
 
 
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_start = np.zeros(length, dtype=np.int64)
         output_arr_end = np.zeros(length, dtype=np.int64)
-        cdef long [::1] output
-        cdef long [::1] output_start
-        cdef long [::1] output_end
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_start
+        cdef int64_t [::1] output_end
 
         output = output_arr
         output_start = output_arr_start
@@ -410,7 +410,7 @@ cdef class NCLS64:
 
                             output_start[nfound] = -1
                             output_end[nfound] = -1
-                            output[nfound] = <long> indexes[loop_counter]
+                            output[nfound] = <int64_t> indexes[loop_counter]
                             nfound += 1
                         else:
                             if im_buf[i].start > nstart:
@@ -445,17 +445,17 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef first_overlap_both(self, const long [::1] starts, const long [::1] ends, const long [::1] indexes):
+    cpdef first_overlap_both(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes):
 
-        cdef int ix = 0
-        cdef int length = len(starts)
-        cdef int loop_counter = 0
-        cdef int nfound = 0
+        cdef int32_t ix = 0
+        cdef int32_t length = len(starts)
+        cdef int32_t loop_counter = 0
+        cdef int32_t nfound = 0
 
-        output_arr = np.zeros(length, dtype=np.long)
-        output_arr_other = np.zeros(length, dtype=np.long)
-        cdef long [::1] output
-        cdef long [::1] output_other
+        output_arr = np.zeros(length, dtype=np.int64)
+        output_arr_other = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_other
 
         output = output_arr
         output_other = output_arr_other
@@ -485,19 +485,19 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef all_containments_both(self, const long [::1] starts, const long [::1] ends, const long [::1] indexes):
+    cpdef all_containments_both(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes):
 
-        cdef int i
-        cdef int nhit = 0
-        cdef int length = len(starts)
-        cdef int loop_counter = 0
-        cdef int nfound = 0
-        cdef int start, end
+        cdef int32_t i
+        cdef int32_t nhit = 0
+        cdef int32_t length = len(starts)
+        cdef int32_t loop_counter = 0
+        cdef int32_t nfound = 0
+        cdef int32_t start, end
 
-        output_arr = np.zeros(length, dtype=np.long)
-        output_arr_other = np.zeros(length, dtype=np.long)
-        cdef long [::1] output
-        cdef long [::1] output_other
+        output_arr = np.zeros(length, dtype=np.int64)
+        output_arr_other = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_other
 
         output = output_arr
         output_other = output_arr_other
@@ -555,18 +555,18 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef has_overlaps(self, const long [::1] starts, const long [::1] ends, const long [::1] indexes):
+    cpdef has_overlaps(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes):
 
-        cdef int i = 0
-        cdef int ix = 0
-        cdef int length = len(starts)
-        cdef int nfound = 0
+        cdef int32_t i = 0
+        cdef int32_t ix = 0
+        cdef int32_t length = len(starts)
+        cdef int32_t nfound = 0
 
         if not self.im: # if empty
             return []
 
-        output_arr = np.zeros(length, dtype=long)
-        cdef long [::1] output
+        output_arr = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
         output = output_arr
 
         for i in range(length):
@@ -588,10 +588,10 @@ cdef class NCLSIterator:
     cdef cn.IntervalIterator *it
     cdef cn.IntervalIterator *it_alloc
     cdef cn.IntervalMap im_buf[1024]
-    cdef int nhit, start, end, ihit
+    cdef int32_t nhit, start, end, ihit
     cdef NCLS64 db
 
-    def __cinit__(self, long start, long end, NCLS64 db not None):
+    def __cinit__(self, int64_t start, int64_t end, NCLS64 db not None):
         self.it = cn.interval_iterator_alloc()
         self.it_alloc = self.it
         self.start = start
@@ -605,8 +605,8 @@ cdef class NCLSIterator:
         return self
 
 
-    cdef int cnext(self): # c VERSION OF ITERATOR next METHOD RETURNS INDEX
-        cdef int i
+    cdef int32_t cnext(self): # c VERSION OF ITERATOR next METHOD RETURNS INDEX
+        cdef int32_t i
         if self.ihit >= self.nhit: # TRY TO GET ONE MORE BUFFER CHUNK OF HITS
             if self.it == NULL: # ITERATOR IS EXHAUSTED
                 return -1
@@ -625,7 +625,7 @@ cdef class NCLSIterator:
 
     # PYTHON VERSION OF next RETURNS HIT AS A TUPLE
     def __next__(self): # PYREX USES THIS NON-STANDARD NAME INSTEAD OF next()!!!
-        cdef int i
+        cdef int32_t i
         i = self.cnext()
         if i >= 0:
             return (self.im_buf[i].start, self.im_buf[i].end, self.im_buf[i].target_id)
@@ -637,7 +637,7 @@ cdef class NCLSIterator:
         cn.free_interval_iterator(self.it_alloc)
 
 
-    def find_overlap(self, int start, int end):
+    def find_overlap(self, int32_t start, int32_t end):
         if not self.im:
             return []
 
