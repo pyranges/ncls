@@ -1,3 +1,7 @@
+# 0.0.44 (unreleased)
+- remove sys.time dep. perhaps it now works on windows?
+- add k_find_both
+
 # 0.0.43 (23.07.19)
 - add coverage-method which finds bp overlap of intervals
 
