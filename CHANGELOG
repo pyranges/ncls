@@ -1,6 +1,10 @@
-# 0.0.44 (unreleased)
+# 0.0.45 (07.10.19)
+- try to fix another windows error
+
+# 0.0.44 (10.09.19)
 - remove sys.time dep. perhaps it now works on windows?
 - add k_find_both
+- fix bug when large ints were used
 
 # 0.0.43 (23.07.19)
 - add coverage-method which finds bp overlap of intervals

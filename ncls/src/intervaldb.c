@@ -1,5 +1,6 @@
 
 
+#include <stdint.h>
 #include "intervaldb.h"
 
 int C_int_max=INT_MAX; /* KLUDGE TO LET PYREX CODE ACCESS VALUE OF INT_MAX MACRO */
@@ -331,9 +332,9 @@ IntervalMap *interval_map_alloc(int n)
 
 
 
-inline int find_overlap_start(int start,int end,IntervalMap im[],int n)
+inline int64_t find_overlap_start(int64_t start,int64_t end,IntervalMap im[],int n)
 {
-  int l=0,mid,r;
+  int64_t l=0,mid,r;
 
   r=n-1;
   while (l<r) {
@@ -426,14 +427,14 @@ void reorient_intervals(int n,IntervalMap im[],int ori_sign)
 }
 
 
-int find_intervals(IntervalIterator *it0, int start, int end,
+int64_t find_intervals(IntervalIterator *it0, int64_t start, int64_t end,
                    IntervalMap im[],int n,
                    SublistHeader subheader[], int nlists,
                    IntervalMap buf[], int nbuf,
                    int *p_nreturn, IntervalIterator **it_return)
 {
   IntervalIterator *it=NULL,*it2=NULL;
-  int ibuf=0,j,k,ori_sign=1;
+  int64_t ibuf=0,j,k,ori_sign=1;
   if (!it0) { /* ALLOCATE AN ITERATOR IF NOT SUPPLIED*/
     CALLOC(it,1,IntervalIterator);
   }

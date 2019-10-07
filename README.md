@@ -1,6 +1,6 @@
 # Nested containment list
 
-[![Build Status](https://travis-ci.org/hunt-genes/ncls.svg?branch=master)](https://travis-ci.org/hunt-genes/ncls) [![PyPI version](https://badge.fury.io/py/ncls.svg)](https://badge.fury.io/py/ncls)
+[![Build Status](https://travis-ci.org/biocore-ntnu/ncls.svg?branch=master)](https://travis-ci.org/hunt-genes/ncls) [![PyPI version](https://badge.fury.io/py/ncls.svg)](https://badge.fury.io/py/ncls)
 
 The Nested Containment List is a datastructure for interval overlap queries,
 like the interval tree. It is usually an order of magnitude faster than the

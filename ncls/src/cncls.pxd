@@ -1,3 +1,4 @@
+from libc.stdint cimport int64_t
 
 # cdef extern from "string.h":
 #   ctypedef int size_t
@@ -39,8 +40,8 @@ cdef extern from "stdio.h":
 
 cdef extern from "ncls/src/intervaldb.h":
     ctypedef struct IntervalMap:
-        int start
-        int end
+        int64_t start
+        int64_t end
         int target_id
         int sublist
 
@@ -51,7 +52,7 @@ cdef extern from "ncls/src/intervaldb.h":
         int start
         int len
 
-    int find_overlap_start(int start, int end, IntervalMap im[], int n)
+    int find_overlap_start(int64_t start, int64_t end, IntervalMap im[], int n)
     int imstart_qsort_cmp(void *void_a,void *void_b)
     # int target_qsort_cmp(void *void_a,void *void_b)
     IntervalMap *read_intervals(int n,FILE *ifile)
@@ -68,8 +69,8 @@ cdef extern from "ncls/src/intervaldb.h":
                              int *nfound)
 
     int find_intervals(IntervalIterator *it0,
-                       int start,
-                       int end,
+                       int64_t start,
+                       int64_t end,
                        IntervalMap im[],
                        int n,
                        SublistHeader subheader[],

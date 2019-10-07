@@ -1,5 +1,5 @@
 
-from libc.stdint cimport int32_t
+from libc.stdint cimport int32_t, int64_t
 
 cdef extern from "stdlib.h":
   void free(void *)
