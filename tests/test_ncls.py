@@ -1,6 +1,5 @@
 
 from ncls import NCLS
-import pandas as pd
 
 import numpy as np
 
