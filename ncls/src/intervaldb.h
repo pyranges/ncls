@@ -4,21 +4,23 @@
 #include "default.h"
 #include <limits.h>
 
+#include <stdint.h>
+
 extern int C_int_max;
 
 typedef struct {
-  int start;
-  int end;
-  int target_id;
+  int64_t start;
+  int64_t end;
+  int64_t target_id;
   /* int target_start; */
   /* int target_end; */
-  int sublist;
+  int64_t sublist;
 } IntervalMap;
 
 
 typedef struct {
-  int start;
-  int end;
+  int64_t start;
+  int64_t end;
 } IntervalIndex;
 
 typedef struct {
@@ -75,7 +77,7 @@ typedef struct {
 
 extern int *alloc_array(int n);
 
-extern int find_overlap_start(int start,int end,IntervalMap im[],int n);
+extern int64_t find_overlap_start(int64_t start,int64_t end,IntervalMap im[],int n);
 extern int imstart_qsort_cmp(const void *void_a,const void *void_b);
 extern int target_qsort_cmp(const void *void_a,const void *void_b);
 extern IntervalMap *read_intervals(int n,FILE *ifile);
@@ -88,7 +90,7 @@ extern IntervalDB *build_interval_db(IntervalMap im[],int n);
 extern IntervalIterator *interval_iterator_alloc(void);
 extern int free_interval_iterator(IntervalIterator *it);
 extern IntervalIterator *reset_interval_iterator(IntervalIterator *it);
-extern int find_intervals(IntervalIterator *it0,int start,int end,IntervalMap im[],int n,SublistHeader subheader[],int nlists,IntervalMap buf[],int nbuf,int *p_nreturn,IntervalIterator **it_return);
+extern int64_t find_intervals(IntervalIterator *it0,int64_t start,int64_t end,IntervalMap im[],int n,SublistHeader subheader[],int nlists,IntervalMap buf[],int nbuf,int *p_nreturn,IntervalIterator **it_return);
 extern int read_imdiv(FILE *ifile,IntervalMap imdiv[],int div,int i_div,int ntop);
 extern IntervalMap *read_sublist(FILE *ifile,SublistHeader *subheader,IntervalMap *im);
 extern int find_file_intervals(IntervalIterator *it0,int start,int end,
@@ -110,10 +112,6 @@ extern int save_text_file(char filestem[],char err_msg[],
 extern int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[]);
 extern void reorient_intervals(int n,IntervalMap im[],int ori_sign);
 
-extern int find_intervals_stack(int start_stack[], int end_stack[], int sp, int start,
-                         int end, IntervalMap im[], int n,
-                         SublistHeader subheader[], IntervalMap buf[],
-                                int *nfound);
 /* extern int find_k_next(int start, int end, */
 /*                 IntervalMap im[], int n, */
 /*                 SublistHeader subheader[], int nlists, */
