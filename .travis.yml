@@ -6,4 +6,4 @@ install:
   - python setup.py install
 
 # functionality is tested in the pyranges package
-script: cd ~/; python -c 'import ncls; print(ncls.__version__)'; py.test tests/test_ncls.py
+script: cd ~/; python -c 'import ncls; print(ncls.__version__)'; py.test
