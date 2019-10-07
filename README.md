@@ -14,7 +14,8 @@ gains.
 It was implemented to be the cornerstone of the PyRanges project, but I have made
 it available to the Python community as a stand-alone library. Enjoy.
 
-Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
+Original Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
+Cite: http://dx.doi.org/10.1093/bioinformatics/btz615
 
 ## Install
 
