@@ -347,7 +347,7 @@ cdef class NCLS32:
 
         return None
 
-    def find_overlap(self, int start, int end):
+    def find_overlap(self, int32_t start, int32_t end):
         if not self.im: # RAISE EXCEPTION IF NO DATA
             return []
 
@@ -712,7 +712,7 @@ cdef class NCLSIterator:
         cn.free_interval_iterator(self.it_alloc)
 
 
-    def find_overlap(self, int start, int end):
+    def find_overlap(self, int32_t start, int32_t end):
         if not self.im:
             return []
 

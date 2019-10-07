@@ -112,10 +112,6 @@ extern int save_text_file(char filestem[],char err_msg[],
 extern int text_file_to_binaries(FILE *infile,char buildpath[],char err_msg[]);
 extern void reorient_intervals(int n,IntervalMap im[],int ori_sign);
 
-extern int find_intervals_stack(int start_stack[], int end_stack[], int sp, int start,
-                         int end, IntervalMap im[], int n,
-                         SublistHeader subheader[], IntervalMap buf[],
-                                int *nfound);
 /* extern int find_k_next(int start, int end, */
 /*                 IntervalMap im[], int n, */
 /*                 SublistHeader subheader[], int nlists, */

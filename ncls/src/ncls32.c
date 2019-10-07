@@ -2364,7 +2364,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_7__str___genexpr(PyObject *
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_14__str__(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self); /* proto */
 static void __pyx_pf_4ncls_3src_6ncls32_6NCLS32_16__dealloc__(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_18close(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int __pyx_v_start, int __pyx_v_end); /* proto */
+static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int32_t __pyx_v_start, int32_t __pyx_v_end); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_22has_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int __pyx_v_start, int __pyx_v_end); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_24set_difference_helper(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, __Pyx_memviewslice __pyx_v_starts, __Pyx_memviewslice __pyx_v_ends, __Pyx_memviewslice __pyx_v_indexes); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_26first_overlap_both(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, __Pyx_memviewslice __pyx_v_starts, __Pyx_memviewslice __pyx_v_ends, __Pyx_memviewslice __pyx_v_indexes); /* proto */
@@ -2376,7 +2376,7 @@ static int __pyx_pf_4ncls_3src_6ncls32_12NCLSIterator___cinit__(struct __pyx_obj
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_2__iter__(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_4__next__(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self); /* proto */
 static void __pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_6__dealloc__(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, int __pyx_v_start, int __pyx_v_end); /* proto */
+static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, int32_t __pyx_v_start, int32_t __pyx_v_end); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -6587,7 +6587,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_18close(struct __pyx_obj_4n
  * 
  *         return None             # <<<<<<<<<<<<<<
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
@@ -6611,7 +6611,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_18close(struct __pyx_obj_4n
 /* "ncls/src/ncls32.pyx":350
  *         return None
  * 
- *     def find_overlap(self, int start, int end):             # <<<<<<<<<<<<<<
+ *     def find_overlap(self, int32_t start, int32_t end):             # <<<<<<<<<<<<<<
  *         if not self.im: # RAISE EXCEPTION IF NO DATA
  *             return []
  */
@@ -6619,8 +6619,8 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_18close(struct __pyx_obj_4n
 /* Python wrapper */
 static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_21find_overlap(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_21find_overlap(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  int __pyx_v_start;
-  int __pyx_v_end;
+  int32_t __pyx_v_start;
+  int32_t __pyx_v_end;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_overlap (wrapper)", 0);
@@ -6659,8 +6659,8 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_21find_overlap(PyObject *__
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_start = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_start == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 350, __pyx_L3_error)
-    __pyx_v_end = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_end == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 350, __pyx_L3_error)
+    __pyx_v_start = __Pyx_PyInt_As_int32_t(values[0]); if (unlikely((__pyx_v_start == ((int32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 350, __pyx_L3_error)
+    __pyx_v_end = __Pyx_PyInt_As_int32_t(values[1]); if (unlikely((__pyx_v_end == ((int32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 350, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -6677,7 +6677,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_21find_overlap(PyObject *__
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int __pyx_v_start, int __pyx_v_end) {
+static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int32_t __pyx_v_start, int32_t __pyx_v_end) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -6688,7 +6688,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
 
   /* "ncls/src/ncls32.pyx":351
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im: # RAISE EXCEPTION IF NO DATA             # <<<<<<<<<<<<<<
  *             return []
  * 
@@ -6697,7 +6697,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
   if (__pyx_t_1) {
 
     /* "ncls/src/ncls32.pyx":352
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im: # RAISE EXCEPTION IF NO DATA
  *             return []             # <<<<<<<<<<<<<<
  * 
@@ -6712,7 +6712,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
 
     /* "ncls/src/ncls32.pyx":351
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im: # RAISE EXCEPTION IF NO DATA             # <<<<<<<<<<<<<<
  *             return []
  * 
@@ -6727,9 +6727,9 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 354, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int32_t(__pyx_v_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_end); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 354, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int32_t(__pyx_v_end); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
@@ -6752,7 +6752,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
   /* "ncls/src/ncls32.pyx":350
  *         return None
  * 
- *     def find_overlap(self, int start, int end):             # <<<<<<<<<<<<<<
+ *     def find_overlap(self, int32_t start, int32_t end):             # <<<<<<<<<<<<<<
  *         if not self.im: # RAISE EXCEPTION IF NO DATA
  *             return []
  */
@@ -10990,7 +10990,7 @@ static void __pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_6__dealloc__(struct __pyx
 /* "ncls/src/ncls32.pyx":715
  * 
  * 
- *     def find_overlap(self, int start, int end):             # <<<<<<<<<<<<<<
+ *     def find_overlap(self, int32_t start, int32_t end):             # <<<<<<<<<<<<<<
  *         if not self.im:
  *             return []
  */
@@ -10998,8 +10998,8 @@ static void __pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_6__dealloc__(struct __pyx
 /* Python wrapper */
 static PyObject *__pyx_pw_4ncls_3src_6ncls32_12NCLSIterator_9find_overlap(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_4ncls_3src_6ncls32_12NCLSIterator_9find_overlap(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  int __pyx_v_start;
-  int __pyx_v_end;
+  int32_t __pyx_v_start;
+  int32_t __pyx_v_end;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_overlap (wrapper)", 0);
@@ -11038,8 +11038,8 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_12NCLSIterator_9find_overlap(PyObje
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_start = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_start == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L3_error)
-    __pyx_v_end = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_end == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L3_error)
+    __pyx_v_start = __Pyx_PyInt_As_int32_t(values[0]); if (unlikely((__pyx_v_start == ((int32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L3_error)
+    __pyx_v_end = __Pyx_PyInt_As_int32_t(values[1]); if (unlikely((__pyx_v_end == ((int32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -11056,7 +11056,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_12NCLSIterator_9find_overlap(PyObje
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, int __pyx_v_start, int __pyx_v_end) {
+static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, int32_t __pyx_v_start, int32_t __pyx_v_end) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -11068,7 +11068,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
 
   /* "ncls/src/ncls32.pyx":716
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im:             # <<<<<<<<<<<<<<
  *             return []
  * 
@@ -11081,7 +11081,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
   if (__pyx_t_3) {
 
     /* "ncls/src/ncls32.pyx":717
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im:
  *             return []             # <<<<<<<<<<<<<<
  * 
@@ -11096,7 +11096,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
 
     /* "ncls/src/ncls32.pyx":716
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im:             # <<<<<<<<<<<<<<
  *             return []
  * 
@@ -11109,9 +11109,9 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
  *         return NCLSIterator(start, end, self)             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 719, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int32_t(__pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 719, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_end); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 719, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int32_t(__pyx_v_end); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 719, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 719, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
@@ -11134,7 +11134,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
   /* "ncls/src/ncls32.pyx":715
  * 
  * 
- *     def find_overlap(self, int start, int end):             # <<<<<<<<<<<<<<
+ *     def find_overlap(self, int32_t start, int32_t end):             # <<<<<<<<<<<<<<
  *         if not self.im:
  *             return []
  */
