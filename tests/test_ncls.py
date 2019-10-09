@@ -17,31 +17,30 @@ def test_ncls():
 
     print(starts, ends, ids)
 
-    ncls = NCLS(starts.values, ends.values, ids.values)
+    ncls = NCLS(starts, ends, ids)
+    print(ncls)
+    print(ncls.intervals())
 
-    # starts = pd.Series([0, 4])
-    # ends = pd.Series([2, 5])
-    # indexes = pd.Series([98, 99])
-    print(starts, ends, indexes)
-    it = ncls.all_overlaps_both_stack(starts.values, ends.values, indexes.values)
-    it2 = ncls.all_overlaps_both(starts.values, ends.values, indexes.values)
+    assert list(ncls.find_overlap(0, 2)) == []
+    print("aaa", list(ncls.find_overlap(9_223_372_036_854_775_805, 9_223_372_036_854_775_806)))
+    assert list(ncls.find_overlap(0, 9_223_372_036_854_775_806)) == [(5, 6, 2147483647), (9223372036854775805, 9223372036854775807, 3)]
 
-    print(it)
-    print(it2)
-    assert it == it2
-    # assert next(it) == (0, 100, 0)
+    r, l = ncls.all_overlaps_both(starts, ends, ids)
+    assert list(r) == [2147483647, 3]
+    assert list(l) == [2147483647, 3]
 
 
-# def test_next_nonoverlapping():
-#
-#     starts = pd.Series(range(0, 5))
-#     ends = starts + 100
-#     ids = starts
-#
-#     ncls = NCLS(starts.values, ends.values, ids.values)
-#
-#     result = ncls.find_k_next_nonoverlapping(0, 2, 2)
-#
-#     print(result)
-#
-#     assert 0
+def test_all_containments_both():
+
+    starts = np.array([1291845632, 3002335232], dtype=int)
+    ends = np.array([1292894207, 3002597375], dtype=int)
+    ids = np.array([0, 1], dtype=int)
+
+    ncls = NCLS(starts, ends, ids)
+    subs, covers = ncls.all_containments_both(starts, ends, ids)
+
+    print(ncls.intervals())
+
+    assert list(subs) == [0, 1] == list(covers)
+
+
