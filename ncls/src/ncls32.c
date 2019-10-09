@@ -1852,7 +1852,7 @@ static int __Pyx_ValidateAndInit_memviewslice(
 static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(PyObject *, int writable_flag);
 
 /* ObjectToMemviewSlice.proto */
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(PyObject *, int writable_flag);
+static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(PyObject *, int writable_flag);
 
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int32_t(int32_t value);
@@ -1861,10 +1861,10 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int32_t(int32_t value);
 static CYTHON_INLINE PyObject *__pyx_memview_get_nn_int32_t__const__(const char *itemp);
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int64_t(int64_t value);
 
 /* MemviewDtypeToObject.proto */
-static CYTHON_INLINE PyObject *__pyx_memview_get_long__const__(const char *itemp);
+static CYTHON_INLINE PyObject *__pyx_memview_get_nn_int64_t__const__(const char *itemp);
 
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
@@ -1884,6 +1884,9 @@ static CYTHON_INLINE int32_t __Pyx_PyInt_As_int32_t(PyObject *);
 
 /* CIntFromPy.proto */
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
+
+/* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
 /* CIntFromPy.proto */
 static CYTHON_INLINE char __Pyx_PyInt_As_char(PyObject *);
@@ -2066,7 +2069,7 @@ static void __pyx_memoryview_slice_assign_scalar(__Pyx_memviewslice *, int, size
 static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize_t *, int, size_t, void *); /*proto*/
 static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, PyObject *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn_int32_t__const__ = { "const int32_t", NULL, sizeof(int32_t const ), { 0 }, 0, IS_UNSIGNED(int32_t const ) ? 'U' : 'I', IS_UNSIGNED(int32_t const ), 0 };
-static __Pyx_TypeInfo __Pyx_TypeInfo_long__const__ = { "const long", NULL, sizeof(long const ), { 0 }, 0, IS_UNSIGNED(long const ) ? 'U' : 'I', IS_UNSIGNED(long const ), 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn_int64_t__const__ = { "const int64_t", NULL, sizeof(int64_t const ), { 0 }, 0, IS_UNSIGNED(int64_t const ) ? 'U' : 'I', IS_UNSIGNED(int64_t const ), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_long = { "long", NULL, sizeof(long), { 0 }, 0, IS_UNSIGNED(long) ? 'U' : 'I', IS_UNSIGNED(long), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn_int32_t = { "int32_t", NULL, sizeof(int32_t), { 0 }, 0, IS_UNSIGNED(int32_t) ? 'U' : 'I', IS_UNSIGNED(int32_t), 0 };
 #define __Pyx_MODULE_NAME "ncls.src.ncls32"
@@ -2361,7 +2364,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_7__str___genexpr(PyObject *
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_14__str__(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self); /* proto */
 static void __pyx_pf_4ncls_3src_6ncls32_6NCLS32_16__dealloc__(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_18close(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int __pyx_v_start, int __pyx_v_end); /* proto */
+static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int32_t __pyx_v_start, int32_t __pyx_v_end); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_22has_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int __pyx_v_start, int __pyx_v_end); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_24set_difference_helper(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, __Pyx_memviewslice __pyx_v_starts, __Pyx_memviewslice __pyx_v_ends, __Pyx_memviewslice __pyx_v_indexes); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_26first_overlap_both(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, __Pyx_memviewslice __pyx_v_starts, __Pyx_memviewslice __pyx_v_ends, __Pyx_memviewslice __pyx_v_indexes); /* proto */
@@ -2373,7 +2376,7 @@ static int __pyx_pf_4ncls_3src_6ncls32_12NCLSIterator___cinit__(struct __pyx_obj
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_2__iter__(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_4__next__(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self); /* proto */
 static void __pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_6__dealloc__(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, int __pyx_v_start, int __pyx_v_end); /* proto */
+static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, int32_t __pyx_v_start, int32_t __pyx_v_end); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -2559,7 +2562,7 @@ static CYTHON_INLINE int __pyx_f_4ncls_3src_6ncls32_int_min(int __pyx_v_a, int _
 /* "ncls/src/ncls32.pyx":36
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const long [::1] ids=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const int64_t [::1] ids=None):             # <<<<<<<<<<<<<<
  * 
  *         if None in (starts, ends, ids):
  */
@@ -2637,7 +2640,7 @@ static int __pyx_pw_4ncls_3src_6ncls32_6NCLS32_1__cinit__(PyObject *__pyx_v_self
       __PYX_INC_MEMVIEW(&__pyx_v_ends, 1);
     }
     if (values[2]) {
-      __pyx_v_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_ids.memview)) __PYX_ERR(0, 36, __pyx_L3_error)
+      __pyx_v_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_ids.memview)) __PYX_ERR(0, 36, __pyx_L3_error)
     } else {
       __pyx_v_ids = __pyx_k__3;
       __PYX_INC_MEMVIEW(&__pyx_v_ids, 1);
@@ -2678,7 +2681,7 @@ static int __pyx_pf_4ncls_3src_6ncls32_6NCLS32___cinit__(struct __pyx_obj_4ncls_
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
   /* "ncls/src/ncls32.pyx":38
- *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const long [::1] ids=None):
+ *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const int64_t [::1] ids=None):
  * 
  *         if None in (starts, ends, ids):             # <<<<<<<<<<<<<<
  *             return
@@ -2708,7 +2711,7 @@ static int __pyx_pf_4ncls_3src_6ncls32_6NCLS32___cinit__(struct __pyx_obj_4ncls_
     __pyx_t_2 = __pyx_t_5;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_ids, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_ids, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = PyObject_RichCompare(__pyx_t_1, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2731,7 +2734,7 @@ static int __pyx_pf_4ncls_3src_6ncls32_6NCLS32___cinit__(struct __pyx_obj_4ncls_
     goto __pyx_L0;
 
     /* "ncls/src/ncls32.pyx":38
- *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const long [::1] ids=None):
+ *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const int64_t [::1] ids=None):
  * 
  *         if None in (starts, ends, ids):             # <<<<<<<<<<<<<<
  *             return
@@ -2930,7 +2933,7 @@ static int __pyx_pf_4ncls_3src_6ncls32_6NCLS32___cinit__(struct __pyx_obj_4ncls_
  * 
  */
     __pyx_t_12 = __pyx_v_i;
-    (__pyx_v_self->im[__pyx_v_i]).target_id = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_ids.data) + __pyx_t_12)) )));
+    (__pyx_v_self->im[__pyx_v_i]).target_id = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_ids.data) + __pyx_t_12)) )));
 
     /* "ncls/src/ncls32.pyx":56
  *             self.im[i].end = ends[i]
@@ -2954,7 +2957,7 @@ static int __pyx_pf_4ncls_3src_6ncls32_6NCLS32___cinit__(struct __pyx_obj_4ncls_
   /* "ncls/src/ncls32.pyx":36
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const long [::1] ids=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const int64_t [::1] ids=None):             # <<<<<<<<<<<<<<
  * 
  *         if None in (starts, ends, ids):
  */
@@ -3211,7 +3214,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_2intervals(struct __pyx_obj
 /* "ncls/src/ncls32.pyx":76
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef all_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef all_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i = 0
  */
@@ -3271,7 +3274,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_overlaps_both(struct __p
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_ends, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 76, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 76, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 76, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
@@ -3347,7 +3350,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_overlaps_both(struct __p
   }
 
   /* "ncls/src/ncls32.pyx":78
- *     cpdef all_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
+ *     cpdef all_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):
  * 
  *         cdef int i = 0             # <<<<<<<<<<<<<<
  *         cdef int nhit = 0
@@ -3790,7 +3793,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_overlaps_both(struct __p
  */
         __pyx_t_18 = __pyx_v_loop_counter;
         __pyx_t_19 = __pyx_v_nfound;
-        *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_19)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_18)) )));
+        *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_19)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_18)) )));
 
         /* "ncls/src/ncls32.pyx":128
  *                     # print("loop_counter", loop_counter)
@@ -3878,7 +3881,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_overlaps_both(struct __p
   /* "ncls/src/ncls32.pyx":76
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef all_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef all_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i = 0
  */
@@ -3961,7 +3964,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_5all_overlaps_both(PyObject
     }
     __pyx_v_starts = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[0], 0); if (unlikely(!__pyx_v_starts.memview)) __PYX_ERR(0, 76, __pyx_L3_error)
     __pyx_v_ends = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[1], 0); if (unlikely(!__pyx_v_ends.memview)) __PYX_ERR(0, 76, __pyx_L3_error)
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 76, __pyx_L3_error)
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 76, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -4007,7 +4010,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_4all_overlaps_both(struct _
 /* "ncls/src/ncls32.pyx":144
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef k_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes, int k):             # <<<<<<<<<<<<<<
+ *     cpdef k_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes, int k):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i = 0
  */
@@ -4068,7 +4071,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_k_overlaps_both(struct __pyx
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_ends, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 144, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 144, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_k); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 144, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
@@ -4151,7 +4154,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_k_overlaps_both(struct __pyx
   }
 
   /* "ncls/src/ncls32.pyx":146
- *     cpdef k_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes, int k):
+ *     cpdef k_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes, int k):
  * 
  *         cdef int i = 0             # <<<<<<<<<<<<<<
  *         cdef int nhit = 0
@@ -4622,7 +4625,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_k_overlaps_both(struct __pyx
  */
         __pyx_t_19 = __pyx_v_loop_counter;
         __pyx_t_20 = __pyx_v_nfound;
-        *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_20)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_19)) )));
+        *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_20)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_19)) )));
 
         /* "ncls/src/ncls32.pyx":199
  *                     # print("loop_counter", loop_counter)
@@ -4710,7 +4713,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_k_overlaps_both(struct __pyx
   /* "ncls/src/ncls32.pyx":144
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef k_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes, int k):             # <<<<<<<<<<<<<<
+ *     cpdef k_overlaps_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes, int k):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i = 0
  */
@@ -4804,7 +4807,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_7k_overlaps_both(PyObject *
     }
     __pyx_v_starts = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[0], 0); if (unlikely(!__pyx_v_starts.memview)) __PYX_ERR(0, 144, __pyx_L3_error)
     __pyx_v_ends = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[1], 0); if (unlikely(!__pyx_v_ends.memview)) __PYX_ERR(0, 144, __pyx_L3_error)
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 144, __pyx_L3_error)
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 144, __pyx_L3_error)
     __pyx_v_k = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 144, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
@@ -4851,7 +4854,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_6k_overlaps_both(struct __p
 /* "ncls/src/ncls32.pyx":216
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef all_overlaps_self(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef all_overlaps_self(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i
  */
@@ -4909,7 +4912,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_overlaps_self(struct __p
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_ends, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 216, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 216, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 216, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
@@ -5301,7 +5304,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_overlaps_self(struct __p
  */
         __pyx_t_20 = __pyx_v_loop_counter;
         __pyx_t_21 = __pyx_v_nfound;
-        *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_21)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_20)) )));
+        *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_21)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_20)) )));
 
         /* "ncls/src/ncls32.pyx":258
  *                     output[nfound] = indexes[loop_counter]
@@ -5359,7 +5362,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_overlaps_self(struct __p
   /* "ncls/src/ncls32.pyx":216
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef all_overlaps_self(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef all_overlaps_self(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i
  */
@@ -5440,7 +5443,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_9all_overlaps_self(PyObject
     }
     __pyx_v_starts = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[0], 0); if (unlikely(!__pyx_v_starts.memview)) __PYX_ERR(0, 216, __pyx_L3_error)
     __pyx_v_ends = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[1], 0); if (unlikely(!__pyx_v_ends.memview)) __PYX_ERR(0, 216, __pyx_L3_error)
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 216, __pyx_L3_error)
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 216, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -5486,7 +5489,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_8all_overlaps_self(struct _
 /* "ncls/src/ncls32.pyx":271
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef coverage(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef coverage(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         # assumes the ncls to not contain any overlapping intervals
  */
@@ -5546,7 +5549,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_coverage(struct __pyx_obj_4n
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_ends, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 271, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 271, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 271, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
@@ -5952,7 +5955,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_coverage(struct __pyx_obj_4n
   /* "ncls/src/ncls32.pyx":271
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef coverage(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef coverage(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         # assumes the ncls to not contain any overlapping intervals
  */
@@ -6033,7 +6036,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_11coverage(PyObject *__pyx_
     }
     __pyx_v_starts = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[0], 0); if (unlikely(!__pyx_v_starts.memview)) __PYX_ERR(0, 271, __pyx_L3_error)
     __pyx_v_ends = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[1], 0); if (unlikely(!__pyx_v_ends.memview)) __PYX_ERR(0, 271, __pyx_L3_error)
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 271, __pyx_L3_error)
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 271, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -6584,7 +6587,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_18close(struct __pyx_obj_4n
  * 
  *         return None             # <<<<<<<<<<<<<<
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
@@ -6608,7 +6611,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_18close(struct __pyx_obj_4n
 /* "ncls/src/ncls32.pyx":350
  *         return None
  * 
- *     def find_overlap(self, int start, int end):             # <<<<<<<<<<<<<<
+ *     def find_overlap(self, int32_t start, int32_t end):             # <<<<<<<<<<<<<<
  *         if not self.im: # RAISE EXCEPTION IF NO DATA
  *             return []
  */
@@ -6616,8 +6619,8 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_18close(struct __pyx_obj_4n
 /* Python wrapper */
 static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_21find_overlap(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_21find_overlap(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  int __pyx_v_start;
-  int __pyx_v_end;
+  int32_t __pyx_v_start;
+  int32_t __pyx_v_end;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_overlap (wrapper)", 0);
@@ -6656,8 +6659,8 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_21find_overlap(PyObject *__
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_start = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_start == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 350, __pyx_L3_error)
-    __pyx_v_end = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_end == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 350, __pyx_L3_error)
+    __pyx_v_start = __Pyx_PyInt_As_int32_t(values[0]); if (unlikely((__pyx_v_start == ((int32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 350, __pyx_L3_error)
+    __pyx_v_end = __Pyx_PyInt_As_int32_t(values[1]); if (unlikely((__pyx_v_end == ((int32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 350, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -6674,7 +6677,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_21find_overlap(PyObject *__
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int __pyx_v_start, int __pyx_v_end) {
+static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLS32 *__pyx_v_self, int32_t __pyx_v_start, int32_t __pyx_v_end) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -6685,7 +6688,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
 
   /* "ncls/src/ncls32.pyx":351
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im: # RAISE EXCEPTION IF NO DATA             # <<<<<<<<<<<<<<
  *             return []
  * 
@@ -6694,7 +6697,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
   if (__pyx_t_1) {
 
     /* "ncls/src/ncls32.pyx":352
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im: # RAISE EXCEPTION IF NO DATA
  *             return []             # <<<<<<<<<<<<<<
  * 
@@ -6709,7 +6712,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
 
     /* "ncls/src/ncls32.pyx":351
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im: # RAISE EXCEPTION IF NO DATA             # <<<<<<<<<<<<<<
  *             return []
  * 
@@ -6724,9 +6727,9 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 354, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int32_t(__pyx_v_start); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_end); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 354, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int32_t(__pyx_v_end); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
@@ -6749,7 +6752,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_20find_overlap(struct __pyx
   /* "ncls/src/ncls32.pyx":350
  *         return None
  * 
- *     def find_overlap(self, int start, int end):             # <<<<<<<<<<<<<<
+ *     def find_overlap(self, int32_t start, int32_t end):             # <<<<<<<<<<<<<<
  *         if not self.im: # RAISE EXCEPTION IF NO DATA
  *             return []
  */
@@ -7120,7 +7123,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_22has_overlap(struct __pyx_
 /* "ncls/src/ncls32.pyx":385
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef set_difference_helper(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef set_difference_helper(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i
  */
@@ -7212,7 +7215,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_set_difference_helper(struct
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_ends, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 385, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 385, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 385, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
@@ -7955,7 +7958,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_set_difference_helper(struct
  */
         __pyx_t_26 = __pyx_v_loop_counter;
         __pyx_t_27 = __pyx_v_nfound;
-        *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_27)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_26)) )));
+        *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_27)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_26)) )));
 
         /* "ncls/src/ncls32.pyx":450
  *                     output_end[nfound] = -1
@@ -8024,7 +8027,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_set_difference_helper(struct
  */
             __pyx_t_28 = __pyx_v_loop_counter;
             __pyx_t_29 = __pyx_v_nfound;
-            *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_29)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_28)) )));
+            *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_29)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_28)) )));
 
             /* "ncls/src/ncls32.pyx":467
  *                             #print("  new_end", im_buf[i].start)
@@ -8143,7 +8146,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_set_difference_helper(struct
  */
             __pyx_t_36 = __pyx_v_loop_counter;
             __pyx_t_37 = __pyx_v_nfound;
-            *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_37)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_36)) )));
+            *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_37)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_36)) )));
 
             /* "ncls/src/ncls32.pyx":487
  *                             output_end[nfound] = -1
@@ -8184,7 +8187,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_set_difference_helper(struct
  */
               __pyx_t_38 = __pyx_v_loop_counter;
               __pyx_t_39 = __pyx_v_nfound;
-              *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_39)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_38)) )));
+              *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_39)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_38)) )));
 
               /* "ncls/src/ncls32.pyx":492
  *                                 # print("im_buf[i].start > nstart", im_buf[i].start, nstart)
@@ -8245,7 +8248,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_set_difference_helper(struct
  */
               __pyx_t_43 = __pyx_v_loop_counter;
               __pyx_t_44 = __pyx_v_nfound;
-              *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_44)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_43)) )));
+              *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_44)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_43)) )));
 
               /* "ncls/src/ncls32.pyx":503
  * 
@@ -8370,7 +8373,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_set_difference_helper(struct
   /* "ncls/src/ncls32.pyx":385
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef set_difference_helper(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef set_difference_helper(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i
  */
@@ -8456,7 +8459,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_25set_difference_helper(PyO
     }
     __pyx_v_starts = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[0], 0); if (unlikely(!__pyx_v_starts.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
     __pyx_v_ends = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[1], 0); if (unlikely(!__pyx_v_ends.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -8502,7 +8505,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_24set_difference_helper(str
 /* "ncls/src/ncls32.pyx":521
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef first_overlap_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef first_overlap_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int ix = 0
  */
@@ -8557,7 +8560,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_first_overlap_both(struct __
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_ends, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 521, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 521, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 521, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
@@ -8633,7 +8636,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_first_overlap_both(struct __
   }
 
   /* "ncls/src/ncls32.pyx":523
- *     cpdef first_overlap_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
+ *     cpdef first_overlap_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):
  * 
  *         cdef int ix = 0             # <<<<<<<<<<<<<<
  *         cdef int length = len(starts)
@@ -8850,7 +8853,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_first_overlap_both(struct __
  */
       __pyx_t_17 = __pyx_v_loop_counter;
       __pyx_t_18 = __pyx_v_nfound;
-      *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_18)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_17)) )));
+      *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_18)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_17)) )));
 
       /* "ncls/src/ncls32.pyx":551
  *             if ix != -1:
@@ -8909,7 +8912,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_first_overlap_both(struct __
   /* "ncls/src/ncls32.pyx":521
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef first_overlap_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef first_overlap_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int ix = 0
  */
@@ -8992,7 +8995,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_27first_overlap_both(PyObje
     }
     __pyx_v_starts = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[0], 0); if (unlikely(!__pyx_v_starts.memview)) __PYX_ERR(0, 521, __pyx_L3_error)
     __pyx_v_ends = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[1], 0); if (unlikely(!__pyx_v_ends.memview)) __PYX_ERR(0, 521, __pyx_L3_error)
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 521, __pyx_L3_error)
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 521, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -9038,7 +9041,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_26first_overlap_both(struct
 /* "ncls/src/ncls32.pyx":561
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef all_containments_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef all_containments_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i
  */
@@ -9101,7 +9104,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_containments_both(struct
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_ends, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 561, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 561, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 561, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
@@ -9651,7 +9654,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_containments_both(struct
  */
           __pyx_t_19 = __pyx_v_loop_counter;
           __pyx_t_20 = __pyx_v_nfound;
-          *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_20)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_19)) )));
+          *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_20)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_19)) )));
 
           /* "ncls/src/ncls32.pyx":613
  * 
@@ -9748,7 +9751,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_all_containments_both(struct
   /* "ncls/src/ncls32.pyx":561
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef all_containments_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef all_containments_both(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i
  */
@@ -9831,7 +9834,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_29all_containments_both(PyO
     }
     __pyx_v_starts = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[0], 0); if (unlikely(!__pyx_v_starts.memview)) __PYX_ERR(0, 561, __pyx_L3_error)
     __pyx_v_ends = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[1], 0); if (unlikely(!__pyx_v_ends.memview)) __PYX_ERR(0, 561, __pyx_L3_error)
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 561, __pyx_L3_error)
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 561, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -9877,7 +9880,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_6NCLS32_28all_containments_both(str
 /* "ncls/src/ncls32.pyx":631
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i = 0
  */
@@ -9928,7 +9931,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_has_overlaps(struct __pyx_ob
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_ends, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 631, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_long__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 631, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_indexes, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_int64_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 631, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
@@ -10004,7 +10007,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_has_overlaps(struct __pyx_ob
   }
 
   /* "ncls/src/ncls32.pyx":633
- *     cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):
+ *     cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):
  * 
  *         cdef int i = 0             # <<<<<<<<<<<<<<
  *         cdef int ix = 0
@@ -10157,7 +10160,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_has_overlaps(struct __pyx_ob
  */
       __pyx_t_17 = __pyx_v_i;
       __pyx_t_18 = __pyx_v_nfound;
-      *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_18)) )) = (*((long const  *) ( /* dim=0 */ ((char *) (((long const  *) __pyx_v_indexes.data) + __pyx_t_17)) )));
+      *((long *) ( /* dim=0 */ ((char *) (((long *) __pyx_v_output.data) + __pyx_t_18)) )) = (*((int64_t const  *) ( /* dim=0 */ ((char *) (((int64_t const  *) __pyx_v_indexes.data) + __pyx_t_17)) )));
 
       /* "ncls/src/ncls32.pyx":653
  *             if ix != -1:
@@ -10204,7 +10207,7 @@ static PyObject *__pyx_f_4ncls_3src_6ncls32_6NCLS32_has_overlaps(struct __pyx_ob
   /* "ncls/src/ncls32.pyx":631
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const long [::1] indexes):             # <<<<<<<<<<<<<<
+ *     cpdef has_overlaps(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):             # <<<<<<<<<<<<<<
  * 
  *         cdef int i = 0
  */
@@ -10285,7 +10288,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_6NCLS32_31has_overlaps(PyObject *__
     }
     __pyx_v_starts = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[0], 0); if (unlikely(!__pyx_v_starts.memview)) __PYX_ERR(0, 631, __pyx_L3_error)
     __pyx_v_ends = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int32_t__const__(values[1], 0); if (unlikely(!__pyx_v_ends.memview)) __PYX_ERR(0, 631, __pyx_L3_error)
-    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 631, __pyx_L3_error)
+    __pyx_v_indexes = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(values[2], 0); if (unlikely(!__pyx_v_indexes.memview)) __PYX_ERR(0, 631, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -10987,7 +10990,7 @@ static void __pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_6__dealloc__(struct __pyx
 /* "ncls/src/ncls32.pyx":715
  * 
  * 
- *     def find_overlap(self, int start, int end):             # <<<<<<<<<<<<<<
+ *     def find_overlap(self, int32_t start, int32_t end):             # <<<<<<<<<<<<<<
  *         if not self.im:
  *             return []
  */
@@ -10995,8 +10998,8 @@ static void __pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_6__dealloc__(struct __pyx
 /* Python wrapper */
 static PyObject *__pyx_pw_4ncls_3src_6ncls32_12NCLSIterator_9find_overlap(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_4ncls_3src_6ncls32_12NCLSIterator_9find_overlap(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  int __pyx_v_start;
-  int __pyx_v_end;
+  int32_t __pyx_v_start;
+  int32_t __pyx_v_end;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_overlap (wrapper)", 0);
@@ -11035,8 +11038,8 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_12NCLSIterator_9find_overlap(PyObje
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_start = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_start == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L3_error)
-    __pyx_v_end = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_end == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L3_error)
+    __pyx_v_start = __Pyx_PyInt_As_int32_t(values[0]); if (unlikely((__pyx_v_start == ((int32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L3_error)
+    __pyx_v_end = __Pyx_PyInt_As_int32_t(values[1]); if (unlikely((__pyx_v_end == ((int32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -11053,7 +11056,7 @@ static PyObject *__pyx_pw_4ncls_3src_6ncls32_12NCLSIterator_9find_overlap(PyObje
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, int __pyx_v_start, int __pyx_v_end) {
+static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct __pyx_obj_4ncls_3src_6ncls32_NCLSIterator *__pyx_v_self, int32_t __pyx_v_start, int32_t __pyx_v_end) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -11065,7 +11068,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
 
   /* "ncls/src/ncls32.pyx":716
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im:             # <<<<<<<<<<<<<<
  *             return []
  * 
@@ -11078,7 +11081,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
   if (__pyx_t_3) {
 
     /* "ncls/src/ncls32.pyx":717
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im:
  *             return []             # <<<<<<<<<<<<<<
  * 
@@ -11093,7 +11096,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
 
     /* "ncls/src/ncls32.pyx":716
  * 
- *     def find_overlap(self, int start, int end):
+ *     def find_overlap(self, int32_t start, int32_t end):
  *         if not self.im:             # <<<<<<<<<<<<<<
  *             return []
  * 
@@ -11106,9 +11109,9 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
  *         return NCLSIterator(start, end, self)             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 719, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int32_t(__pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 719, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_end); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 719, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int32_t(__pyx_v_end); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 719, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 719, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
@@ -11131,7 +11134,7 @@ static PyObject *__pyx_pf_4ncls_3src_6ncls32_12NCLSIterator_8find_overlap(struct
   /* "ncls/src/ncls32.pyx":715
  * 
  * 
- *     def find_overlap(self, int start, int end):             # <<<<<<<<<<<<<<
+ *     def find_overlap(self, int32_t start, int32_t end):             # <<<<<<<<<<<<<<
  *         if not self.im:
  *             return []
  */
@@ -26203,7 +26206,7 @@ if (!__Pyx_RefNanny) {
   /* "ncls/src/ncls32.pyx":36
  *     @cython.wraparound(False)
  *     @cython.initializedcheck(False)
- *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const long [::1] ids=None):             # <<<<<<<<<<<<<<
+ *     def __cinit__(self, const int32_t [::1] starts=None, const int32_t [::1] ends=None, const int64_t [::1] ids=None):             # <<<<<<<<<<<<<<
  * 
  *         if None in (starts, ends, ids):
  */
@@ -26215,7 +26218,7 @@ if (!__Pyx_RefNanny) {
   __pyx_k__2 = __pyx_t_9;
   __pyx_t_9.memview = NULL;
   __pyx_t_9.data = NULL;
-  __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(Py_None, 0); if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(Py_None, 0); if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 36, __pyx_L1_error)
   __pyx_k__3 = __pyx_t_10;
   __pyx_t_10.memview = NULL;
   __pyx_t_10.data = NULL;
@@ -30155,7 +30158,7 @@ __pyx_fail:
 }
 
 /* ObjectToMemviewSlice */
-  static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_long__const__(PyObject *obj, int writable_flag) {
+  static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_nn_int64_t__const__(PyObject *obj, int writable_flag) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
     int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_CONTIG) };
@@ -30166,7 +30169,7 @@ __pyx_fail:
     }
     retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, __Pyx_IS_C_CONTIG,
                                                  (PyBUF_C_CONTIGUOUS | PyBUF_FORMAT) | writable_flag, 1,
-                                                 &__Pyx_TypeInfo_long__const__, stack,
+                                                 &__Pyx_TypeInfo_nn_int64_t__const__, stack,
                                                  &result, obj);
     if (unlikely(retcode == -1))
         goto __pyx_fail;
@@ -30236,24 +30239,24 @@ __pyx_fail:
 }
 
 /* CIntToPy */
-  static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
-    const long neg_one = (long) ((long) 0 - (long) 1), const_zero = (long) 0;
+  static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int64_t(int64_t value) {
+    const int64_t neg_one = (int64_t) ((int64_t) 0 - (int64_t) 1), const_zero = (int64_t) 0;
     const int is_unsigned = neg_one > const_zero;
     if (is_unsigned) {
-        if (sizeof(long) < sizeof(long)) {
+        if (sizeof(int64_t) < sizeof(long)) {
             return PyInt_FromLong((long) value);
-        } else if (sizeof(long) <= sizeof(unsigned long)) {
+        } else if (sizeof(int64_t) <= sizeof(unsigned long)) {
             return PyLong_FromUnsignedLong((unsigned long) value);
 #ifdef HAVE_LONG_LONG
-        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
+        } else if (sizeof(int64_t) <= sizeof(unsigned PY_LONG_LONG)) {
             return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
 #endif
         }
     } else {
-        if (sizeof(long) <= sizeof(long)) {
+        if (sizeof(int64_t) <= sizeof(long)) {
             return PyInt_FromLong((long) value);
 #ifdef HAVE_LONG_LONG
-        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
+        } else if (sizeof(int64_t) <= sizeof(PY_LONG_LONG)) {
             return PyLong_FromLongLong((PY_LONG_LONG) value);
 #endif
         }
@@ -30261,14 +30264,14 @@ __pyx_fail:
     {
         int one = 1; int little = (int)*(unsigned char *)&one;
         unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(long),
+        return _PyLong_FromByteArray(bytes, sizeof(int64_t),
                                      little, !is_unsigned);
     }
 }
 
 /* MemviewDtypeToObject */
-  static CYTHON_INLINE PyObject *__pyx_memview_get_long__const__(const char *itemp) {
-    return (PyObject *) __Pyx_PyInt_From_long(*(long const  *) itemp);
+  static CYTHON_INLINE PyObject *__pyx_memview_get_nn_int64_t__const__(const char *itemp) {
+    return (PyObject *) __Pyx_PyInt_From_int64_t(*(int64_t const  *) itemp);
 }
 
 /* CIntToPy */
@@ -30934,6 +30937,37 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to long");
     return (long) -1;
+}
+
+/* CIntToPy */
+  static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
+    const long neg_one = (long) ((long) 0 - (long) 1), const_zero = (long) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(long) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(long) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(long) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(long),
+                                     little, !is_unsigned);
+    }
 }
 
 /* CIntFromPy */

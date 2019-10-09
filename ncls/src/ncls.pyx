@@ -99,6 +99,10 @@ cdef class NCLS64:
         it = it_alloc
         for loop_counter in range(length):
 
+            # print("loop_counter", loop_counter)
+            # print("start", starts[loop_counter])
+            # print("ends", ends[loop_counter])
+
             # remember first pointer for dealloc
             while it:
                 i = 0
@@ -107,9 +111,6 @@ cdef class NCLS64:
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
                 # print("nhit", nhit)
-                # print("length", length)
-                # print("nfound", nfound)
-                # print(nfound + nhit >= length)
                 if nfound + nhit >= length:
 
                     length = (length + nhit) * 2
@@ -119,12 +120,16 @@ cdef class NCLS64:
                     output_other = output_arr_other
 
                 while i < nhit:
+                    # print("  i", i)
 
                     # print("length", length)
                     # print("nfound", nfound)
                     # print("loop_counter", loop_counter)
                     output[nfound] = indexes[loop_counter]
                     output_other[nfound] = im_buf[i].target_id
+
+                    # print("  output[nfound]", output[nfound])
+                    # print("  output_other[nfound]", output_other[nfound])
 
                     nfound += 1
                     i += 1
@@ -341,14 +346,14 @@ cdef class NCLS64:
 
         return None
 
-    def find_overlap(self, int start, int end):
+    def find_overlap(self, int64_t start, int64_t end):
         if not self.im: # RAISE EXCEPTION IF NO DATA
             return []
 
         return NCLSIterator(start, end, self)
 
 
-    cpdef has_overlap(self, int start, int end):
+    cpdef has_overlap(self, int64_t start, int64_t end):
         cdef int nhit = 0
 
         cdef cn.IntervalIterator *it
@@ -655,7 +660,8 @@ cdef class NCLSIterator:
     cdef cn.IntervalIterator *it
     cdef cn.IntervalIterator *it_alloc
     cdef cn.IntervalMap im_buf[1024]
-    cdef int nhit, start, end, ihit
+    cdef int nhit, ihit
+    cdef int64_t start, end 
     cdef NCLS64 db
 
     def __cinit__(self, long start, long end, NCLS64 db not None):
@@ -673,7 +679,7 @@ cdef class NCLSIterator:
 
 
     cdef int cnext(self): # c VERSION OF ITERATOR next METHOD RETURNS INDEX
-        cdef int i
+        cdef int64_t i
         if self.ihit >= self.nhit: # TRY TO GET ONE MORE BUFFER CHUNK OF HITS
             if self.it == NULL: # ITERATOR IS EXHAUSTED
                 return -1
@@ -704,7 +710,7 @@ cdef class NCLSIterator:
         cn.free_interval_iterator(self.it_alloc)
 
 
-    def find_overlap(self, int start, int end):
+    def find_overlap(self, int64_t start, int64_t end):
         if not self.im:
             return []
 
