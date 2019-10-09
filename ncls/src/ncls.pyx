@@ -80,10 +80,10 @@ cdef class NCLS64:
         cdef int loop_counter = 0
         cdef int nfound = 0
 
-        output_arr = np.zeros(length, dtype=long)
-        output_arr_other = np.zeros(length, dtype=long)
-        cdef long [::1] output
-        cdef long [::1] output_other
+        output_arr = np.zeros(length, dtype=np.int64)
+        output_arr_other = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_other
 
         output = output_arr
         output_other = output_arr_other
@@ -153,10 +153,10 @@ cdef class NCLS64:
         cdef int loop_counter = 0
         cdef int nfound = 0
 
-        output_arr = np.zeros(length, dtype=long)
-        output_arr_other = np.zeros(length, dtype=long)
-        cdef long [::1] output
-        cdef long [::1] output_other
+        output_arr = np.zeros(length, dtype=np.int64)
+        output_arr_other = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_other
 
         output = output_arr
         output_other = output_arr_other
@@ -220,8 +220,8 @@ cdef class NCLS64:
         cdef int loop_counter = 0
         cdef int nfound = 0
 
-        output_arr = np.zeros(length, dtype=long)
-        cdef long [::1] output
+        output_arr = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
 
         output = output_arr
 
@@ -272,8 +272,8 @@ cdef class NCLS64:
         # assumes the ncls to not contain any overlapping intervals
 
         cdef int i = 0
-        cdef int start = 0
-        cdef int end = 0
+        cdef int64_t start = 0
+        cdef int64_t end = 0
         cdef int other_start = 0
         cdef int other_end = 0
         cdef int nhit = 0
@@ -281,10 +281,10 @@ cdef class NCLS64:
         cdef int loop_counter = 0
         cdef int nfound = 0
 
-        # output_arr = np.zeros(length, dtype=long)
-        output_arr_length = np.zeros(length, dtype=long)
-        # cdef long [::1] output
-        cdef long [::1] output_length
+        # output_arr = np.zeros(length, dtype=np.int64)
+        output_arr_length = np.zeros(length, dtype=np.int64)
+        # cdef int64_t [::1] output
+        cdef int64_t [::1] output_length
 
         # output = output_arr
         output_length = output_arr_length
@@ -386,8 +386,8 @@ cdef class NCLS64:
         cdef int i
         cdef int nhit = 0
         cdef int nfound = 0
-        cdef int nstart = 0
-        cdef int nend = 0
+        cdef int64_t nstart = 0
+        cdef int64_t nend = 0
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int overlap_type_nb = 0
@@ -397,9 +397,9 @@ cdef class NCLS64:
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_start = np.zeros(length, dtype=np.int64)
         output_arr_end = np.zeros(length, dtype=np.int64)
-        cdef long [::1] output
-        cdef long [::1] output_start
-        cdef long [::1] output_end
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_start
+        cdef int64_t [::1] output_end
 
         output = output_arr
         output_start = output_arr_start
@@ -526,8 +526,8 @@ cdef class NCLS64:
 
         output_arr = np.zeros(length, dtype=np.long)
         output_arr_other = np.zeros(length, dtype=np.long)
-        cdef long [::1] output
-        cdef long [::1] output_other
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_other
 
         output = output_arr
         output_other = output_arr_other
@@ -564,12 +564,12 @@ cdef class NCLS64:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
-        cdef int start, end
+        cdef int64_t start, end
 
         output_arr = np.zeros(length, dtype=np.long)
         output_arr_other = np.zeros(length, dtype=np.long)
-        cdef long [::1] output
-        cdef long [::1] output_other
+        cdef int64_t [::1] output
+        cdef int64_t [::1] output_other
 
         output = output_arr
         output_other = output_arr_other
@@ -637,8 +637,8 @@ cdef class NCLS64:
         if not self.im: # if empty
             return []
 
-        output_arr = np.zeros(length, dtype=long)
-        cdef long [::1] output
+        output_arr = np.zeros(length, dtype=np.int64)
+        cdef int64_t [::1] output
         output = output_arr
 
         for i in range(length):

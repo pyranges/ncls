@@ -26,3 +26,15 @@ def test_ncls():
     assert list(r) == [2147483647, 3]
     assert list(l) == [2147483647, 3]
 
+def test_all_containments_both():
+
+    starts = np.array([1291845632, 3002335232], dtype=int)
+    ends = np.array([1292894207, 3002597375], dtype=int)
+    ids = np.array([0, 1], dtype=int)
+
+    ncls = NCLS(starts, ends, ids)
+    subs, covers = ncls.all_containments_both(starts, ends, ids)
+
+    print(ncls.intervals())
+
+    assert list(subs) == [0, 1] == list(covers)
