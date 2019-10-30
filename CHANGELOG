@@ -1,3 +1,6 @@
+# 0.0.47 (30.10.19)
+- fix rare segfault in set_difference_helper
+
 # 0.0.45 (07.10.19)
 - try to fix another windows error
 

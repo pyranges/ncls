@@ -384,11 +384,11 @@ cdef class NCLS32:
     @cython.initializedcheck(False)
     cpdef set_difference_helper(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):
 
-        cdef int i
+        cdef int i = 0
         cdef int nhit = 0
         cdef int nfound = 0
-        cdef int nstart = 0
-        cdef int nend = 0
+        cdef int32_t nstart = 0
+        cdef int32_t nend = 0
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int overlap_type_nb = 0
@@ -398,7 +398,7 @@ cdef class NCLS32:
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_start = np.zeros(length, dtype=np.int32)
         output_arr_end = np.zeros(length, dtype=np.int32)
-        cdef long [::1] output
+        cdef int64_t [::1] output
         cdef int32_t [::1] output_start
         cdef int32_t [::1] output_end
 
@@ -412,34 +412,41 @@ cdef class NCLS32:
         if not self.im: # if empty
             return [], [], []
 
-
         it_alloc = cn.interval_iterator_alloc()
         it = it_alloc
         for loop_counter in range(length):
 
             while it:
                 i = 0
-                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+
+                nstart = starts[loop_counter]
+                nend = ends[loop_counter]
+
+                print("----" * 5)
+                print("loop counter", loop_counter)
+                print("nstart", nstart)
+                print("nend", nend)
+
+                cn.find_intervals(it, nstart, nend, self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
                 #print("nhits:", nhit)
 
-                nstart = starts[loop_counter]
-                nend = ends[loop_counter]
 
-                # print("nstart", nstart)
-                # print("nend", nend)
 
                 if nfound + nhit >= length:
 
-                    length = length * 2
+                    length = (nfound + nhit) * 2
                     output_arr = np.resize(output_arr, length)
                     output_arr_start = np.resize(output_arr_start, length)
                     output = output_arr
                     output_start = output_arr_start
                     output_arr_end = np.resize(output_arr_end, length)
                     output_end = output_arr_end
+
+                print("  length is", length)
+                print("  nfound is", nfound)
 
                 # B covers whole of A; ignore
                 if nhit == 1 and starts[loop_counter] > im_buf[i].start and ends[loop_counter] < im_buf[i].end:
@@ -451,10 +458,14 @@ cdef class NCLS32:
                     nfound += 1
 
                 while i < nhit:
+                    print("    i", i)
                     # print("--- i:", i)
                     # print("--- im_buf[i]", im_buf[i])
-                    #print("  B start:", im_buf[i].start)
-                    #print("  B end:", im_buf[i].end)
+                    print("  B start:", im_buf[i].start)
+                    print("  B end:", im_buf[i].end)
+                    print("  nfound:", nfound)
+                    print("  output_arr_start", output_arr_start)
+                    print("  output_arr_end", output_arr_end)
 
                     # in case the start contributes nothing
                     if i < nhit - 1:
@@ -603,7 +614,7 @@ cdef class NCLS32:
 
                         if nfound >= length:
 
-                            length = length * 2
+                            length = nfound * 2
                             output_arr = np.resize(output_arr, length)
                             output_arr_other = np.resize(output_arr_other, length)
                             output = output_arr
