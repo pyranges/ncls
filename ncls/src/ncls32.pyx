@@ -422,10 +422,10 @@ cdef class NCLS32:
                 nstart = starts[loop_counter]
                 nend = ends[loop_counter]
 
-                print("----" * 5)
-                print("loop counter", loop_counter)
-                print("nstart", nstart)
-                print("nend", nend)
+                # print("----" * 5)
+                # print("loop counter", loop_counter)
+                # print("nstart", nstart)
+                # print("nend", nend)
 
                 cn.find_intervals(it, nstart, nend, self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -445,8 +445,8 @@ cdef class NCLS32:
                     output_arr_end = np.resize(output_arr_end, length)
                     output_end = output_arr_end
 
-                print("  length is", length)
-                print("  nfound is", nfound)
+                # print("  length is", length)
+                # print("  nfound is", nfound)
 
                 # B covers whole of A; ignore
                 if nhit == 1 and starts[loop_counter] > im_buf[i].start and ends[loop_counter] < im_buf[i].end:
@@ -458,14 +458,14 @@ cdef class NCLS32:
                     nfound += 1
 
                 while i < nhit:
-                    print("    i", i)
+                    # print("    i", i)
                     # print("--- i:", i)
                     # print("--- im_buf[i]", im_buf[i])
-                    print("  B start:", im_buf[i].start)
-                    print("  B end:", im_buf[i].end)
-                    print("  nfound:", nfound)
-                    print("  output_arr_start", output_arr_start)
-                    print("  output_arr_end", output_arr_end)
+                    # print("  B start:", im_buf[i].start)
+                    # print("  B end:", im_buf[i].end)
+                    # print("  nfound:", nfound)
+                    # print("  output_arr_start", output_arr_start)
+                    # print("  output_arr_end", output_arr_end)
 
                     # in case the start contributes nothing
                     if i < nhit - 1:
