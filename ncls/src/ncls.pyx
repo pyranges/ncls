@@ -432,7 +432,7 @@ cdef class NCLS64:
 
                 if nfound + nhit >= length:
 
-                    length = length * 2
+                    length = (length + nhit) * 2
                     output_arr = np.resize(output_arr, length)
                     output_arr_start = np.resize(output_arr_start, length)
                     output = output_arr
@@ -602,7 +602,7 @@ cdef class NCLS64:
 
                         if nfound >= length:
 
-                            length = length * 2
+                            length = nfound * 2
                             output_arr = np.resize(output_arr, length)
                             output_arr_other = np.resize(output_arr_other, length)
                             output = output_arr
