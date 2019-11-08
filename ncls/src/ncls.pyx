@@ -152,6 +152,7 @@ cdef class NCLS64:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int max_end = -1
 
         output_arr = np.zeros(length, dtype=long)
         output_arr_other = np.zeros(length, dtype=long)
@@ -172,6 +173,7 @@ cdef class NCLS64:
         it = it_alloc
         for loop_counter in range(length):
 
+            # print("loop_counter", loop_counter)
             # remember first pointer for dealloc
             while it:
                 i = 0
@@ -179,28 +181,21 @@ cdef class NCLS64:
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
-                # print("nhit", nhit)
-                # print("length", length)
-                # print("nfound", nfound)
-                # print(nfound + nhit >= length)
-                if nfound + nhit >= length:
-
-                    length = (length + nhit) * 2
-                    output_arr = np.resize(output_arr, length)
-                    output_arr_other = np.resize(output_arr_other, length)
-                    output = output_arr
-                    output_other = output_arr_other
-
+                max_end = -1
                 if nhit:
 
-                    # print("length", length)
-                    # print("nfound", nfound)
-                    # print("loop_counter", loop_counter)
-                    output[nfound] = indexes[loop_counter]
-                    output_other[nfound] = im_buf[nhit - 1].target_id
+                    # """Finding last overlap in NCLS: iterate from start, find last maximal end."""
+
+                    while i < nhit:
+                        if im_buf[i].end >= max_end:
+                            # print("max_end", im_buf[i].end)
+                            output[nfound] = indexes[loop_counter]
+                            output_other[nfound] = im_buf[i].target_id
+                            max_end = im_buf[i].end
+
+                        i += 1
 
                     nfound += 1
-                    i += 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
