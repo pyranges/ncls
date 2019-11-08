@@ -145,6 +145,74 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
+    cpdef last_overlap_both(self, const int64_t [::1] starts, const int64_t [::1] ends, const long [::1] indexes):
+
+        cdef int i = 0
+        cdef int nhit = 0
+        cdef int length = len(starts)
+        cdef int loop_counter = 0
+        cdef int nfound = 0
+
+        output_arr = np.zeros(length, dtype=long)
+        output_arr_other = np.zeros(length, dtype=long)
+        cdef long [::1] output
+        cdef long [::1] output_other
+
+        output = output_arr
+        output_other = output_arr_other
+
+        cdef cn.IntervalIterator *it
+        cdef cn.IntervalIterator *it_alloc
+
+        cdef cn.IntervalMap im_buf[1024]
+        if not self.im: # if empty
+            return [], []
+
+        it_alloc = cn.interval_iterator_alloc()
+        it = it_alloc
+        for loop_counter in range(length):
+
+            # remember first pointer for dealloc
+            while it:
+                i = 0
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
+                                self.subheader, self.nlists, im_buf, 1024,
+                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
+
+                # print("nhit", nhit)
+                # print("length", length)
+                # print("nfound", nfound)
+                # print(nfound + nhit >= length)
+                if nfound + nhit >= length:
+
+                    length = (length + nhit) * 2
+                    output_arr = np.resize(output_arr, length)
+                    output_arr_other = np.resize(output_arr_other, length)
+                    output = output_arr
+                    output_other = output_arr_other
+
+                if nhit:
+
+                    # print("length", length)
+                    # print("nfound", nfound)
+                    # print("loop_counter", loop_counter)
+                    output[nfound] = indexes[loop_counter]
+                    output_other[nfound] = im_buf[nhit - 1].target_id
+
+                    nfound += 1
+                    i += 1
+
+            cn.reset_interval_iterator(it_alloc)
+            it = it_alloc
+
+        cn.free_interval_iterator(it_alloc)
+
+        return output_arr[:nfound], output_arr_other[:nfound]
+
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.initializedcheck(False)
     cpdef k_overlaps_both(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes, int k):
 
         cdef int i = 0
