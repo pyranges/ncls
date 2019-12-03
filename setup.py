@@ -1,6 +1,17 @@
 from distutils.core import setup
 from setuptools import find_packages, Extension, Command
-from Cython.Build import cythonize
+
+
+# try:
+#     from Cython.Build import cythonize
+# except ImportError:
+#      def cythonize(*args, **kwargs):
+#          from Cython.Build import cythonize
+#          return cythonize(*args, **kwargs)
+
+
+
+
 
 import os
 import sys
@@ -19,16 +30,16 @@ Topic :: Scientific/Engineering :: Bio-Informatics"""
 # split into lines and filter empty ones
 CLASSIFIERS = CLASSIFIERS.split("\n")
 
-macros = [("CYTHON_TRACE", "1")]
+# macros = [("CYTHON_TRACE", "1")]
 
-# extension sources
-macros = []
+# # extension sources
+# macros = []
 
-if macros:
-    from Cython.Compiler.Options import get_directive_defaults
-    directive_defaults = get_directive_defaults()
-    directive_defaults['linetrace'] = True
-    directive_defaults['binding'] = True
+# if macros:
+#     from Cython.Compiler.Options import get_directive_defaults
+#     directive_defaults = get_directive_defaults()
+#     directive_defaults['linetrace'] = True
+#     directive_defaults['binding'] = True
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -37,25 +48,35 @@ include_dirs = [dir_path + "/ncls/src", dir_path]
 __version__ = open("ncls/version.py").readline().split(" = ")[1].replace(
     '"', '').strip()
 
+
+
 extensions = [
     Extension(
         "ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
-        define_macros=macros,
+        # define_macros=macros,
         include_dirs=include_dirs),
     Extension(
         "ncls.src.ncls32", ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
-        define_macros=macros,
+        # define_macros=macros,
         include_dirs=include_dirs)
 ]
 
-install_requires = ["cython", "numpy"]
+# using setuptools to cythonize if cython not found
+# not recommended by cython docs, but still
+try:
+    from cython.Build import cythonize
+    ext_modules = cythonize(extensions, language_level=2)
+except ImportError:
+    ext_modules = extensions
+
 
 setup(
     name = "ncls",
     version=__version__,
     packages=find_packages(),
-    ext_modules = cythonize(extensions, language_level=2),
-    install_requires = ["cython", "numpy"],
+    ext_modules = ext_modules,
+    setup_requires = ["cython"],
+    install_requires = ["numpy"],
     # py_modules=["pyncls"],
     description = \
     'A wrapper for the nested containment list data structure.',
@@ -70,3 +91,4 @@ setup(
     package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
     include_dirs=["."],
 )
+
