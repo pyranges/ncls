@@ -38,6 +38,7 @@ typedef struct IntervalIterator_S {
 extern int *alloc_array(int n);
 
 extern int find_overlap_start(int start,int end,IntervalMap im[],int n);
+extern int find_suboverlap_start(int start,int end,int isub,IntervalMap im[],SublistHeader subheader[]);
 extern int imstart_qsort_cmp(const void *void_a,const void *void_b);
 extern int target_qsort_cmp(const void *void_a,const void *void_b);
 extern SublistHeader *build_nested_list(IntervalMap im[],int n,

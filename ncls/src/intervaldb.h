@@ -78,6 +78,7 @@ typedef struct {
 extern int *alloc_array(int n);
 
 extern int64_t find_overlap_start(int64_t start,int64_t end,IntervalMap im[],int n);
+extern int find_suboverlap_start(int start,int end,int isub,IntervalMap im[],SublistHeader subheader[]);
 extern int imstart_qsort_cmp(const void *void_a,const void *void_b);
 extern int target_qsort_cmp(const void *void_a,const void *void_b);
 extern IntervalMap *read_intervals(int n,FILE *ifile);
