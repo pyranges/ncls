@@ -1,3 +1,6 @@
+# 0.0.52 (20.02.20)
+- fix missing functions in headers (thanks Igor Gotlibovych)
+
 # 0.0.51 (03.12.19)
 - make setup.py installable distutils if cython isn't installed
 

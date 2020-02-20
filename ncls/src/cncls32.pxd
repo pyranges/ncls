@@ -41,6 +41,7 @@ cdef extern from "ncls/src/intervaldb32.h":
         int len
 
     int find_overlap_start(int32_t start, int32_t end, IntervalMap im[], int n)
+    int find_suboverlap_start(int32_t start, int32_t end, int isub, IntervalMap im[], SublistHeader subheader[])
     int imstart_qsort_cmp(void *void_a,void *void_b)
     # int target_qsort_cmp(void *void_a,void *void_b)
     SublistHeader *build_nested_list(IntervalMap im[],int n,int *p_n,int *p_nlists)
