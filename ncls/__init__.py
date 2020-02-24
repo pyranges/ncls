@@ -12,4 +12,14 @@ def NCLS(starts, ends, ids):
     else:
         raise Exception("Starts/Ends not int64 or int32: " + str(starts.dtype))
 
+
+def FNCLS(starts, ends, ids):
+
+    from ncls.src.fncls import FNCLS
+
+    if starts.dtype == np.double:
+        return FNCLS(starts, ends, ids)
+    else:
+        raise Exception("Starts/Ends not double: " + str(starts.dtype))
+
 from ncls.version import __version__
