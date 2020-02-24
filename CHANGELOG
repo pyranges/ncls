@@ -1,3 +1,6 @@
+# 0.0.51 (unreleased)
+- add datastructure FNCLS which uses floating point starts and ends
+
 # 0.0.50 (11.11.19)
 - fix last_overlaps_both
 

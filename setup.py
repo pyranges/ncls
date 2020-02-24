@@ -45,7 +45,12 @@ extensions = [
     Extension(
         "ncls.src.ncls32", ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
         define_macros=macros,
-        include_dirs=include_dirs)
+        include_dirs=include_dirs),
+    Extension(
+        "ncls.src.fncls", ["ncls/src/fncls.pyx", "ncls/src/fintervaldb.c"],
+        define_macros=macros,
+        include_dirs=include_dirs),
+
 ]
 
 install_requires = ["cython", "numpy"]
