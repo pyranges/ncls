@@ -17,6 +17,12 @@ it available to the Python community as a stand-alone library. Enjoy.
 Original Paper: https://academic.oup.com/bioinformatics/article/23/11/1386/199545
 Cite: http://dx.doi.org/10.1093/bioinformatics/btz615
 
+## Cite
+
+If you use this library in published research cite
+
+http://dx.doi.org/10.1093/bioinformatics/btz615
+
 ## Install
 
 ```
@@ -102,6 +108,9 @@ intervals
 # [(0, 100, 0), (1, 101, 1), (2, 102, 2), (3, 103, 3), (4, 104, 4)]
 ```
 
+There is also an experimental floating point version of the NCLS called FNCLS.
+See the examples folder.
+
 ## Benchmark
 
 Test file of 100 million intervals (created by subsetting gencode gtf with replacement):
@@ -115,10 +124,6 @@ Test file of 100 million intervals (created by subsetting gencode gtf with repla
 
 Building is 50 times faster and overlap queries are 20 times faster. Memory
 usage is one fifth and one ninth.
-
-## Cite
-
-http://dx.doi.org/10.1093/bioinformatics/btz615
 
 ## Original paper
 
