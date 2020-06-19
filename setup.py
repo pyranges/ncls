@@ -64,11 +64,14 @@ extensions = [
         # define_macros=macros,
         include_dirs=include_dirs)]
 
+for e in extensions:
+    e.cython_directives = {'language_level': "3"}
+
 # using setuptools to cythonize if cython not found
 # not recommended by cython docs, but still
 try:
     from cython.Build import cythonize
-    ext_modules = cythonize(extensions, language_level=2)
+    ext_modules = cythonize(extensions, compiler_directives={'language_level' : "3"})
 except ImportError:
     ext_modules = extensions
 
