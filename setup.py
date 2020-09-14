@@ -1,5 +1,5 @@
-from distutils.core import setup
 from setuptools import find_packages, Extension, Command
+from distutils.core import setup
 
 
 # try:
@@ -94,4 +94,3 @@ setup(
     package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
     include_dirs=["."],
 )
-

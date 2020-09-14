@@ -370,10 +370,10 @@ int find_index_start(int start,int end,IntervalIndex im[],int n)
 
 
 
-inline int find_suboverlap_start(int start,int end,int isub,IntervalMap im[],
+inline int64_t find_suboverlap_start(int64_t start, int64_t end, int isub, IntervalMap im[],
                                  SublistHeader subheader[])
 {
-  int i;
+  int64_t i;
 
   if (isub>=0) {
     i=find_overlap_start(start,end,im+subheader[isub].start,subheader[isub].len);

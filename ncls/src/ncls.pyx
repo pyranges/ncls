@@ -725,10 +725,10 @@ cdef class NCLSIterator:
     cdef cn.IntervalIterator *it_alloc
     cdef cn.IntervalMap im_buf[1024]
     cdef int nhit, ihit
-    cdef int64_t start, end 
+    cdef int64_t start, end
     cdef NCLS64 db
 
-    def __cinit__(self, long start, long end, NCLS64 db not None):
+    def __cinit__(self, int64_t start, int64_t end, NCLS64 db not None):
         self.it = cn.interval_iterator_alloc()
         self.it_alloc = self.it
         self.start = start

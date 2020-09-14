@@ -1,4 +1,7 @@
-# 0.0.53 (unreleased)
+# 0.0.54 (14.09.20)
+- fix #38 (thanks fireice-uk)
+
+# 0.0.53 (?)
 - add datastructure FNCLS which uses floating point starts and ends
 
 # 0.0.52 (20.02.20)
