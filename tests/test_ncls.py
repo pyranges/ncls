@@ -47,11 +47,11 @@ if struct.calcsize("P") * 8 == 64:
 
 else:
     
-    starts = np.array([5, 2_147_483_645], dtype=np.int64)
+    starts = np.array([5, 2_147_483_645], dtype=np.int32)
 
-    ends = np.array([6, 2_147_483_646], dtype=np.int64)
+    ends = np.array([6, 2_147_483_646], dtype=np.int32)
 
-    ids = np.array([0, 3], dtype=np.int64)
+    ids = np.array([0, 3], dtype=np.int32)
 
     def test_ncls():
         # ids = starts
@@ -71,9 +71,9 @@ else:
 
     def test_all_containments_both():
 
-        starts = np.array([5, 10], dtype=int)
-        ends = np.array([6, 50], dtype=int)
-        ids = np.array([0, 1], dtype=int)
+        starts = np.array([5, 10], dtype=np.int32)
+        ends = np.array([6, 50], dtype=np.int32)
+        ids = np.array([0, 1], dtype=np.int32)
 
         ncls = NCLS(starts, ends, ids)
         subs, covers = ncls.all_containments_both(starts, ends, ids)
