@@ -5,6 +5,9 @@ import numpy as np
 
 def NCLS(starts, ends, ids):
 
+    if isinstance(starts, list) or "pandas" in str(type(starts)):
+        starts, ends, ids = [np.array(s) for s in [starts, ends, ids]]
+
     if starts.dtype == np.int64:
         return NCLS64(starts, ends, ids)
     elif starts.dtype == np.int32:
@@ -16,6 +19,9 @@ def NCLS(starts, ends, ids):
 def FNCLS(starts, ends, ids):
 
     from ncls.src.fncls import FNCLS
+
+    if isinstance(starts, list) or "pandas" in str(type(starts)):
+        starts, ends, ids = [np.array(s) for s in [starts, ends, ids]]
 
     if starts.dtype == np.double:
         return FNCLS(starts, ends, ids)

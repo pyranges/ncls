@@ -1,3 +1,6 @@
+# 0.0.57 (14.10.20)
+- accept lists/pd.Series in constructor
+
 # 0.0.55-56 (12.10.20)
 - fix build on 32-bit architectures (thanks to nileshpatra)
 
