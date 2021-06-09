@@ -8,11 +8,11 @@ def NCLS(starts, ends, ids):
     if isinstance(starts, list) or "pandas" in str(type(starts)):
         starts, ends, ids = [np.array(s) for s in [starts, ends, ids]]
 
-    ids = np.astype(np.int64)
+    ids = ids.astype(np.int64)
     if starts.dtype == np.int64:
-        return NCLS64(starts, ends.astype(np.int64), ids)
+        return NCLS64(starts.astype(np.int64), ends.astype(np.int64), ids)
     elif starts.dtype == np.int32:
-        return NCLS32(starts, ends.astype(np.int32), ids)
+        return NCLS32(starts.astype(np.int32), ends.astype(np.int32), ids)
     else:
         raise Exception("Starts/Ends not int64 or int32: " + str(starts.dtype))
 
