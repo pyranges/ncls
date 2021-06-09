@@ -1,3 +1,6 @@
+# 0.0.58 (09.03.21)
+- try to fix type mismatches and make causes more explicit
+
 # 0.0.57 (14.10.20)
 - accept lists/pd.Series in constructor
 

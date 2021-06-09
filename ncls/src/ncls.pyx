@@ -72,7 +72,10 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef all_overlaps_both(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes):
+    cpdef all_overlaps_both(self,
+                            const int64_t [::1] starts,
+                            const int64_t [::1] ends,
+                            const int64_t [::1] indexes):
 
         cdef int i = 0
         cdef int nhit = 0
