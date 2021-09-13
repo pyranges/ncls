@@ -1,3 +1,6 @@
+# 0.0.61 (13.09.21)
+- fix critical error: in case of more than 1024 overlaps for on interval only reported 1024 first
+
 # 0.0.58/59/60 (hotfixes) (09.03.21)
 - try to fix type mismatches and make causes more explicit
 

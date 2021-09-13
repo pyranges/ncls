@@ -83,6 +83,7 @@ cdef class NCLS32:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=long)
         output_arr_other = np.zeros(length, dtype=long)
@@ -103,8 +104,9 @@ cdef class NCLS32:
         it = it_alloc
         for loop_counter in range(length):
 
+            spent = 0
             # remember first pointer for dealloc
-            while it:
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -133,6 +135,10 @@ cdef class NCLS32:
                     nfound += 1
                     i += 1
 
+                if not nhit == 1024:
+                    spent = 1
+
+
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
 
@@ -151,6 +157,7 @@ cdef class NCLS32:
         cdef int loop_counter = 0
         cdef int nfound = 0
         cdef int max_end = -1
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=long)
         output_arr_other = np.zeros(length, dtype=long)
@@ -173,13 +180,14 @@ cdef class NCLS32:
 
             # print("loop_counter", loop_counter)
             # remember first pointer for dealloc
-            while it:
+            spent = 0
+            max_end = -1
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
-                max_end = -1
 
                 # """Finding last overlap in NCLS: iterate from start, find last maximal end."""
 
@@ -194,6 +202,9 @@ cdef class NCLS32:
                         i += 1
 
                     nfound += 1
+
+                if nhit < 1024:
+                    spent = 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
@@ -213,6 +224,7 @@ cdef class NCLS32:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=long)
         output_arr_other = np.zeros(length, dtype=long)
@@ -234,7 +246,8 @@ cdef class NCLS32:
         for loop_counter in range(length):
 
             # remember first pointer for dealloc
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -266,6 +279,9 @@ cdef class NCLS32:
                     nfound += 1
                     i += 1
 
+                if nhit < 1024:
+                    spent = 1
+
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
 
@@ -285,6 +301,7 @@ cdef class NCLS32:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=long)
         cdef long [::1] output
@@ -304,7 +321,8 @@ cdef class NCLS32:
 
             # remember first pointer for dealloc
 
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -321,6 +339,9 @@ cdef class NCLS32:
                     output[nfound] = indexes[loop_counter]
 
                     nfound += 1
+
+                if nhit < 1024:
+                    spent = 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
@@ -346,6 +367,7 @@ cdef class NCLS32:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int spent = 0
 
         # output_arr = np.zeros(length, dtype=long)
         output_arr_length = np.zeros(length, dtype=long)
@@ -369,7 +391,8 @@ cdef class NCLS32:
             start = starts[loop_counter]
             end = ends[loop_counter]
             # remember first pointer for dealloc
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -379,6 +402,8 @@ cdef class NCLS32:
                     output_length[loop_counter] += int_min(im_buf[i].end, end) - int_max(im_buf[i].start, start)
                     i += 1
 
+                if nhit < 1024:
+                    spent = 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
@@ -642,6 +667,7 @@ cdef class NCLS32:
         cdef int loop_counter = 0
         cdef int nfound = 0
         cdef int start, end
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=np.long)
         output_arr_other = np.zeros(length, dtype=np.long)
@@ -667,7 +693,8 @@ cdef class NCLS32:
 
             start = starts[loop_counter]
             end = ends[loop_counter]
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, start, end, self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -690,6 +717,9 @@ cdef class NCLS32:
 
                         nfound += 1
                     i += 1
+
+                if nhit < 1024:
+                    spent = 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc

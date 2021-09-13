@@ -82,6 +82,7 @@ cdef class NCLS64:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_other = np.zeros(length, dtype=np.int64)
@@ -98,24 +99,17 @@ cdef class NCLS64:
         if not self.im: # if empty
             return [], []
 
-        # from time import time
-        # start = time()
         it_alloc = cn.interval_iterator_alloc()
         it = it_alloc
         for loop_counter in range(length):
 
-            # print("loop_counter", loop_counter)
-            # print("start", starts[loop_counter])
-            # print("ends", ends[loop_counter])
-
-            # remember first pointer for dealloc
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
-                # print("nhit", nhit)
                 if nfound + nhit >= length:
 
                     length = (length + nhit) * 2
@@ -125,11 +119,6 @@ cdef class NCLS64:
                     output_other = output_arr_other
 
                 while i < nhit:
-                    # print("  i", i)
-
-                    # print("length", length)
-                    # print("nfound", nfound)
-                    # print("loop_counter", loop_counter)
                     output[nfound] = indexes[loop_counter]
                     output_other[nfound] = im_buf[i].target_id
 
@@ -139,13 +128,13 @@ cdef class NCLS64:
                     nfound += 1
                     i += 1
 
+                if nhit < 1024:
+                    spent = 1
+
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
 
         cn.free_interval_iterator(it_alloc)
-        # end = time()
-
-        # print("ncls time:", end - start)
 
         return output_arr[:nfound], output_arr_other[:nfound]
 
@@ -161,6 +150,7 @@ cdef class NCLS64:
         cdef int loop_counter = 0
         cdef int nfound = 0
         cdef int max_end = -1
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_other = np.zeros(length, dtype=np.int64)
@@ -180,16 +170,14 @@ cdef class NCLS64:
         it_alloc = cn.interval_iterator_alloc()
         it = it_alloc
         for loop_counter in range(length):
-
-            # print("loop_counter", loop_counter)
-            # remember first pointer for dealloc
-            while it:
+            max_end = -1
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
                 if nhit:
-                    max_end = -1
                     while i < nhit:
                         if im_buf[i].end >= max_end:
                             # print("max_end", im_buf[i].end)
@@ -200,6 +188,9 @@ cdef class NCLS64:
                         i += 1
 
                     nfound += 1
+
+                if nhit < 1024:
+                    spent = 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
@@ -219,6 +210,7 @@ cdef class NCLS64:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_other = np.zeros(length, dtype=np.int64)
@@ -240,16 +232,13 @@ cdef class NCLS64:
         for loop_counter in range(length):
 
             # remember first pointer for dealloc
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
                                 &(nhit), &(it)) # GET NEXT BUFFER CHUNK
 
-                # print("nhit", nhit)
-                # print("length", length)
-                # print("nfound", nfound)
-                # print(nfound + nhit >= length)
                 if nfound + nhit >= length:
 
                     length = (length + nhit) * 2
@@ -269,6 +258,9 @@ cdef class NCLS64:
                     nfound += 1
                     i += 1
 
+                if nhit < 1024:
+                    spent = 1
+
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
 
@@ -286,6 +278,7 @@ cdef class NCLS64:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=np.int64)
         cdef int64_t [::1] output
@@ -305,7 +298,8 @@ cdef class NCLS64:
 
             # remember first pointer for dealloc
 
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -322,6 +316,9 @@ cdef class NCLS64:
                     output[nfound] = indexes[loop_counter]
 
                     nfound += 1
+
+                if nhit < 1024:
+                    spent = 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
@@ -347,13 +344,11 @@ cdef class NCLS64:
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int nfound = 0
+        cdef int spent = 0
 
-        # output_arr = np.zeros(length, dtype=np.int64)
         output_arr_length = np.zeros(length, dtype=np.int64)
-        # cdef int64_t [::1] output
         cdef int64_t [::1] output_length
 
-        # output = output_arr
         output_length = output_arr_length
 
         cdef cn.IntervalIterator *it
@@ -370,7 +365,8 @@ cdef class NCLS64:
             start = starts[loop_counter]
             end = ends[loop_counter]
             # remember first pointer for dealloc
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -380,6 +376,8 @@ cdef class NCLS64:
                     output_length[loop_counter] += int_min(im_buf[i].end, end) - int_max(im_buf[i].start, start)
                     i += 1
 
+                if nhit < 1024:
+                    spent = 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
@@ -459,6 +457,7 @@ cdef class NCLS64:
         cdef int loop_counter = 0
         cdef int overlap_type_nb = 0
         cdef int na = -1
+        cdef int spent = 0
 
 
         output_arr = np.zeros(length, dtype=np.int64)
@@ -483,6 +482,7 @@ cdef class NCLS64:
         it = it_alloc
         for loop_counter in range(length):
 
+            spent = 0
             while it:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
@@ -632,6 +632,7 @@ cdef class NCLS64:
         cdef int loop_counter = 0
         cdef int nfound = 0
         cdef int64_t start, end
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_other = np.zeros(length, dtype=np.int64)
@@ -657,7 +658,8 @@ cdef class NCLS64:
 
             start = starts[loop_counter]
             end = ends[loop_counter]
-            while it:
+            spent = 0
+            while not spent:
                 i = 0
                 cn.find_intervals(it, start, end, self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -680,6 +682,9 @@ cdef class NCLS64:
 
                         nfound += 1
                     i += 1
+
+                if nhit < 1024:
+                    spent = 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc
