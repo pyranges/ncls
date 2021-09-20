@@ -472,18 +472,20 @@ cdef class NCLS32:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef set_difference_helper(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes):
+    cpdef set_difference_helper(self, const int32_t [::1] starts, const int32_t [::1] ends, const int64_t [::1] indexes,
+                                const int64_t[::1] nhits):
 
         cdef int i = 0
         cdef int nhit = 0
         cdef int nfound = 0
+        cdef int nfound_loop = 0
         cdef int32_t nstart = 0
         cdef int32_t nend = 0
         cdef int length = len(starts)
         cdef int loop_counter = 0
         cdef int overlap_type_nb = 0
         cdef int na = -1
-
+        cdef int spent = 0
 
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_start = np.zeros(length, dtype=np.int32)
@@ -504,39 +506,29 @@ cdef class NCLS32:
 
         it_alloc = cn.interval_iterator_alloc()
         it = it_alloc
+
         for loop_counter in range(length):
 
-            while it:
+            nhit = nhits[loop_counter]
+            nstart = starts[loop_counter]
+            nend = ends[loop_counter]
+            nfound_loop = 0
+            spent = 0
+
+            while not spent:
                 i = 0
-
-                nstart = starts[loop_counter]
-                nend = ends[loop_counter]
-
-                # print("----" * 5)
-                # print("loop counter", loop_counter)
-                # print("nstart", nstart)
-                # print("nend", nend)
-
-                cn.find_intervals(it, nstart, nend, self.im, self.ntop,
+                cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
-                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
-                #print("nhits:", nhit)
-
-
+                                &(na), &(it)) # GET NEXT BUFFER CHUNK
 
                 if nfound + nhit >= length:
-
-                    length = (nfound + nhit) * 2
+                    length = (length + nhit) * 2
                     output_arr = np.resize(output_arr, length)
                     output_arr_start = np.resize(output_arr_start, length)
                     output = output_arr
                     output_start = output_arr_start
                     output_arr_end = np.resize(output_arr_end, length)
                     output_end = output_arr_end
-
-                # print("  length is", length)
-                # print("  nfound is", nfound)
 
                 # B covers whole of A; ignore
                 if nhit == 1 and starts[loop_counter] > im_buf[i].start and ends[loop_counter] < im_buf[i].end:
@@ -546,64 +538,40 @@ cdef class NCLS32:
                     output[nfound] = indexes[loop_counter]
                     i = nhit
                     nfound += 1
+                    nfound_loop += 1
 
-                while i < nhit:
-                    # print("    i", i)
-                    # print("--- i:", i)
-                    # print("--- im_buf[i]", im_buf[i])
-                    # print("  B start:", im_buf[i].start)
-                    # print("  B end:", im_buf[i].end)
-                    # print("  nfound:", nfound)
-                    # print("  output_arr_start", output_arr_start)
-                    # print("  output_arr_end", output_arr_end)
-
+                while i < 1024:
                     # in case the start contributes nothing
                     if i < nhit - 1:
-                        # print("  i < nhit - 1")
-
                         if nstart < im_buf[i].start:
-                            #print("  new_start", nstart)
-                            #print("  new_end", im_buf[i].start)
                             output[nfound] = indexes[loop_counter]
                             output_start[nfound] = nstart
                             output_end[nfound] = im_buf[i].start
                             nfound += 1
+                            nfound_loop += 1
 
                         nstart = im_buf[i].end
-                    elif i == nhit - 1:
-
-                        # print("i == nhit -1")
-                        #print("im_buf[i].start", im_buf[i].start)
-                        #print("im_buf[i].end", im_buf[i].end)
-                        #print("nstart", nstart)
-                        #print("ends[loop_counter]", ends[loop_counter])
-
+                    elif nfound_loop == nhit - 1:
                         if im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]:
-                            # print("im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]")
-                            #print("we are here " * 10)
-
                             output_start[nfound] = -1
                             output_end[nfound] = -1
-                            output[nfound] = indexes[loop_counter]
+                            output[nfound] = <long> indexes[loop_counter]
                             nfound += 1
+                            nfound_loop += 1
                         else:
                             if im_buf[i].start > nstart:
-                                # print("im_buf[i].start > nstart", im_buf[i].start, nstart)
                                 output[nfound] = indexes[loop_counter]
                                 output_start[nfound] = nstart
                                 output_end[nfound] = im_buf[i].start
                                 nfound += 1
+                                nfound_loop += 1
 
                             if im_buf[i].end < ends[loop_counter]:
-                                # print("im_buf[i].end < ends[loop_counter]", im_buf[i].end, ends[loop_counter])
-                                # print("i, loop_counter", i, loop_counter)
-                                # print("indexes[loop_counter]", indexes[loop_counter])
-                                # print("indexes", indexes[loop_counte  rloop_counter])
-
                                 output[nfound] = indexes[loop_counter]
                                 output_start[nfound] = im_buf[i].end
                                 output_end[nfound] = ends[loop_counter]
                                 nfound += 1
+                                nfound_loop += 1
 
                     i += 1
 
