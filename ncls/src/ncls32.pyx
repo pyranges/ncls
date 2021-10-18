@@ -478,14 +478,13 @@ cdef class NCLS32:
         cdef int i = 0
         cdef int nhit = 0
         cdef int nfound = 0
-        cdef int nfound_loop = 0
         cdef int32_t nstart = 0
         cdef int32_t nend = 0
         cdef int length = len(starts)
-        cdef int loop_counter = 0
         cdef int overlap_type_nb = 0
         cdef int na = -1
         cdef int spent = 0
+        cdef int max_i = 0
 
         output_arr = np.zeros(length, dtype=np.int64)
         output_arr_start = np.zeros(length, dtype=np.int32)
@@ -512,10 +511,8 @@ cdef class NCLS32:
             nhit = nhits[loop_counter]
             nstart = starts[loop_counter]
             nend = ends[loop_counter]
-            nfound_loop = 0
-            spent = 0
 
-            while not spent:
+            while nhit > 0:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
@@ -538,42 +535,46 @@ cdef class NCLS32:
                     output[nfound] = indexes[loop_counter]
                     i = nhit
                     nfound += 1
-                    nfound_loop += 1
+                    break
 
-                while i < 1024:
+                max_i = 1024 if nhit > 1024 else nhit
+
+                while i < max_i:
                     # in case the start contributes nothing
-                    if i < nhit - 1:
-                        if nstart < im_buf[i].start:
+                    if nstart < im_buf[i].start:
+                        output[nfound] = indexes[loop_counter]
+                        output_start[nfound] = nstart
+                        output_end[nfound] = im_buf[i].start
+                        nfound += 1
+                    nstart = im_buf[i].end
+
+                    i += 1
+
+                nhit = nhit - 1024
+
+                if nhit <= 0:
+                    i = i - 1
+
+                    if im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]:
+                        # print("im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]")
+                        #print("we are here " * 10)
+
+                        output_start[nfound] = -1
+                        output_end[nfound] = -1
+                        output[nfound] = <long> indexes[loop_counter]
+                        nfound += 1
+                    else:
+                        if im_buf[i].start > nstart:
                             output[nfound] = indexes[loop_counter]
                             output_start[nfound] = nstart
                             output_end[nfound] = im_buf[i].start
                             nfound += 1
-                            nfound_loop += 1
 
-                        nstart = im_buf[i].end
-                    elif nfound_loop == nhit - 1:
-                        if im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]:
-                            output_start[nfound] = -1
-                            output_end[nfound] = -1
-                            output[nfound] = <long> indexes[loop_counter]
+                        if im_buf[i].end < ends[loop_counter]:
+                            output[nfound] = indexes[loop_counter]
+                            output_start[nfound] = im_buf[i].end
+                            output_end[nfound] = ends[loop_counter]
                             nfound += 1
-                            nfound_loop += 1
-                        else:
-                            if im_buf[i].start > nstart:
-                                output[nfound] = indexes[loop_counter]
-                                output_start[nfound] = nstart
-                                output_end[nfound] = im_buf[i].start
-                                nfound += 1
-                                nfound_loop += 1
-
-                            if im_buf[i].end < ends[loop_counter]:
-                                output[nfound] = indexes[loop_counter]
-                                output_start[nfound] = im_buf[i].end
-                                output_end[nfound] = ends[loop_counter]
-                                nfound += 1
-                                nfound_loop += 1
-
-                    i += 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc

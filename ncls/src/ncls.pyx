@@ -446,7 +446,8 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef set_difference_helper(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes):
+    cpdef set_difference_helper(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes, const int64_t [::1] nhits,
+                                const int64_t[::1] nhits):
 
         cdef int i
         cdef int nhit = 0
@@ -477,28 +478,21 @@ cdef class NCLS64:
         if not self.im: # if empty
             return [], [], []
 
-
         it_alloc = cn.interval_iterator_alloc()
         it = it_alloc
         for loop_counter in range(length):
 
-            spent = 0
-            while it:
+            nhit = nhits[loop_counter]
+            nstart = starts[loop_counter]
+            nend = ends[loop_counter]
+
+            while nhit > 0:
                 i = 0
                 cn.find_intervals(it, starts[loop_counter], ends[loop_counter], self.im, self.ntop,
                                 self.subheader, self.nlists, im_buf, 1024,
-                                &(nhit), &(it)) # GET NEXT BUFFER CHUNK
-
-                #print("nhits:", nhit)
-
-                nstart = starts[loop_counter]
-                nend = ends[loop_counter]
-
-                # print("nstart", nstart)
-                # print("nend", nend)
+                                &(na), &(it)) # GET NEXT BUFFER CHUNK
 
                 if nfound + nhit >= length:
-
                     length = (length + nhit) * 2
                     output_arr = np.resize(output_arr, length)
                     output_arr_start = np.resize(output_arr_start, length)
@@ -515,62 +509,45 @@ cdef class NCLS64:
                     output[nfound] = indexes[loop_counter]
                     i = nhit
                     nfound += 1
+                    break
 
-                while i < nhit:
-                    # print("--- i:", i)
-                    # print("--- im_buf[i]", im_buf[i])
-                    #print("  B start:", im_buf[i].start)
-                    #print("  B end:", im_buf[i].end)
+                max_i = 1024 if nhit > 1024 else nhit
 
+                while i < max_i:
                     # in case the start contributes nothing
-                    if i < nhit - 1:
-                        # print("  i < nhit - 1")
+                    if nstart < im_buf[i].start:
+                        output[nfound] = indexes[loop_counter]
+                        output_start[nfound] = nstart
+                        output_end[nfound] = im_buf[i].start
+                        nfound += 1
+                    nstart = im_buf[i].end
 
-                        if nstart < im_buf[i].start:
-                            #print("  new_start", nstart)
-                            #print("  new_end", im_buf[i].start)
+                    i += 1
+
+                nhit = nhit - 1024
+
+                if nhit <= 0:
+                    i = i - 1
+                    if im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]:
+                        # print("im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]")
+                        #print("we are here " * 10)
+
+                        output_start[nfound] = -1
+                        output_end[nfound] = -1
+                        output[nfound] = <long> indexes[loop_counter]
+                        nfound += 1
+                    else:
+                        if im_buf[i].start > nstart:
                             output[nfound] = indexes[loop_counter]
                             output_start[nfound] = nstart
                             output_end[nfound] = im_buf[i].start
                             nfound += 1
 
-                        nstart = im_buf[i].end
-                    elif i == nhit - 1:
-
-                        # print("i == nhit -1")
-                        #print("im_buf[i].start", im_buf[i].start)
-                        #print("im_buf[i].end", im_buf[i].end)
-                        #print("nstart", nstart)
-                        #print("ends[loop_counter]", ends[loop_counter])
-
-                        if im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]:
-                            # print("im_buf[i].start <= nstart and im_buf[i].end >= ends[loop_counter]")
-                            #print("we are here " * 10)
-
-                            output_start[nfound] = -1
-                            output_end[nfound] = -1
-                            output[nfound] = <long> indexes[loop_counter]
+                        if im_buf[i].end < ends[loop_counter]:
+                            output[nfound] = indexes[loop_counter]
+                            output_start[nfound] = im_buf[i].end
+                            output_end[nfound] = ends[loop_counter]
                             nfound += 1
-                        else:
-                            if im_buf[i].start > nstart:
-                                # print("im_buf[i].start > nstart", im_buf[i].start, nstart)
-                                output[nfound] = indexes[loop_counter]
-                                output_start[nfound] = nstart
-                                output_end[nfound] = im_buf[i].start
-                                nfound += 1
-
-                            if im_buf[i].end < ends[loop_counter]:
-                                # print("im_buf[i].end < ends[loop_counter]", im_buf[i].end, ends[loop_counter])
-                                # print("i, loop_counter", i, loop_counter)
-                                # print("indexes[loop_counter]", indexes[loop_counter])
-                                # print("indexes", indexes[loop_counte  rloop_counter])
-
-                                output[nfound] = indexes[loop_counter]
-                                output_start[nfound] = im_buf[i].end
-                                output_end[nfound] = ends[loop_counter]
-                                nfound += 1
-
-                    i += 1
 
             cn.reset_interval_iterator(it_alloc)
             it = it_alloc

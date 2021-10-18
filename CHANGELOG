@@ -1,3 +1,9 @@
+# 0.0.63 (18.10.21)
+- fix critical error: fix 1024-error for subtract 64 bit
+
+# 0.0.62 (20.09.21)
+- fix critical error: fix 1024-error for subtract
+
 # 0.0.61 (13.09.21)
 - fix critical error: in case of more than 1024 overlaps for on interval only reported 1024 first
 
