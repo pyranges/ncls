@@ -446,8 +446,8 @@ cdef class NCLS64:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef set_difference_helper(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes, const int64_t [::1] nhits,
-                                const int64_t[::1] nhits):
+    cpdef set_difference_helper(self, const int64_t [::1] starts, const int64_t [::1] ends, const int64_t [::1] indexes,
+                                const int64_t [::1] nhits):
 
         cdef int i
         cdef int nhit = 0
