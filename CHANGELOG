@@ -1,3 +1,7 @@
+# 0.0.64 (11.02.22)
+- fix Cython.Build module import on case-sensitive file systems
+- update legacy build files to work with never versions of Python and gcc.
+
 # 0.0.63 (18.10.21)
 - fix critical error: fix 1024-error for subtract 64 bit
 
