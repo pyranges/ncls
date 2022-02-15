@@ -67,9 +67,12 @@ extensions = [
 # using setuptools to cythonize if cython not found
 # not recommended by cython docs, but still
 try:
-    from cython.Build import cythonize
+    from Cython.Build import cythonize
     ext_modules = cythonize(extensions, language_level=2)
 except ImportError:
+    print()
+    print("Warning: Cannot compile with Cython. Using legacy build.")
+    print()
     ext_modules = extensions
 
 
