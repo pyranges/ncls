@@ -14,9 +14,9 @@ ids = starts
 
 ncls = NCLS(starts, ends, ids)
 
-starts2 = np.array([0, 10, 20, 40000], dtype=np.long)
-ends2 = np.array([5, 15, 25, 50000], dtype=np.long)
-indexes2 = np.array([0, 1, 2, 3], dtype=np.long)
+starts2 = np.array([0, 10, 20, 40000], dtype=np.int)
+ends2 = np.array([5, 15, 25, 50000], dtype=np.int)
+indexes2 = np.array([0, 1, 2, 3], dtype=np.int)
 
 
 print(starts)

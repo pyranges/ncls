@@ -8,13 +8,13 @@ import pandas as pd
 import numpy as np
 
 
-starts = np.array(list(reversed([3, 5, 8])), dtype=np.long)
-ends = np.array(list(reversed([6, 7, 9])), dtype=np.long)
-indexes = np.array(list(reversed([0, 1, 2])), dtype=np.long)
+starts = np.array(list(reversed([3, 5, 8])), dtype=np.int)
+ends = np.array(list(reversed([6, 7, 9])), dtype=np.int)
+indexes = np.array(list(reversed([0, 1, 2])), dtype=np.int)
 
-# starts = np.array([3, 5, 8], dtype=np.long)
-# ends = np.array([6, 7, 9], dtype=np.long)
-# indexes = np.array([0, 1, 2], dtype=np.long)
+# starts = np.array([3, 5, 8], dtype=np.int)
+# ends = np.array([6, 7, 9], dtype=np.int)
+# indexes = np.array([0, 1, 2], dtype=np.int)
 
 ncls = NCLS(starts, ends, indexes)
 
