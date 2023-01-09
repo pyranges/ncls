@@ -85,8 +85,8 @@ cdef class NCLS32:
         cdef int nfound = 0
         cdef int spent = 0
 
-        output_arr = np.zeros(length, dtype=long)
-        output_arr_other = np.zeros(length, dtype=long)
+        output_arr = np.zeros(length, dtype=np.int_)
+        output_arr_other = np.zeros(length, dtype=np.int_)
         cdef long [::1] output
         cdef long [::1] output_other
 
@@ -159,8 +159,8 @@ cdef class NCLS32:
         cdef int max_end = -1
         cdef int spent = 0
 
-        output_arr = np.zeros(length, dtype=long)
-        output_arr_other = np.zeros(length, dtype=long)
+        output_arr = np.zeros(length, dtype=np.int_)
+        output_arr_other = np.zeros(length, dtype=np.int_)
         cdef long [::1] output
         cdef long [::1] output_other
 
@@ -226,8 +226,8 @@ cdef class NCLS32:
         cdef int nfound = 0
         cdef int spent = 0
 
-        output_arr = np.zeros(length, dtype=long)
-        output_arr_other = np.zeros(length, dtype=long)
+        output_arr = np.zeros(length, dtype=np.int_)
+        output_arr_other = np.zeros(length, dtype=np.int_)
         cdef long [::1] output
         cdef long [::1] output_other
 
@@ -303,7 +303,7 @@ cdef class NCLS32:
         cdef int nfound = 0
         cdef int spent = 0
 
-        output_arr = np.zeros(length, dtype=long)
+        output_arr = np.zeros(length, dtype=np.int_)
         cdef long [::1] output
 
         output = output_arr
@@ -369,8 +369,8 @@ cdef class NCLS32:
         cdef int nfound = 0
         cdef int spent = 0
 
-        # output_arr = np.zeros(length, dtype=long)
-        output_arr_length = np.zeros(length, dtype=long)
+        # output_arr = np.zeros(length, dtype=np.int_)
+        output_arr_length = np.zeros(length, dtype=np.int_)
         # cdef long [::1] output
         cdef long [::1] output_length
 
@@ -595,8 +595,8 @@ cdef class NCLS32:
         cdef int loop_counter = 0
         cdef int nfound = 0
 
-        output_arr = np.zeros(length, dtype=np.int)
-        output_arr_other = np.zeros(length, dtype=np.int)
+        output_arr = np.zeros(length, dtype=np.int_)
+        output_arr_other = np.zeros(length, dtype=np.int_)
         cdef long [::1] output
         cdef long [::1] output_other
 
@@ -638,8 +638,8 @@ cdef class NCLS32:
         cdef int start, end
         cdef int spent = 0
 
-        output_arr = np.zeros(length, dtype=np.int)
-        output_arr_other = np.zeros(length, dtype=np.int)
+        output_arr = np.zeros(length, dtype=np.int_)
+        output_arr_other = np.zeros(length, dtype=np.int_)
         cdef long [::1] output
         cdef long [::1] output_other
 
@@ -715,7 +715,7 @@ cdef class NCLS32:
         if not self.im: # if empty
             return []
 
-        output_arr = np.zeros(length, dtype=long)
+        output_arr = np.zeros(length, dtype=np.int_)
         cdef long [::1] output
         output = output_arr
 
