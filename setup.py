@@ -10,9 +10,6 @@ from distutils.core import setup
 #          return cythonize(*args, **kwargs)
 
 
-
-
-
 import os
 import sys
 
@@ -45,29 +42,37 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 include_dirs = [dir_path + "/ncls/src", dir_path]
 
-__version__ = open("ncls/version.py").readline().split(" = ")[1].replace(
-    '"', '').strip()
-
+__version__ = (
+    open("ncls/version.py").readline().split(" = ")[1].replace('"', "").strip()
+)
 
 
 extensions = [
     Extension(
-        "ncls.src.ncls", ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
+        "ncls.src.ncls",
+        ["ncls/src/ncls.pyx", "ncls/src/intervaldb.c"],
         # define_macros=macros,
-        include_dirs=include_dirs),
+        include_dirs=include_dirs,
+    ),
     Extension(
-        "ncls.src.ncls32", ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
+        "ncls.src.ncls32",
+        ["ncls/src/ncls32.pyx", "ncls/src/intervaldb32.c"],
         # define_macros=macros,
-        include_dirs=include_dirs),
+        include_dirs=include_dirs,
+    ),
     Extension(
-        "ncls.src.fncls", ["ncls/src/fncls.pyx", "ncls/src/fintervaldb.c"],
+        "ncls.src.fncls",
+        ["ncls/src/fncls.pyx", "ncls/src/fintervaldb.c"],
         # define_macros=macros,
-        include_dirs=include_dirs)]
+        include_dirs=include_dirs,
+    ),
+]
 
 # using setuptools to cythonize if cython not found
 # not recommended by cython docs, but still
 try:
     from Cython.Build import cythonize
+
     ext_modules = cythonize(extensions, language_level=2)
 except ImportError:
     print()
@@ -77,23 +82,41 @@ except ImportError:
 
 
 setup(
-    name = "ncls",
+    name="ncls",
     version=__version__,
     packages=find_packages(),
-    ext_modules = ext_modules,
-    setup_requires = ["cython"],
-    install_requires = ["numpy"],
+    ext_modules=ext_modules,
+    setup_requires=["cython"],
+    install_requires=["numpy"],
     # py_modules=["pyncls"],
-    description = \
-    'A wrapper for the nested containment list data structure.',
-    long_description = __doc__,
+    description="A wrapper for the nested containment list data structure.",
+    long_description=__doc__,
     # I am the maintainer; the datastructure was invented by
     # Alexander V. Alekseyenko and Christopher J. Lee.
-    author = "Endre Bakken Stovner",
-    author_email='endrebak85@gmail.com',
-    url = 'https://github.com/endrebak/ncls',
-    license = 'New BSD License',
-    classifiers = CLASSIFIERS,
-    package_data={'': ['*.pyx', '*.pxd', '*.h', '*.c']},
+    author="Endre Bakken Stovner",
+    author_email="endrebak85@gmail.com",
+    url="https://github.com/endrebak/ncls",
+    license="New BSD License",
+    classifiers=CLASSIFIERS,
+    package_data={
+        "": [
+            "*.pyx",
+            "*.pxd",
+            [
+                "ncls/src/cgraph.h",
+                "ncls/src/default.h",
+                "ncls/src/fintervaldb.h",
+                "ncls/src/intervaldb.h",
+                "ncls/src/intervaldb32.h",
+                "ncls/src/utarray.h",
+            ],
+            [
+                "ncls/src/fintervaldb.c",
+                "ncls/src/intervaldb.c",
+                "ncls/src/intervaldb32.c",
+            ],
+            "*.",
+        ]
+    },
     include_dirs=["."],
 )
