@@ -1,3 +1,6 @@
+# 0.0.67 (12.05.23)
+- Remove .c files that should be regenerated
+
 # 0.0.66 (09.01.23)
 - fix more deprecated stuff
 
