@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 # 0.0.67/68 (12.05.23)
 - Remove .c files that should be regenerated (@starsareintherose)
-=======
-# 0.0.67 (12.05.23)
-- Remove .c files that should be regenerated
->>>>>>> 6f7f5f27f2d9117ce9dfab58edee183a04da135a
 
 # 0.0.66 (09.01.23)
 - fix more deprecated stuff

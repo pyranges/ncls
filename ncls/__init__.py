@@ -1,10 +1,13 @@
-from ncls.src.ncls import NCLS64
-from ncls.src.ncls32 import NCLS32
-
 import numpy as np
+import pkg_resources
+
+__version__ = pkg_resources.get_distribution("ncls").version
+
+from ncls.src.ncls import NCLS64  # type: ignore
+from ncls.src.ncls32 import NCLS32  # type: ignore
+
 
 def NCLS(starts, ends, ids):
-
     if isinstance(starts, list) or "pandas" in str(type(starts)):
         starts, ends, ids = [np.array(s) for s in [starts, ends, ids]]
 
@@ -18,8 +21,7 @@ def NCLS(starts, ends, ids):
 
 
 def FNCLS(starts, ends, ids):
-
-    from ncls.src.fncls import FNCLS
+    from ncls.src.fncls import FNCLS  # type: ignore
 
     if isinstance(starts, list) or "pandas" in str(type(starts)):
         starts, ends, ids = [np.array(s) for s in [starts, ends, ids]]
@@ -28,5 +30,3 @@ def FNCLS(starts, ends, ids):
         return FNCLS(starts, ends.astype(np.double), ids)
     else:
         raise Exception("Starts/Ends not double: " + str(starts.dtype))
-
-from ncls.version import __version__

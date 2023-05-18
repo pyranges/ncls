@@ -1,16 +1,16 @@
 # import numpy as cnp
 import sys
 
-
 cimport cython
-
 from libc.stdint cimport int32_t, int64_t
-# from cython.stdint import int32
+from libc.stdlib cimport malloc
 
 cimport ncls.src.cncls32 as cn
 
-from libc.stdlib cimport malloc
+# from cython.stdint import int32
+
 import numpy as np
+
 
 cdef inline int int_max(int a, int b): return a if a >= b else b
 cdef inline int int_min(int a, int b): return a if a <= b else b

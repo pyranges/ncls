@@ -1,8 +1,10 @@
 from ncls import FNCLS
 import numpy as np
+
 np.random.seed(0)
 
 import pandas as pd
+
 size = int(1e4)
 
 starts = np.random.randint(0, high=int(1e6), size=size) + np.random.random()

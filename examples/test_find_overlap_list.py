@@ -1,6 +1,3 @@
-
-
-
 from ncls import NCLS
 
 import pickle

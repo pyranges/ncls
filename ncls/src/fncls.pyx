@@ -1,13 +1,12 @@
-cimport ncls.src.cfncls as cn
-
 cimport cython
-
 from libc.stdint cimport int64_t
+from libc.stdlib cimport malloc
 
+cimport ncls.src.cfncls as cn
 cimport ncls.src.cncls as cn
 
-from libc.stdlib cimport malloc
 import numpy as np
+
 
 cdef inline int int_max(int a, int b): return a if a >= b else b
 cdef inline int int_min(int a, int b): return a if a <= b else b
