@@ -1,7 +1,7 @@
+import importlib_metadata
 import numpy as np
-import pkg_resources
 
-__version__ = pkg_resources.get_distribution("ncls").version
+__version__ = importlib_metadata.version("ncls")
 
 from ncls.src.ncls import NCLS64  # type: ignore
 from ncls.src.ncls32 import NCLS32  # type: ignore

@@ -20,7 +20,7 @@ classifiers = [
     "Topic :: Scientific/Engineering"
 ]
 keywords = ["ncls", "interval-tree", "genomics"]
-dependencies = ["numpy"]
+dependencies = ["numpy", "importlib_metadata"]
 
 [project.optional-dependencies]
 dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
