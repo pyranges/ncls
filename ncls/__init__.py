@@ -1,5 +1,5 @@
-import numpy as np
 import importlib_metadata
+import numpy as np
 
 __version__ = importlib_metadata.version("ncls")
 
