@@ -76,5 +76,6 @@ jobs:
       - name: mypy
         run: |
           pip install numpy  # for the typing stubs
+          pip install importlib_metadata  # for the typing stubs
           python -m pip install pandas-stubs types-setuptools 
           mypy ncls
