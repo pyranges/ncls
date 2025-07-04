@@ -3,7 +3,7 @@ name: Build and upload to PyPI
 # Source: https://raw.githubusercontent.com/pypa/cibuildwheel/main/examples/github-deploy.yml
 
 env:
-  CIBW_SKIP: "cp36-*"
+  CIBW_SKIP: "cp36-* cp37-*"
 
 # Build on every branch push, tag push, and pull request change:
 on:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019, macos-11]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v3
