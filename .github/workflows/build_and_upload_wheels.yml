@@ -2,7 +2,7 @@ name: Build and upload to PyPI
 
 env:
   # skip EOL interpreters
-  CIBW_SKIP: "cp36-* cp37-* cp38-* pp*"
+  CIBW_SKIP: "cp36-* cp37-* cp38-*"
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v3
