@@ -2,7 +2,7 @@ name: Build and upload to PyPI
 
 env:
   # skip EOL interpreters
-  CIBW_SKIP: "cp36-* cp37-* cp38-*"
+  CIBW_SKIP: "cp36-* cp37-* cp38-* pp*"
 
 on:
   workflow_dispatch:
