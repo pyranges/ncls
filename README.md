@@ -1,5 +1,11 @@
 # Nested containment list
 
+## Deprecation notice
+
+While I'll continue maintaining this library I suggest you change to [ruranges](https://github.com/pyranges/ruranges/) which is a more lightweight and faster library with many more operations than NCLS.
+
+## NCLS
+
 [![Build Status](https://travis-ci.org/biocore-ntnu/ncls.svg?branch=master)](https://travis-ci.org/hunt-genes/ncls) [![PyPI version](https://badge.fury.io/py/ncls.svg)](https://badge.fury.io/py/ncls)
 
 The Nested Containment List is a datastructure for interval overlap queries,

@@ -1,7 +1,13 @@
 import numpy as np
-import pkg_resources
 
-__version__ = pkg_resources.get_distribution("ncls").version
+try:
+    from importlib.metadata import version as _ver
+except ImportError:
+    try:
+        from importlib_metadata import version as _ver
+    except ImportError:
+        import pkg_resources
+        _ver = lambda name: pkg_resources.get_distribution(name).version
 
 from ncls.src.ncls import NCLS64  # type: ignore
 from ncls.src.ncls32 import NCLS32  # type: ignore

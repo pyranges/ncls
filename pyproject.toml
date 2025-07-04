@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ncls"
-version = "0.0.69"
+version = "0.0.70"
 description = "A fast interval tree-like implementation in C, wrapped for the Python ecosystem."
 readme = "README.md"
 authors = [{ name = "Endre Bakken Stovner", email = "endbak@pm.me" }]
