@@ -27,6 +27,7 @@
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 #if defined(__STDC__) || defined(__ANSI_CPP__)  /*###################*/
 #define STRINGIFY(NAME) # NAME
