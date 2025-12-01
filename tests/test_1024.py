@@ -12,15 +12,15 @@ def test_all_overlaps_both():
 
     ncls = NCLS(starts, ends, ids)
 
-    starts2 = np.arange(0, 2048, 2)
-    ends2 = np.arange(1, 2048, 2)
+    starts2 = np.arange(0, 2048, 2, dtype=np.int64)
+    ends2 = np.arange(1, 2048, 2, dtype=np.int64)
 
     result = ncls.all_overlaps_both(starts2, ends2, starts2)
     assert len(result[0]) == 1024
     print(result[0])
 
-    starts2 = np.arange(0, 2 * 2048, 2)
-    ends2 = np.arange(1, 2 * 2048, 2)
+    starts2 = np.arange(0, 2 * 2048, 2, dtype=np.int64)
+    ends2 = np.arange(1, 2 * 2048, 2, dtype=np.int64)
     # ncls2 = NCLS(starts2, ends2, starts2)
 
     result = ncls.all_overlaps_both(starts2, ends2, starts2)
