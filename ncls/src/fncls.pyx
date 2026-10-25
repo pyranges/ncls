@@ -29,7 +29,7 @@ cdef class FNCLS:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    def __cinit__(self, const double [::1] starts=None, const double [::1] ends=None, const int64_t [::1] ids=None):
+    def __cinit__(self, const double [:] starts=None, const double [:] ends=None, const int64_t [:] ids=None):
 
         if None in (starts, ends, ids):
             return
@@ -56,7 +56,7 @@ cdef class FNCLS:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     @cython.initializedcheck(False)
-    cpdef all_overlaps_both(self, const double [::1] starts, const double [::1] ends, const int64_t [::1] indexes):
+    cpdef all_overlaps_both(self, const double [:] starts, const double [:] ends, const int64_t [:] indexes):
 
         cdef int i = 0
         cdef int nhit = 0
