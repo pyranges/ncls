@@ -8,10 +8,8 @@ jobs:
   install_and_test:
     runs-on: ubuntu-latest
     strategy:
-      # You can use PyPy versions in python-version.
-      # For example, pypy2.7 and pypy3.9
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
 
     steps:
       - uses: actions/checkout@v3
@@ -44,7 +42,7 @@ jobs:
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11.0"
+          python-version: "3.11"
       - run: pip install black
       - run: black -l 120 --check --diff ncls tests
 
@@ -56,6 +54,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Set up Python environment
         uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
       - name: flake8 Lint install
         run: pip install flake8
       - name: flake8 Lint
