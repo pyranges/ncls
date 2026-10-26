@@ -6,13 +6,13 @@ from ncls.src.ncls32 import NCLS32  # type: ignore
 
 def NCLS(starts, ends, ids):
     if isinstance(starts, list) or "pandas" in str(type(starts)):
-        starts, ends, ids = [np.array(s) for s in [starts, ends, ids]]
+        starts, ends, ids = [np.asarray(s) for s in [starts, ends, ids]]
 
-    ids = ids.astype(np.int64)
+    ids = ids.astype(np.int64, copy=False)
     if starts.dtype == np.int64:
-        return NCLS64(starts.astype(np.int64), ends.astype(np.int64), ids)
+        return NCLS64(starts, ends.astype(np.int64, copy=False), ids)
     elif starts.dtype == np.int32:
-        return NCLS32(starts.astype(np.int32), ends.astype(np.int32), ids)
+        return NCLS32(starts, ends.astype(np.int32, copy=False), ids)
     else:
         raise Exception("Starts/Ends not int64 or int32: " + str(starts.dtype))
 
@@ -21,9 +21,9 @@ def FNCLS(starts, ends, ids):
     from ncls.src.fncls import FNCLS  # type: ignore
 
     if isinstance(starts, list) or "pandas" in str(type(starts)):
-        starts, ends, ids = [np.array(s) for s in [starts, ends, ids]]
+        starts, ends, ids = [np.asarray(s) for s in [starts, ends, ids]]
 
     if starts.dtype == np.double:
-        return FNCLS(starts, ends.astype(np.double), ids)
+        return FNCLS(starts, ends.astype(np.double, copy=False), ids)
     else:
         raise Exception("Starts/Ends not double: " + str(starts.dtype))
