@@ -1,8 +1,8 @@
 name: Build and upload to PyPI
 
 env:
-  # skip EOL interpreters
-  CIBW_SKIP: "cp36-* cp37-* cp38-* pp*"
+  # Build wheels for Python 3.11 and above
+  CIBW_SKIP: "cp36-* cp37-* cp38-* cp39-* cp310-* pp*"
 
 on:
   workflow_dispatch:

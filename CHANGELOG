@@ -1,3 +1,7 @@
+# 0.0.71 (25.10.26)
+- reuse correctly typed constructor inputs instead of making redundant array copies
+- accept non-contiguous (strided) arrays, as pandas >= 3.1 can return from Series.values
+
 # 0.0.67/68 (12.05.23)
 - Remove .c files that should be regenerated (@starsareintherose)
 
